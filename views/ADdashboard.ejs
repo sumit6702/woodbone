@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+<body class="bg-white jagrataFont">
+  <%- include('./partial/AdminNavbar.ejs')  %>
+  <main>
+
+    <section class="mx-[1%] lg:mx-[4%] p-4 border-t mt-4">
+      <!-- -------------------------------- CARDS -------------------------------- -->
+      <div class="lg:flex justify-between my-8">
+        <div class="h-48 w-48 bg-purple-100 rounded-md mx-auto lg:mx-1 mb-3 relative">
+          <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+            <img class="mx-auto" src="https://cdn-icons-png.flaticon.com/64/4149/4149881.png" alt="">
+            <div class="text-center my-3 text-lg font-bold text-purple-400">
+              <p>Customers</p>
+              <p>
+                <% if(users.length < 10 ){ %>
+                00<%= users.length %>
+                <% }else if(users.length < 100){ %>
+                0<%= users.length %>
+                <% }else{%>
+                <%= users.length %>
+                <% } %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="h-48 w-48 bg-yellow-100 rounded-md mx-auto lg:mx-1 mb-3 relative">
+          <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+            <img class="mx-auto" src="https://cdn-icons-png.flaticon.com/64/1474/1474613.png" alt="">
+            <div class="text-center my-3 text-lg font-bold text-yellow-400">
+              <p>Products</p>
+              <p>
+                <% if(prodcuts.length < 10 ){ %>
+                00<%= prodcuts.length %>
+                <% }else if(prodcuts.length < 100){ %>
+                0<%= prodcuts.length %>
+                <% }else{%>
+                <%= prodcuts.length %>
+                <% } %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="h-48 w-48 bg-blue-100 rounded-md mx-auto lg:mx-1 mb-3 relative">
+          <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+            <img class="mx-auto" src="https://cdn-icons-png.flaticon.com/64/9419/9419370.png" alt="">
+            <div class="text-center my-3 text-lg font-bold text-blue-400">
+              <p>Orders</p>
+              <p>
+                <% if(orders.length < 10){ %>
+                00<%= orders.length %>
+                <% }else if(orders.length < 100){ %>
+                0<%= orders.length %>
+                <% }else{%>
+                <%= orders.length %>
+                <% } %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="h-48 w-48 bg-green-100 rounded-md mx-auto lg:mx-1 mb-3 relative">
+          <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+            <img class="mx-auto" src="https://cdn-icons-png.flaticon.com/64/1773/1773345.png" alt="">
+            <div class="text-center my-3 text-lg font-bold text-green-400">
+              <p>Sales</p>
+              <p class="indian_Price"><%= Revenue %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------- HERO PRODUCTS ---------------------------- -->
+      <div class="grid grid-cols-12">
+        <div class="col-span-12 lg:col-span-4 mx-2 mb-8 lg:mb-0">
+          <div class="chart-container p-6  border relative w-full h-full rounded-md shadow-md bg-white bg-opacity-50">
+            <p class="uppercase text-center font-medium mb-4 text-lg">Quarterly Orders</p>
+            <canvas id="myChart" class=""></canvas>
+            <!-- <p class="text-start uppercase mt-2 text-gray-500">Income
+              <span id="totalSales" class="indian_Price block text-black font-medium">9999</span>
+            </p> -->
+          </div>
+        </div>
+        <div class="col-span-12 lg:col-span-8 mx-2 p-6 rounded-lg shadow-md border">
+          <div class="mb-4">
+            <p class="px-3 text-lg font-semibold text-gray-800">Hero Products</p>
+            <p class="px-3 text-gray-600">Top selling prodcuts</p>
+          </div>
+          <table class="w-full">
+            <thead class="w-full border-b">
+              <tr class="">
+                <th class="py-2">Porduct</th>
+                <th class="py-2 hidden lg:block">Price </th>
+                <th class="py-2">Total Sales</th>
+                <th class="py-2 hidden lg:block">Orders</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center odd:bg-blue-50 hover:bg-blue-100">
+                <td class="py-5">Ikea Dinning Table</td>
+                <td class="py-5 hidden lg:block">23,999</td>
+                <td class="py-5">1,23,999</td>
+                <td class="py-5 hidden lg:block">99</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["1M", "2M", "3M"],
+        datasets: [{
+          label: 'sales from orders',
+          data: [10, 0, 0],
+          backgroundColor: [
+            "rgb(75, 192, 192, 0.8)",
+            "rgba(245, 40, 145, 0.8)",
+            "rgba(0, 43, 158, 0.8)",
+          ],
+          borderColor: [
+            "transparent",
+          ],
+          hoverOffset: 22,
+          spacing: 2,
+          borderAlign: 'inner',
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            display: false,
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Price",
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            display: false,
+            title: {
+              display: true,
+              text: "Date",
+            },
+          },
+        },
+        plugins: {
+          // legend: {
+          //   display: false, // Hide dataset label
+          // },
+        }
+      }
+    });
+  </script>
+  <%- include('./partial/scripts.ejs') %>
+</body>
+
+</html>

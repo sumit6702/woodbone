@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <script src="/js/jquery.js"></script>
+  <link rel="stylesheet" href="/build/styles.css">
+  <script src="https://kit.fontawesome.com/9966fbdd3d.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body class="bg-blue-50">
+  <% if (messages.adminalert && messages.adminalert.length> 0) { %>
+  <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 my-3 shadow-md absolute right-0" role="alert">
+    <div class="flex">
+      <div class="py-1">
+        <svg class="fill-current h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M2.06 16.75l8.294-14.697A1 1 0 0111 2h8a1 1 0 01.95 1.312l-8.294 14.697A1 1 0 019 19H3a1 1 0 01-.95-1.312zM10 16a1 1 0 100-2 1 1 0 000 2zm0-4a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-bold">
+          <%= messages.adminalert[0] %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <section class="md:p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div class="my-6">
+      <h1 class="text-4xl text-blue-300 font-bold text-center">LOGO</h1>
+    </div>
+    <div class="bg-white p-4 md:p-12 rounded-lg shadow-md">
+      <form action="/admin/login/reset_Password" id="reset_Password" method="post" novalidate>
+        <div class="pb-6 block">
+          <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
+          <p class="text-center text-gray-400">Forgot your password? Enter your email to reset it.</p>
+        </div>
+        <div class="my-3">
+          <label for="resetmail">Email</label>
+          <div class="relative">
+            <input class="border rounded-md w-full border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm" placeholder="Enter your email" type="email" name="resetmail" id="resetmail">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-envelope text-blue-400"></i>
+            </div>
+          </div>
+          <span class="text-red-400 font-semibold hidden" id="adminmailerr">Email is empty</span>
+        </div>
+        <div class="mt-3">
+          <button class="px-6 w-full rounded-md mx-auto py-1 border-2 bg-blue-400 border-blue-400 text-white text-lg font-semibold" type="submit">Get Code</button>
+        </div>
+      </form>
+      <form action="/admin/login/verify_otp" id="Submit_Otp" method="post" novalidate>
+        <div class="pb-6 block">
+          <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
+          <p class="text-center text-gray-400">If email is correct then OTP send to mail.</p>
+        </div>
+        <div class="my-3">
+          <label for="resetotp">OTP</label>
+          <div class="relative">
+            <input type="hidden" name="resetedmail" value="" id="resetedmail">
+            <input class="border rounded-md w-full border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm" placeholder="Enter OTP" type="number" name="resetotp" id="resetotp">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-key text-blue-400"></i>
+            </div>
+          </div>
+          <span class="text-red-400 font-semibold hidden" id="adminmailerrotp">Wrong OTP. Enter Correct OTP</span>
+        </div>
+        <div class="mt-3">
+          <button class="px-6 w-full rounded-md mx-auto py-1 border-2 bg-blue-400 border-blue-400 text-white text-lg font-semibold" type="submit">Reset Password</button>
+        </div>
+      </form>
+      <form action="/admin/login/new_admin_password" id="new_Admin_Password" method="post" novalidate>
+        <div class="pb-6 block">
+          <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
+          <p class="text-center text-gray-400">If email is correct then OTP send to mail.</p>
+        </div>
+        <div class="my-3">
+          <label for="resetotp">New Password</label>
+          <div class="relative">
+            <input type="hidden" name="resetedmailed" value="" id="resetedmailed">
+            <input class="border rounded-md w-full border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm" placeholder="Confirm Admin Password" type="password" name="newadminpass" id="newadminpass">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-key text-blue-400"></i>
+            </div>
+          </div>
+          <span class="text-red-400 font-semibold hidden" id="newpass">Email is empty</span>
+        </div>
+        <div class="my-3">
+          <label for="resetotp">Confirm Password</label>
+          <div class="relative">
+            <input class="border rounded-md w-full border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm" placeholder="Confrim Password" type="password" name="confnewadminpass" id="confnewadminpass">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-key text-blue-400"></i>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="px-6 w-full rounded-md mx-auto py-1 border-2 bg-blue-400 border-blue-400 text-white text-lg font-semibold" type="submit">Reset Password</button>
+        </div>
+      </form>
+    </div>
+    <div class="my-6 text-center">
+      <p><a class="text-blue-600" href="/admin/login">Back to Login?</a></p>
+    </div>
+  </section>
+  <script>
+    $(function() {
+      $("#Submit_Otp").hide();
+      $("#new_Admin_Password").hide();
+      $("#reset_Password").on("submit", function(e) {
+        e.preventDefault();
+
+        let mail = $("#resetmail");
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        let isValid = true;
+
+        if (mail.val() === "") {
+          mail.removeClass("border-blue-200");
+          mail.addClass("border-red-400");
+          $("#adminmailerr").removeClass("hidden")
+          isValid = false;
+        } else if (!emailRegex.test(mail.val())) {
+          mail.removeClass("border-blue-200");
+          mail.addClass("border-red-400");
+          $("#adminmailerr").removeClass("hidden")
+          $("#adminmailerr").text("Email is not Correct!")
+        } else {
+          mail.addClass("border-green-200");
+          mail.removeClass("border-red-400");
+          $("#adminmailerr").text("Email is empty")
+          $("#adminmailerr").addClass("hidden")
+        }
+
+        if (isValid) {
+          $.ajax({
+            url: "/admin/login/reset_Password", // Update the URL to the actual endpoint
+            method: "POST",
+            data: $("#reset_Password").serialize(), // Serialize the form data
+            success: function(response) {
+              // Handle the success response here
+              alert(response);
+            },
+            error: function(xhr, status, error) {
+              // Handle the error response here
+              alert(error)
+            }
+          });
+        }
+        $("#resetedmail").val($("#resetmail").val());
+        $("#reset_Password").hide();
+        $("#Submit_Otp").show();
+      });
+
+      $("#Submit_Otp").on("submit", function(e) {
+        e.preventDefault();
+        $("#submitOtpBtn").prop("disabled", true);
+        $("#adminmailerrotp").removeClass("hidden");
+        console.log("Before AJAX request");
+        $.ajax({
+          url: "/admin/login/verify_otp", // Update the URL to the actual endpoint
+          method: "POST",
+          data: $("#Submit_Otp").serialize(), // Serialize the form data
+          success: function(response) {
+            $("#resetedmailed").val($("#resetedmail").val());
+            $("#Submit_Otp").hide();
+            $("#new_Admin_Password").show();
+          },
+          error: function(xhr, status, error) {
+            $("#adminmailerrotp").removeClass("hidden");
+            $("#submitOtpBtn").prop("disabled", false);
+            console.log(error);
+          }
+        });
+      });
+
+
+
+      $("#new_Admin_Password").on("submit", function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: "/admin/login/new_admin_password", // Update the URL to the actual endpoint
+          method: "POST",
+          data: $("#new_Admin_Password").serialize(), // Serialize the form data
+          success: function(response) {
+            window.location.href = '/admin/login';
+          },
+          error: function(xhr, status, error) {
+            alert(error)
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

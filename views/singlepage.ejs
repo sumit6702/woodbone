@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+<body>
+  <%- include('./partial/navbar.ejs') %> <%-
+    include('./partial/mobilenavbar.ejs') %>
+  <main>
+    <script>
+      function updateURL(ele) {
+        var sortByValue = $(ele).val();
+        var url = new URL(window.location.href);
+        url.searchParams.set("sortby", sortByValue);
+        window.history.pushState({}, "", url.pathname + url.search);
+      }
+
+      var sliderContainer = document.getElementById("price_slider");
+      const minPriceInput = document.getElementById("min-price");
+      const maxPriceInput = document.getElementById("max-price");
+
+      // Create the range slider
+      noUiSlider.create(sliderContainer, {
+        start: [0, 10000],
+        connect: true,
+        range: {
+          min: 0,
+          max: 10000,
+        },
+        format: {
+          to: (value) => Math.round(value),
+          from: (value) => Number(value),
+        },
+      });
+
+      slider.noUiSlider.on("update", function(values, handle) {
+        const value = parseFloat(values[handle]);
+
+        if (handle === 0) {
+          $(minPriceInput).val(Math.round(value));
+        } else {
+          $(maxPriceInput).val(Math.round(value));
+        }
+      });
+
+      $(minPriceInput).on("input", function() {
+        slider.noUiSlider.set([$(this).val(), null]);
+      });
+
+      $(maxPriceInput).on("input", function() {
+        slider.noUiSlider.set([null, $(this).val()]);
+      });
+    </script>
+    <style>
+      .noUi-horizontal .noUi-handle {
+        height: 16px;
+        width: 16px;
+        right: -10px;
+        top: 0px;
+        border-radius: 100%;
+        cursor: pointer;
+      }
+
+      .noUi-handle:after,
+      .noUi-handle:before {
+        content: none;
+      }
+
+      .noUi-handle:after,
+      .noUi-handle::after {
+        content: none;
+      }
+
+      .noUi-connect {
+        height: 20%;
+        background-color: #6fc6de;
+      }
+
+      .noUi-connects {
+        position: absolute;
+        top: 40%;
+      }
+
+      .noUi-target {
+        background: transparent;
+        border-radius: 0px;
+        border: none;
+        box-shadow: none;
+      }
+    </style>
+    <section class="bg-gray-300 h-36 flex items-center">
+      <div class="container mx-auto lg:flex lg:justify-between px-6 lg:px-0">
+        <div class="text-3xl font-medium capitalize">
+          <span> <%= title %> </span>
+        </div>
+        <div>
+          <a class="mx-1 border-b-2 border-blue-600" href="/">Home</a> /
+          <span><a href="/furniture">furniture</a> / <%= title %></span>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-4 flex justify-between">
+        <div>Showing <%= (currentPage - 1) * itemsPerPage + 1 %>–<%= Math.min(currentPage * itemsPerPage, totalProducts) %> of <%= totalProducts  %></div>
+        <div>
+          <div>
+            <ul class="relative w-max font-light" x-data="{ showSortBy: false }" @click.away="showSortBy = false">
+              <div id="sortbyLabel" class="flex w-full cursor-pointer border-b border-black pb-[2px] justify-between" @click="showSortBy = !showSortBy">
+                <label class="cursor-pointer" for="">Sort by <span> <%= sortStatusText%> </span></label>
+                <i class="fa-solid fa-chevron-down ms-[36px]"></i>
+              </div>
+              <div x-show="showSortBy" id="sortby" class="border border-black py-2 px-4 absolute right-0 w-max z-50 bg-white shadow-md">
+                <li class="my-1">
+                  <a class="pb-[2px] border-b border-transparent hover:border-b hover:border-black" href="?sort=default">Default</a>
+                </li>
+                <li class="my-1">
+                  <a class="pb-[2px] border-b border-transparent hover:border-b hover:border-black" href="?sort=latest">Latest</a>
+                </li>
+                <li class="my-1">
+                  <a class="pb-[2px] border-b border-transparent hover:border-b hover:border-black" href="?sort=price-asc">Price- low to high</a>
+                </li>
+                <li class="my-1">
+                  <a class="pb-[2px] border-b border-transparent hover:border-b hover:border-black" href="?sort=price-desc">Price- High to low</a>
+                </li>
+                <li class="my-1">
+                  <a class="pb-[2px] border-b border-transparent hover:border-b hover:border-black" href="?sort=averageRating">Average Rating</a>
+                </li>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <% if (products.length===0) { %>
+        <p class="w-full text-center text-red-600">
+          No products available at the moment.
+        </p>
+        <%}else{%> <% for (let i=0; i < products.length; i++) { %> <% const
+          product=products[i];%>
+        <div class="product-wrapper relative border" x-data="{ open: false }" x x-on:toggle-modal.window="open = !open">
+          <div class="product-Img-Wrapper relative">
+            <div class="divContainer">
+              <img class="" src="/<%= product.Image[0].path %>" alt="Product Image" />
+            </div>
+            <div class="product-actions lg:absolute top-0 left-0 w-full h-full lg:bg-gray-100 lg:opacity-0 lg:transition-opacity lg:duration-200 ease-out">
+              <div class="product-actions-links flex items-center justify-center relative top-1/2 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 z-40 w-fit lg:px-2 my-2 lg:my-0 lg:p-0">
+                <a class="mx-2 p-2 border border-black" href="/add-cart/<%= product.productId %>/<%= encodeURIComponent(product.name) %>/1">
+                  <img src="https://cdn-icons-png.flaticon.com/16/3144/3144456.png" alt="Add_Cart" />
+                </a>
+                <div>
+                  <form action="/add_wishlist/<%= product.productId %>" method="post">
+                    <button class="mx-2 p-2 border border-black" type="submit">
+                      <img src="https://cdn-icons-png.flaticon.com/16/3132/3132924.png" alt="Add_Whishlist">
+                    </button>
+                  </form>
+                </div>
+                <a class="mx-2 p-2 border border-black isDisable" x-on:click="open = true" x-transition href="https://localhost:3080/zoomin/?<%= product.productId %>">
+                  <img src="https://cdn-icons-png.flaticon.com/16/10561/10561282.png" alt="Zoom_Item" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="product-Content-Wrapper px-2 py-4">
+            <div class="product-title flex justify-between text-lg">
+              <p><%= product.name %></p>
+              <p class="text-red-600 indian_Price"><%= product.price %></p>
+            </div>
+            <div>
+              <a class="product-category relative inline-block font-light z-30" href="https://localhost:3080/product-category/?82673">
+                <%= product.category %>
+              </a>
+            </div>
+          </div>
+          <a class="product-link absolute top-0 left-0 right-0 bottom-0 z-20" href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
+          </a>
+          <div x-show.important="open" x-transition class="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-10 z-50 modal">
+            <div x-on:click.away="open = false" x-transition class="w-5/6 h-2/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-sm md:flex overflow-scroll md:overflow-auto">
+              <div class="md:w-1/2">
+                <a href="/productpage">
+                  <img class="h-full w-full object-cover" src="/<%= product.Image[0].path %>" alt="" />
+                </a>
+              </div>
+              <div class="md:w-1/2">
+                <div class="py-[5%] px-[2%] md:px-[2%]">
+                  <!-- Item Deatils -->
+                  <div class="mx-5">
+                    <div>
+                      <h1 class="text-4xl font-medium pb-2">
+                        <%= product.name %>
+                      </h1>
+                      <span class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price"><%= product.price %>
+                      </span>
+                    </div>
+                    <div class="my-5 font-light h-24 md:h-12 overflow-hidden">
+                      <p><%- product.htmldesc %></p>
+                    </div>
+                  </div>
+                  <!-- Product Actions -->
+                  <div class="my-4 md:my-10">
+                    <div class="flex justify-center md:justify-normal">
+                      <div class="number-input flex border mx-4">
+                        <div class="flex items-center py-1 px-2 border-r cursor-pointer quantity_btn_minus">
+                          <i class="fa-solid fa-minus fa-xs text-neutral-500"></i>
+                        </div>
+                        <input type="hidden" class="productId" data-product-index="<%= i %>" value="<%= product.productId %>" />
+                        <input type="hidden" class="productname" data-product-index="<%= i %>
+                            value=" <%= encodeURIComponent(product.name) %>" />
+                        <input class="quantity border-t w-12 quantity-input" min="1" max="5" name="quantity" value="1" type="number" id="productqt<%= i %>" step="1" data-product-index="<%= i %>" data-product-id="<%= product.productId %>" />
+                        <div class="flex items-center p-1 px-2 border-l cursor-pointer quantity_btn_plus">
+                          <i class="fa-solid fa-plus fa-xs text-neutral-500"></i>
+                        </div>
+                      </div>
+
+                      <button class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all" type="submit" data-product-index="<%= i %>">
+                        Add to Cart
+                      </button>
+                    </div>
+                    <div>
+                      <form action="/add_wishlist/<%= product.productId %>" method="post">
+                        <button class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" type="submit">
+                          Add to Whishlist
+                          <span class="my-auto px-2">
+                            <img src="https://i.ibb.co/FsZgZ14/heart.png">
+                          </span>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- Product Details -->
+                  <div class="px-3">
+                    <table class="text-sm font-light">
+                      <tr class="">
+                        <td>
+                          SKU:
+                          <span class="font-medium">
+                            <%= product.sku %>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td>
+                          CATEGORY:
+                          <span>
+                            <a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/furniture/<%= product.category %>">
+                              <%= product.category %>
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td>
+                          Product Id:
+                          <span><a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/product/<%= product.productId %>/<%= product.name %>">
+                              <%= product.productId %>
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="fixed top-0 right-0">
+                <button x-on:click="open = false" x-transition class="px-2 py-1 mx-2 my-1 bg-black bg-opacity-20">
+                  <i class="fa-solid fa-xmark fa-xl text-white md:text-black"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }; %>
+        <%}%>
+      </div>
+        <div class="pagination container mx-auto">
+          <div class="block w-fit py-2 px-4 m-auto text-lg">
+            <% if (currentPage > 1) { %>
+              <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: currentPage - 1 }) %>">Previous</a>
+          <% } %>
+          
+          <% const maxVisiblePages = 10;%>
+          
+          <% const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2)); %>
+          <% const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1); %>
+          
+          <% if (startPage > 1) { %>
+              <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: 1 }) %>">1</a>
+              <% if (startPage > 2) { %>
+                  <span>...</span>
+              <% } %>
+          <% } %>
+          
+          <% for (let i = startPage; i <= endPage; i++) { %>
+              <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: i }) %>" <%= i === currentPage ? 'class="active"' : '' %>><%= i %></a>
+          <% } %>
+          
+          <% if (endPage < totalPages) { %>
+              <% if (endPage < totalPages - 1) { %>
+                  <span>...</span>
+              <% } %>
+              <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: totalPages }) %>"><%= totalPages %></a>
+          <% } %>
+          
+          <% if (currentPage < totalPages) { %>
+              <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: currentPage + 1 }) %>">Next</a>
+          <% } %>
+          
+          </div>
+          
+        </div>
+      </section>
+      <% if(page==="Search" ){ %>
+        <script>
+          $(document).ready((function() {
+            $('[href^="?sort="]').click((function(o) {
+              o.preventDefault();
+              const e = new URLSearchParams(window.location.search).get("s_query"),
+                n = $(this).attr("href").replace("?sort=", ""),
+                r = new URLSearchParams({
+                  s_query: e,
+                  sort: n
+                });
+              window.location.href = `${window.location.origin}${window.location.pathname}?${r}`
+            }))
+          }));
+        </script>
+        <% } %>
+  </main>
+  <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs')%>
+</body>
+
+</html>

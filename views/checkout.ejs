@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+  <body>
+    <%- include('./partial/navbar.ejs') %>
+      <%- include('./partial/mobilenavbar.ejs') %>
+        <main>
+          <section class="px-1 md:px-7 md:mx-[8%]">
+            <div>
+              <form id="paynowform" action="/paynow" method="post">
+                <div class="grid grid-cols-12 grid-col md:gap-12">
+
+                  <div class="col-span-12 md:col-span-6">
+                    <p class="my-2 px-2 text-3xl font-medium">Billing and shipping details</p>
+                    <% if(defaultAdd==null){ %>
+                      <div class="border rounded-md">
+                        <div class="flex justify-between px-2 py-1 border-b">
+                          <p>Address</p>
+                          <p>No Address found</p>
+                        </div>
+                        <div class="flex justify-between px-2 py-1 font-medium my-3">
+                          <a class="text-red-600 w-full text-center" href="/my-account">Set a default Address</a>
+                        </div>
+                      </div>
+                      <% }else{ %>
+                        <div class="bg-gray-50 p-2">
+                          <div class="flex justify-between px-2 py-1 font-medium border-b">
+                            <p>Address</p>
+                          </div>
+                          <div class="p-2 border m-2 bg-white">
+                            <div class="">
+                              <div>
+                                <%= defaultAdd.FirstName %>
+                                  <%= defaultAdd.LastName %>
+                              </div>
+                              <div>
+                                <%= defaultAdd.PhoneNo %>
+                              </div>
+                            </div>
+                            <div class="text-gray-400">
+                              <p>
+                                <%= defaultAdd.Address %>,
+                                  <%= defaultAdd.City %>,
+                                    <%= defaultAdd.State %>,
+                                      <%= defaultAdd.Pincode %>,
+                                        <%= defaultAdd.Country %>
+                              </p>
+                            </div>
+                            <input type="hidden" name="FirstName" id="" value="<%= defaultAdd.FirstName %>">
+                            <input type="hidden" name="LastName" id="" value="<%= defaultAdd.LastName  %>">
+                            <input type="hidden" name="PhoneNo" id="" value="<%= defaultAdd.PhoneNo %>">
+                            <input type="hidden" name="Address" id="" value="<%= defaultAdd.Address %>">
+                            <input type="hidden" name="City" id="" value="<%= defaultAdd.City %>">
+                            <input type="hidden" name="State" id="" value="<%= defaultAdd.State %>">
+                            <input type="hidden" name="Pincode" id="" value="<%= defaultAdd.Pincode %>">
+                            <input type="hidden" name="Country" id="" value="<%= defaultAdd.Country %>">
+                          </div>
+                        </div>
+                        <% } %>
+                  </div>
+
+                  <div class="col-span-12 md:col-span-6">
+                    <p class="my-2 px-2 text-3xl font-medium">Your order</p>
+                    <div class="p-4 border bg-gray-50">
+                      <table class="w-full">
+                        <thead>
+                          <tr class="uppercase m-2 border-b">
+                            <th class="w-1/2 py-2">Product</th>
+                            <th class="w-1/2 py-2">SubTotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for (let i=0; i < products.length; i++) { %>
+                            <tr class="bg-white">
+                              <td class="text-center py-2">
+                                <%= products[i].name %> × <%= quantity[i] %>
+                                <input type="hidden" name="product_id" value="<%= products[i].id %>">
+                                <input type="hidden" name="prodcutname" value="<%= products[i].name %>">
+                                <input type="hidden" name="productquantity" value="<%= quantity[i] %>">
+                                <input type="hidden" name="prodcutprice" value="<%= products[i].price %>">
+                              </td>
+                              <td class="text-center py-2 indian_Price">
+                                <%= products[i].price %>
+                              </td>
+                            </tr>
+                            <% } %>
+                              <tr class="border-b bg-white">
+                                <td class="text-center py-2">+ Shipping</td>
+                                <td class="text-center py-2">₹499.00</td>
+                              </tr>
+                              <tr class="border-b font-medium">
+                                <td class="text-center py-2 uppercase">Total</td>
+                                <td class="text-center py-2 indian_Price">
+                                  <%= total %>
+                                </td>
+                                <input type="hidden" name="totalPrice" value="<%= total %>">
+                              </tr>
+                              <tr>
+                                <td class="py-2 px-2 font-medium text-lg" colspan="2">Payment Method</td>
+                              </tr>
+                              <tr>
+                                <td class="flex cursor-pointer">
+                                  <label class="mx-auto py-1 cursor-pointer" for="othMethod">Other Method</label>
+                                </td>
+                                <td>
+                                  <input class="flex mx-auto" type="radio" name="paymentMethod" required id="othMethod">
+                                </td>
+                              </tr>
+                        </tbody>
+                      </table>
+                      <style>
+                        input[type="radio"] {
+                          appearance: none;
+                          -webkit-appearance: none;
+                          width: 15px;
+                          height: 15px;
+                          border: 2px solid #ccc;
+                          background-color: white;
+                          border-radius: 100%;
+                        }
+                        input[type="radio"]:checked {
+                          border-color: #000000;
+                          background-color: #0fb600;
+                        }
+                      </style>
+                    </div>
+                    <p class="my-2 text-sm text-gray-600">
+                      Your personal data will be used to process your order, support your experience throughout this
+                      website, and for other purposes described in our privacy policy.
+                    </p>
+                  </div>
+
+                  <div class="col-span-12 my-4">
+                    <button
+                      class="flex py-2 px-4 mx-auto rounded shadow-md bg-blue-600 font-medium uppercase text-white">Place
+                      Order</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+        </main>
+        <script>
+          $(function () {
+            $("#paynowform").submit(function (e) {
+              if ($("#othMethod").prop("checked")) {
+                $(this.submit);
+              } else {
+                e.preventDefault();
+              }
+
+            });
+          });
+        </script>
+        <%- include('./partial/footer.ejs') %>
+          <%- include('./partial/scripts.ejs') %>
+  </body>
+
+</html>

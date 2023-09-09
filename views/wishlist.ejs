@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+    <body>
+        <%- include('./partial/navbar.ejs') %>
+            <%- include('./partial/mobilenavbar.ejs') %>
+                <main class=" my-5">
+                    <section class="bg-gray-100 h-36 flex items-center">
+                        <div class="container mx-auto lg:flex lg:justify-between px-6 lg:px-0">
+                            <div class="text-3xl font-medium">Wishlist</div>
+                            <div><a class="mx-1 border-b-2 border-blue-600" href="/">Home</a>/ wishlist</div>
+                        </div>
+                    </section>
+                    <section class=" my-8 mx-5 border border-black">
+                        <table class="w-full">
+                            <tr class="border-b pb-3">
+                                <th class="text-sm font-light uppercase w-1/4"><h2>Product Name</h2></th>
+                                <th class="text-sm font-light uppercase w-1/4"><h2>Unit Price</h2></th>
+                                <th class="text-sm font-light uppercase w-1/4"><h2>Stock Status</h2></th>
+                                <th class="w-1/4 hidden md:block"><h2></h2></th>
+                            </tr>
+                            <% if(products.length === 0){ %>
+                                <tr>
+                                    <td colspan="4" class="text-center py-3 text-lg">No Wishlist Item</td>
+                                </tr>
+                            <% }else{ %>
+                                <% for (let i=0; i < products.length; i++) { %> 
+                                <% const product=products[i];%>
+                                <tr>
+                                    <td class="flex py-2">
+                                        <form class="my-auto mx-2 md:mx-4" action="/remove_wishlist/<%= product.productId %>" method="post">
+                                            <button  type="submit"><i class="fa-solid fa-xmark"></i></button>
+                                        </form>
+                                        <a class="hidden md:block" href=""><img class="h-20" src="http://localhost:3080/<%= product.Image[0].path %>" alt=""></a>
+                                        <a class="my-auto mx-2 md:mx-4" href=""><%= product.name %></a>
+                                    </td>
+                                    <td class="text-center py-2">₹ <%= product.price %></td>
+                                    <td class="text-center py-2">In Stock</td>
+                                    <td class="text-center py-2 hidden md:block">
+                                        <a class="border border-black px-2 py-1" href="/add-cart/<%= product.productId %>/<%= encodeURIComponent(product.name) %>/1">Add to Cart</a>
+                                    </td>
+                                </tr>
+                                <% }; %><% } %>
+                        </table>
+                    </section>
+                </main>
+                <%- include('./partial/footer.ejs') %>
+                    <%- include('./partial/scripts.ejs') %>
+
+    </body>
+
+</html>

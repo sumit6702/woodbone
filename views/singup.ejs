@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partial/header.ejs') %>
+<body>
+    <%- include('./partial/navbar.ejs') %>
+    <%- include('./partial/mobilenavbar.ejs') %>
+    <main>
+        <section class="container px-7 mx-auto my-20">
+                <div class="w-fit mx-auto p-4">
+                    <form id="singupForm" action="" method="post">
+                                       <!-- Alert -->
+                <% if (messages.singuperror && messages.singuperror.length > 0) { %>
+                    <div id="Alert" class="max-w-[370px] bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 my-3 shadow-md" role="alert">
+                      <div class="flex">
+                        <div class="py-1">
+                          <svg class="fill-current h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M2.06 16.75l8.294-14.697A1 1 0 0111 2h8a1 1 0 01.95 1.312l-8.294 14.697A1 1 0 019 19H3a1 1 0 01-.95-1.312zM10 16a1 1 0 100-2 1 1 0 000 2zm0-4a1 1 0 100-2 1 1 0 000 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="font-bold"><%= messages.singuperror[0] %></p>
+                            <p class="text-sm">User already Exist. <a class="underline" href="/login">Login</a> or User different email address</p>
+                        </div>
+                      </div>
+                    </div>
+                  <% } %>
+                    <!-- END -->
+                        <div class="relative py-2">
+                            <label class="ms-2 absolute bg-white centerlabel text-gray-700 leading-tight px-2" for="singupname">Name</label>
+                            <input class="min-w-[370px] px-1 py-2 border-2" type="text" name="singupname" id="singupname">
+                        </div>
+                        <div class="relative py-2">
+                            <label class="ms-2 absolute bg-white centerlabel text-gray-700 leading-tight px-2" for="singupmail">Email</label>
+                            <input class="min-w-[370px] px-1 py-2 border-2" type="email" name="singupmail" id="singupmail">
+                        </div>
+                        <div class="relative py-2">
+                            <label class="ms-2 absolute centerlabel bg-white text-gray-700 leading-tight px-2" for="singuppsw">Password</label>
+                            <input class="min-w-[370px] px-1 py-2 border-2" type="password" name="singuppsw" id="singuppsw">
+                        </div>
+                        <div class="relative py-2">
+                            <label class="ms-2 absolute centerlabel bg-white text-gray-700 leading-tight px-2" for="singupcfpsw">Confrim Password</label>
+                            <input class="min-w-[370px] px-1 py-2 border-2" type="password" name="singupcfpsw" id="singupcfpsw">
+                        </div>
+                        <div class="relative py-2">
+                            <button class="flex mx-auto bg-orange-500 font-bold text-white px-5 py-2" type="submit">Singup</button>
+                        </div>
+                        <div class="text-center">
+                          <p>Have Account?<a class="border-b ms-1 border-blue-600 text-blue-700" href="/login">Log in</a></p>
+                      </div>
+                    </form>
+                </div>
+        </section>
+    </main>
+    <%- include('./partial/footer.ejs') %>
+    <%- include('./partial/scripts.ejs') %>
+</body>
+</html>

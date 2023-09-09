@@ -1,0 +1,150 @@
+<nav class="lg:block hidden text-black">
+  <section class="">
+    <div class="navabout uppercase text-sm flex justify-between font-medium py-1 bg-slate-300 border-b">
+      <div>
+        <a href="#">support@woodbone.com </a> / <a href="#">+91 41145727 </a>
+      </div>
+      <div>
+        <p>OPEN FROM 9AM TO 5PM – CLOSED ON WEEKENDS</p>
+      </div>
+    </div>
+    <div id="navMenu" class="flex justify-between text-lg font-medium mx-10">
+      <section>
+        <ul class="flex">
+          <a class="navbrand py-7" href="/">Logo</a>
+          <li class="nav-links">
+            <a class="flex py-7" href="/"><span>Home</span></a>
+          </li>
+          <li class="relative nav-links">
+            <a class="double-Click flex py-7" href="/furniture"><span>Furniture</span></a>
+            <div class="absolute nav-nested-links min-w-max p-8 bg-white text-black pe-20 z-50 shadow-md">
+              <div>
+                <a class="flex h-full py-2" href="/furniture/beds"><span>Beds</span></a>
+              </div>
+              <div>
+                <a class="flex h-full py-2" href="/furniture/storage"><span>Storage</span></a>
+              </div>
+              <div>
+                <a class="flex h-full py-2" href="/furniture/seating"><span>Seating</span></a>
+              </div>
+              <div>
+                <a class="flex h-full py-2" href="/furniture/tables"><span>Tables</span></a>
+              </div>
+              <div>
+                <a class="flex h-full py-2" href="/furniture/outdoors"><span>Outdoor</span></a>
+              </div>
+              <div>
+                <a class="flex h-full py-2" href="/furniture/others"><span>Other</span></a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-links">
+            <a class="flex py-7" href="/contactus"><span>Contact us</span></a>
+          </li>
+          <li class="nav-links">
+            <a class="flex py-7" href=""><span>Blog</span></a>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <ul class="flex">
+          <li id="formContainer" class="flex">
+            <section class="flex search-trigger my-auto cursor-pointer py-7">
+              <span>Search</span>
+              <button type="submit" class="ms-2">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </section>
+            <form class="flex searchform relative my-auto" action="/search">
+              <input class="me-6 bg-transparent focus:outline-none border-b" id="s_query" name="s_query" type="text"
+                placeholder="Search" />
+              <button type="submit" class="h-full my-auto absolute right-0">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </form>
+          </li>
+          <li class="relative cartNavbtn">
+            <a class="flex relative py-7" href="/cart">
+              Cart
+              <div class="flex">
+                <span class="ms-1">
+                  <svg id="cartSvg" height="22" width="22" data-name="cartsvg" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 168.1 225.75">
+                    <path
+                      d="m143.63,225.75H24.48c-6.74,0-13.02-2.68-17.68-7.54C2.14,213.33-.27,206.95.02,200.21L5.58,71.21c.57-13.13,11.31-23.42,24.45-23.42h107.64c13.11,0,23.85,10.26,24.45,23.35l5.95,129c.31,6.74-2.08,13.15-6.75,18.03s-10.95,7.57-17.7,7.57ZM30.04,59.79c-6.7,0-12.18,5.24-12.47,11.94l-5.56,129c-.15,3.43,1.08,6.69,3.46,9.17,2.38,2.48,5.58,3.85,9.01,3.85h119.15c3.44,0,6.65-1.37,9.02-3.86s3.6-5.75,3.44-9.19l-5.95-129c-.31-6.67-5.78-11.9-12.46-11.9H30.04Z" />
+                    <circle cx="40.82" cy="81.11" r="9.45" />
+                    <circle cx="127.35" cy="81.11" r="9.45" />
+                    <path
+                      d="m123.66,59.86H38.38l-.54-5.41c-1.66-16.74,1.89-30.12,10.55-39.78C61.2.38,80.37.01,81.18,0h.4s.4.04.4.04c15.56,1.91,27.21,8.03,34.63,18.17,11.69,15.98,8.12,35.9,7.96,36.74l-.92,4.89Zm-74.2-12h63.73c.13-5.59-.66-14.96-6.32-22.63-5.32-7.22-14.03-11.67-25.89-13.21-2.23.12-15.28,1.25-23.72,10.74-5.38,6.05-7.99,14.48-7.8,25.1Z" />
+                  </svg>
+                </span>
+                <span id="carCount" class="absolute right-2">
+                  <%= cartval  %>
+                </span>
+              </div>
+            </a>
+          </li>
+          <% if(userid){ %>
+            <li class="profileNavbtn relative" x-data="{ profileLink: false }" @mouseover="profileLink = true"
+              @mouseout="profileLink = false" x-transition>
+              <a class="flex" href="/my-account">
+                <div class="flex my-auto">
+                  <%= userid.firstName %>
+                    <span class="ms-1">
+                      <svg id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 211.68 252.51">
+                        <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
+                        <path class="login-svg"
+                          d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
+                      </svg>
+                    </span>
+                </div>
+              </a>
+              <div x-show="profileLink"
+                class="absolute right-0 bg-white z-50 text-black font-light p-3 w-max shadow-lg border border-gray-500">
+                <ul>
+                  <li class="my-1 p-1">
+                    <a href="/my-account">My Account</a>
+                  </li>
+                  <li class="my-1 p-1">
+                    <a href="/wishlist">Wishlist</a>
+                  </li>
+                  <li class="my-1 p-1">
+                    <a href="/orders">Orders</a>
+                  </li>
+                  <li class="my-1 p-1 bg-teal-400 uppercase font-medium text-center">
+                    <a href="/logout">Logout</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <% }else{ %>
+              <li class="loginNavbtn relative cursor-pointer hover:text-gray-700" x-data="{ logins :  false }" 
+              x-on:click="logins = !logins"
+              x-on:mouseenter="logins = true" 
+              x-on:mouseleave="logins = false"
+              x-transition:enter="transition ease-out duration-200">
+                <section class="my-auto pt-2 pb-4">
+                  <div class="flex ms-1">
+                    <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 211.68 252.51">
+                      <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
+                      <path class="login-svg"
+                        d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
+                    </svg>
+                  </div>
+                  <span>login/Singup</span>
+                </section>
+                <div class="absolute -bottom-12 z-50"  x-show="logins">
+                  <div class="py-1 px-3 bg-white z-50 shadow-md">
+                      <a class="block pb-1" href="/singup">Singup</a>
+                      <a class="block pb-1" href="/login">Login</a>
+                  </div>
+                </div>
+              </li>
+              <% } %>
+        </ul>
+      </section>
+    </div>
+  </section>
+</nav>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+    <body>
+
+        <main>
+            <section class="h-screen grid grid-cols-12">
+                <!-- Admin Sidebar -->
+                <%- include('./partial/dashbSideHeader.ejs') %>
+                    <!-- Admin Main panel -->
+                    <div class="col-span-full lg:col-span-10 bg-gray-50">
+                        <!-- Admin NavBar -->
+                        <%- include('./partial/dashbNavbar.ejs') %>
+                            <!-- Admin Dynamic Panel -->
+                            <section>
+                                <div class="flex bg-white m-2 p-2 shadow-md">
+                                    <div class="ow-date relative">
+                                        <div class="flex mx-2 py-1 lg:hidden bg-white px-1 border w-max cursor-pointer"
+                                            id="rangButton"><span class="ovtext"></span><img class="w-7 f-7 p-2"
+                                                src="https://cdn-icons-png.flaticon.com/512/32/32195.png" alt="">
+                                        </div>
+                                        <div class="hidden bg-white lg:bg-transparent absolute lg:relative lg:left-0 left-2 lg:border-opacity-0  border lg:border-none shadow-lg lg:shadow-none lg:flex w-max cursor-pointer"
+                                            id="overview_range">
+                                            <div
+                                                class="mx-3 ov_range border-b-2 border-transparent lg:hover:border-b-2  lg:hover:border-blue-500">
+                                                <a href="/24hour"><span>All Orders</span></a>
+                                            </div>
+                                            <div
+                                                class="mx-3 ov_range border-b-2 border-transparent lg:hover:border-b-2  lg:hover:border-blue-500">
+                                                <a href="oneweek"><span>Dispatch</span></a>
+                                            </div>
+                                            <div
+                                                class="mx-3 ov_range border-b-2 border-transparent lg:hover:border-b-2  lg:hover:border-blue-500">
+                                                <a href="onemonth"><span>Pending</span></a>
+                                            </div>
+                                            <div
+                                                class="mx-3 ov_range border-b-2 border-transparent lg:border-b-2 lg:hover:border-b-2  lg:hover:border-blue-500">
+                                                <a href="oneyear"><span>Completed</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex ms-auto me-0">
+                                        <div class="border px-4 bg-white">
+                                            <div class="date-input-container">
+                                                <input type="date" name="" id="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white m-2 p-2 shadow-md overflow-x-scroll">
+                                    <table class="w-full min-w-max">
+                                        <tr class="bg-slate-100 border-2 text-center border-slate-100">
+                                            <th class="p-1">Id</th>
+                                            <th class="p-1">Email</th>
+                                            <th class="p-1">Date</th>
+                                            <th class="p-1">Price</th>
+                                            <th class="p-1">Status</th>
+                                            <th class="p-1">Action</th>
+                                        </tr>
+                                        <% for(let i = 0; i < orders.length; i++) { %>
+                                        <tr
+                                            class="cursor-pointer hover:bg-sky-800 hover:transition-all hover:shadow-md hover:text-white border-2  border-slate-100 m-7 text-center">
+                                            <td class="p-1 uppercase">#<%= orders[i].order_id  %></td>
+                                            <td class="p-1"><%= orders[i].email  %></td>
+                                            <td class="p-1"><%= formatDate(orders[i].createdAt).replace(',', '-')%></td>
+                                            <td class="p-1 indian_Price"><%= orders[i].orderprice  %></td>
+                                            <td class="p-1 order-status">
+                                                <i class="fa-solid fa-circle-dot"></i>
+                                                <span><%= orders[i].Orderstatus  %></span>
+                                            </td>
+                                            <td class="p-1 border-2">
+                                                <button class="px-1 me-2"><i class="fa-solid fa-gear"></i></button>
+                                                <button class="px-1 ms-2"><i
+                                                        class="fa-solid fa-chevron-down"></i></button>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </table>
+                                </div>
+                            </section>
+                    </div>
+            </section>
+        </main>
+        <script>
+            $(document).ready(function () {
+                $(".order-status").each(function () {
+                    var statusText = $(this).find("span").text();
+                    var icon = $(this).find("i");
+
+                    if (statusText === "Placed") {
+                        icon.addClass("text-red-500");
+                    } else if (statusText === "Completed") {
+                        icon.addClass("text-gray-500");
+                    } else {
+                        icon.addClass("text-green-500");
+                    }
+                });
+            });
+        </script>
+        <%- include('./partial/scripts.ejs') %>
+    </body>
+
+</html

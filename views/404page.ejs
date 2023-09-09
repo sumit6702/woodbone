@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+    <body>
+        <%- include('./partial/navbar.ejs') %>
+            <%- include('./partial/mobilenavbar.ejs') %>
+                <main class="bg-zinc-100">
+                    <section class="container px-7 mx-auto">
+                        <div class="">
+                            <img class="mx-auto" width="70%" src="/images/404.png" alt="">
+                        </div>
+                        <div class="mt-16 mb-4">
+                            <h1 class="text-4xl font-semibold text-center">Something gone wrong!</h1>
+                            <p class="text-center">The page you were looking for doesn't exist</p>
+                        </div>
+                        <div class="mt-4 pb-4 flex">
+                            <a class="mx-auto bg-green-600 px-5 py-2 rounded-lg shadow-sm text-white text-sm" href="/">Go Back</a>
+                        </div>
+                    </section>
+                </main>
+                <%- include('./partial/footer.ejs') %>
+                    <%- include('./partial/scripts.ejs') %>
+    </body>
+
+</html>

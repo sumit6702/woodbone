@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+<body>
+  <style>
+    .swiper {
+      width: 100%;
+    }
+
+    .swiper-pagination-bullet {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      color: #310202;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+      position: relative;
+    }
+
+    .swiper-pagination-bullet-active {
+      color: #fff;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+      content: "";
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      transition: ease-out 0.3s;
+      padding: 44px 34px;
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      transition: ease-in 0.3s;
+      transform: scale(1.1);
+    }
+  </style>
+  <%- include('./partial/navbar.ejs') %>
+  <%- include('./partial/mobilenavbar.ejs') %>
+  <main class="">
+    <% if (messages.contactAlert && messages.contactAlert.length> 0) { %>
+    <div id="Alert" class="bg-teal-100 text-teal-900 px-4 py-2 my-3 shadow-md absolute top-8 right-0 z-50" role="alert">
+      <div class="flex">
+        <div class="py-1">
+          <svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M2.06 16.75l8.294-14.697A1 1 0 0111 2h8a1 1 0 01.95 1.312l-8.294 14.697A1 1 0 019 19H3a1 1 0 01-.95-1.312zM10 16a1 1 0 100-2 1 1 0 000 2zm0-4a1 1 0 100-2 1 1 0 000 2z" />
+          </svg>
+        </div>
+        <div>
+          <p class="font-bold">
+            <%= messages.contactAlert[0] %>
+          </p>
+          <p class="text-sm text-teal-600">Incorrect login or Password.</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      setTimeout(function() {
+        var captchaAlert = document.getElementById("ContactAlert");
+        captchaAlert && captchaAlert.remove()
+      }, 3e3)
+    </script>
+    <% } %>
+    <!-- Slider main container -->
+    <div class="swiper">
+      <!-- Additional required wrapper -->
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide " data-swiper-autoplay="6000"><img src="/images/h5-slider-img-2-1.jpg" alt=""></div>
+        <div class="swiper-slide" data-swiper-autoplay="6000"><img src="/images/h5-slider-img-3.jpg" alt="">
+        </div>
+      </div>
+      <!-- If we need navigation buttons -->
+      <div class="swiper-button-prev">
+        <span>
+          <svg id="Prevbtn" height="36" width="36" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 221.09 92.11">
+            <polyline class="cls-1" points="93.37 .36 1.22 91.61 221.09 91.61" />
+          </svg>
+        </span>
+      </div>
+      <div class="swiper-button-next">
+        <span>
+          <svg id="NextBtn" height="36" width="36" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 221.09 92.11">
+            <polyline class="cls-1" points="127.72 91.76 219.88 .5 0 .5" />
+          </svg>
+        </span>
+      </div>
+    </div>
+    <!-- ------------------------ Top Product Categoire ------------------------ -->
+    <section class="container px-7 mx-auto my-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="relative topProducts">
+          <a class="" href="/furniture/tables/study_tables">
+            <div class="topProductsImg">
+              <img class="object-cover object-center md:h-44 lg:h-auto transition-transform duration-300" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/h5-baner-1.jpg" alt="">
+            </div>
+            <div class="topProductshead absolute top-0 px-8 py-5 md:py-10 text-white w-full h-full">
+              <p class="uppercase my-2">Special Offer</p>
+              <h5 class="text-2xl font-semibold">Study Tables</h5>
+            </div>
+          </a>
+        </div>
+        <div class="relative topProducts">
+          <a href="">
+            <div class="topProductsImg">
+              <img class="object-cover object-center md:h-44 lg:h-auto transition-transform duration-300" src="https://umea.qodeinteractive.com/wp-content/uploads/2021/01/h5-baner-2.jpg" alt="">
+            </div>
+            <div class="topProductshead absolute top-0 px-8 py-5 md:py-10 text-white w-full h-full">
+              <p class="uppercase my-2">Top Picks</p>
+              <h5 class="text-2xl font-semibold">Custom woodwork</h5>
+            </div>
+          </a>
+        </div>
+        <div class="relative topProducts">
+          <a href="">
+            <div class="topProductsImg">
+              <img class="object-cover object-center md:h-44 lg:h-auto transition-transform duration-300" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/h5-baner-3.jpg" alt="">
+            </div>
+            <div class="topProductshead absolute top-0 px-8 py-5 md:py-10 text-white w-full h-full">
+              <p class="uppercase my-2">New Arrival</p>
+              <h5 class="text-2xl font-semibold">New Designs</h5>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- ---------------------------- Main Product ----------------------------- -->
+    <section class="container px-7 mx-auto my-12">
+      <!-- Product Heading -->
+      <div class="text-center my-4">
+        <p class="my-1">Browse Our Items</p>
+        <h1 class="text-3xl font-medium my-1">Ideal for your home</h1>
+      </div>
+      <div class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-6 grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <% if (products.length===0) { %>
+        <p class="w-full text-center text-red-600">No products available at the moment.
+        </p>
+        <%}else{%>
+        <% for (let i=0; i < Math.min(4, products.length); i++) { %>
+        <% const product=products[i]; %>
+        <div class="product-wrapper relative" x-data="{ open: false }" x-on:toggle-modal.window="open = !open">
+          <div class="product-Img-Wrapper relative">
+            <div class="divContainer">
+              <img class="" src="/<%= product.Image[0].path %>" alt="Product Image">
+            </div>
+            <div class="product-actions lg:absolute top-0 left-0 w-full h-full lg:bg-gray-100 lg:opacity-0 lg:transition-opacity lg:duration-200 ease-out">
+              <div class="product-actions-links flex items-center justify-center relative top-1/2 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 z-40 w-fit lg:px-2 my-2 lg:my-0 lg:p-0">
+                <a class="mx-2 p-2 border border-black" href="/add-cart/<%= product.productId %>/<%= encodeURIComponent(product.name) %>/1">
+                  <img src="https://cdn-icons-png.flaticon.com/16/3144/3144456.png" alt="Add_Cart">
+                </a>
+                <div>
+                  <form action="/add_wishlist/<%= product.productId %>" method="post">
+                    <button class="mx-2 p-2 border border-black" type="submit">
+                      <img src="https://cdn-icons-png.flaticon.com/16/3132/3132924.png" alt="Add_Whishlist">
+                    </button>
+                  </form>
+                </div>
+                <a class="mx-2 p-2 border border-black isDisable" x-on:click="open = true" x-transition href="https://localhost:3080/zoomin/?<%= product.productId %>">
+                  <img src="https://cdn-icons-png.flaticon.com/16/10561/10561282.png" alt="Zoom_Item">
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="product-Content-Wrapper">
+            <div class="product-title flex justify-between text-lg">
+              <p>
+                <%= product.name %>
+              </p>
+              <p class="text-red-600 indian_Price"><%= product.price %>
+              </p>
+            </div>
+            <div>
+              <a class="product-category relative inline-block font-light z-30" href="https://localhost:3080/product-category/?82673">
+                <%= product.category %>
+              </a>
+            </div>
+          </div>
+          <a class="product-link absolute top-0 left-0 right-0 bottom-0 z-20" href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
+          </a>
+          <div x-show.important="open" x-transition class="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-10 z-50 modal">
+            <div x-on:click.away="open = false" x-transition class="w-5/6 h-2/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-sm md:flex overflow-scroll md:overflow-auto">
+              <div class="md:w-1/2">
+                <a href="/productpage">
+                  <img class="h-full w-full object-cover" src="/<%= product.Image[0].path %>" alt="">
+                </a>
+              </div>
+              <div class="md:w-1/2">
+                <div class="py-[5%] px-[2%] md:px-[2%] ">
+                  <!-- Item Deatils -->
+                  <div class="mx-5">
+                    <div>
+                      <h1 class="text-4xl font-medium pb-2">
+                        <%= product.name %>
+                      </h1>
+                      <span class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price">
+                        <%= product.price %>
+                      </span>
+                    </div>
+                    <div class="my-5 font-light h-12 overflow-hidden">
+                      <p>
+                        <%- product.htmldesc %>
+                      </p>
+                    </div>
+                  </div>
+                  <!-- Product Actions -->
+                  <div class="my-4 md:my-10">
+                    <div class="flex justify-center md:justify-normal">
+                      <div class="number-input flex border mx-4">
+                        <div class="flex items-center py-1 px-2 border-r cursor-pointer quantity_btn_minus">
+                          <i class="fa-solid fa-minus fa-xs text-neutral-500"></i>
+                        </div>
+                        <input type="hidden" class="productId" data-product-index="<%= i %>" value="<%= product.productId %>" />
+                        <input type="hidden" class="productname" data-product-index="<%= i %>
+                            value=" <%= encodeURIComponent(product.name) %>" />
+                        <input class="quantity border-t w-12 quantity-input" min="1" max="5" name="quantity" value="1" type="number" id="productqt<%= i %>" step="1" data-product-index="<%= i %>" data-product-id="<%= product.productId %>" />
+                        <div class="flex items-center p-1 px-2 border-l cursor-pointer quantity_btn_plus">
+                          <i class="fa-solid fa-plus fa-xs text-neutral-500"></i>
+                        </div>
+                      </div>
+
+                      <button class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all" type="submit" data-product-index="<%= i %>">
+                        Add to Cart
+                      </button>
+                    </div>
+                    <div>
+                      <a class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" href="">Add to
+                        Whishlist <span class="my-auto px-2"><img src="https://i.ibb.co/FsZgZ14/heart.png"></span></a>
+                    </div>
+                  </div>
+                  <!-- Product Details -->
+                  <div class="px-3">
+                    <table class="text-sm font-light">
+                      <tr class="">
+                        <td>
+                          SKU:
+                          <span class="font-medium">
+                            <%= product.sku %>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td>
+                          CATEGORY:
+                          <span>
+                            <a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/furniture/<%= product.category %>">
+                              <%= product.category %>
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <td>
+                          Product ID:
+                          <span><a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/product/<%= product.productId %>/<%= product.name %>">
+                              <%= product.productId %>
+                            </a>
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="fixed top-0 right-0">
+                <button x-on:click="open = false" x-transition class="px-2 py-1 mx-2 my-1 bg-black bg-opacity-20 rounded-full"><i class="fa-solid fa-xmark fa-xl text-white md:text-black"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }; %>
+        <%}%>
+      </div>
+    </section>
+    <!-- ------------------------------ tieup COs ------------------------------ -->
+    <section class="container px-7 mx-auto my-12">
+      <div class=" grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-8 justify-evenly align-top">
+        <img class="h-24 my-1 py-1 mx-auto" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/client-img-1-ver-x2.png" alt="">
+        <img class="h-24 my-1 py-1 mx-auto" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/client-img-3-ver-x2.png" alt="">
+        <img class="h-24 my-1 py-1 mx-auto" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/client-img-2-ver-x2.png" alt="">
+        <img class="h-24 my-1 py-1 mx-auto" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/client-img-4-ver-x2.png" alt="">
+        <img class="h-24 my-1 py-1 mx-auto" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/client-img-1-ver-x2.png" alt="">
+      </div>
+    </section>                        
+    <!-- ------------------------------ Our Teams ------------------------------ -->                        
+    <section class="my-12 relative">
+      <div class="text-center min-h-[345px] md:min-h-[445px]" style="background-color: #E7E1D8;">
+        <div class="p-2 md:p-12">
+          <p class="uppercase font-light">Our Creative Force</p>
+          <h1 class="text-4xl">Meet Our Team</h1>
+        </div>
+      </div>
+      <div class="container mx-auto px-7 my-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 py-6 relative -mt-56 md:-mt-72">
+          <div>
+            <div class="overflow-hidden"><img class="transition-transform duration-300 transform hover:translate-x-1 hover:ease-in-out" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/team-img-4.jpg" alt=""></div>
+            <div class="pt-4">
+              <p class="text-xl font-medium my-1">Nicolette Ritonni</p>
+              <p class="font-light text-sm">FINE CERAMICS</p>
+            </div>
+          </div>
+          <div>
+            <div class="overflow-hidden"><img class="transition-transform duration-300 transform hover:translate-x-1 hover:ease-in-out" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/team-img-3.jpg" alt="">
+            </div>
+            <div class="pt-4">
+              <p class="text-xl font-medium my-1">Juliette Massé</p>
+              <p class="font-light text-sm">STORE MANAGER</p>
+            </div>
+          </div>
+          <div>
+            <div class="overflow-hidden"><img class="transition-transform duration-300 transform hover:translate-x-1 hover:ease-in-out" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/team-img-2.jpg" alt=""></div>
+            <div class="pt-4">
+              <p class="text-xl font-medium my-1">Nicolas Waldau</p>
+              <p class="font-light text-sm">ARCHITECT</p>
+            </div>
+          </div>
+          <div>
+            <div class="overflow-hidden"><img class="transition-transform duration-300 transform hover:translate-x-1 hover:ease-in-out" src="https://umea.qodeinteractive.com/wp-content/uploads/2020/11/team-img-1.jpg" alt=""></div>
+            <div class="pt-4">
+              <p class="text-xl font-medium my-1">Yeung Ngai</p>
+              <p class="font-light text-sm">DESIGNER</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container px-7 md:px-16 lg:px-32 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-3 py-6 border border-black">
+        <div class="flex mx-auto">
+          <div class="my-auto">
+            <img class="p-2 h-16 w-20" src="https://umea.qodeinteractive.com/wp-content/uploads/2021/04/icon-1.png" alt="">
+          </div>
+          <div class="ms-4">
+            <p class="text-lg font-medium">20 Days returns</p>
+            <p class="">Hassle free Return within 20 day window period</p>
+          </div>
+        </div>
+        <div class="flex mx-auto">
+          <div class="my-auto">
+            <img class="p-2 h-16 w-20" src="https://umea.qodeinteractive.com/wp-content/uploads/2021/04/icon-2.png" alt="">
+          </div>
+          <div class="ms-4">
+            <p class="text-lg font-medium">Free Shipping</p>
+            <p>Get Free shipping on all orders.</p>
+          </div>
+
+        </div>
+        <div class="px-2 mx-0 md:mx-16 lg:mx-0 lg:me-12">
+          <div class="w-fit">
+            <p class="text-2xl font-medium ">Sign up for our newsletter</p>
+          </div>
+          <div class="my-2 relative">
+            <form id="newsletter_mail" action="">
+              <input class="w-full p-1 pe-7 border-0 border-b border-black focus:outline-none placeholder:font-light placeholder:text-black" type="email" name="newsletter" id="newsletter" placeholder="Your Email" required>
+              <button class="py-1 ps-2 absolute right-0" type="submit">
+                <img height="22" width="22" src="https://cdn-icons-png.flaticon.com/512/3114/3114931.png" alt="">
+              </button>
+              <span class="absolute left-0 -bottom-8 bg-red-400 text-white text-sm p-1 hidden">Mail
+                is empty or Invaild</span>
+            </form>
+            <script>
+              $(function() {
+                $("#newsletter_mail").on("submit", function(event) {
+                  let mail = $("#newsletter").val().trim();
+                  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                  if (mail === "" || !emailRegex.test(mail)) {
+                    event.preventDefault();
+                    console.log("Newsletter NOT submitted successfully!");
+                    $("#newsletter_mail").find("span").removeClass("hidden");
+                  } else {
+                    console.log("Newsletter submitted successfully!");
+                    $("#newsletter_mail").find("span").addClass("hidden");
+                  }
+                });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </section>                        
+  </main>
+  <%- include('./partial/footer.ejs') %>
+        <%- include('./partial/scripts.ejs') %>
+        <script type="module">
+          import Swiper from "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.esm.browser.min.js";
+
+          const swiper = new Swiper(".swiper", {
+            // Optional parameters
+            direction: "horizontal",
+            loop: true,
+
+            // Navigation arrows
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+
+            autoplay: {
+              delay: 5000,
+            },
+            effect: "fade",
+            fadeEffect: {
+              crossFade: true,
+            },
+            keyboard: {
+              enabled: true,
+              onlyInViewport: false,
+            },
+          });
+        </script>
+</body>
+
+</html>

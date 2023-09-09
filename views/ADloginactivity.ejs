@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+<body class="bg-gray-50 jagrataFont">
+  <%- include('./partial/AdminNavbar.ejs') %>
+  <main>
+    <section class="mx-[2%] lg:mx-[8%] bg-blue-100 py-7 px-5 my-4 rounded-md shadow bg-[url('https://i.ibb.co/rt29MDq/ADloginbg.png')] bg-no-repeat bg-right-top bg-[length:350px_350px]">
+      <h1 class="text-xl font-semibold">Login Activity</h1>
+      <p class="text-sm mt-2 flex text-gray-600">
+        <a href="/admin/dashboard">Home</a> <span class="mx-2">•</span> <span>Login Activity</span>
+      </p>
+    </section>
+    <section class="mx-[2%] lg:mx-[8%] bg-white rounded-md shadow-md">
+      <form action="/delete_adminlogins" method="post">
+        <div id="loginActionHeader" class="p-2 my-4 rounded-md flex justify-between">
+          <span>Action</span>
+          <% if (logins.length> 0) { %>
+          <button type="submit" class="me-4"><i class="fa-regular fa-trash-can"></i></button>
+          <% } %>
+          <% if (messages && messages.alert) { %>
+          <div id="Alert" class=" bg-blue-100 px-3 py-1 rounded-md absolute">
+            <i class="fa-solid fa-triangle-exclamation text-blue-500"></i>
+            <span class="ms-2"><%= messages.alert %></span>
+          </div>
+          <% } %>
+        </div>
+        <table class="w-full">
+          <thead class="border-b">
+            <tr class="">
+              <th class="ps-2 px-2 text-gray-500 font-light">
+                <div class="inline-flex items-center">
+                  <label class="relative flex cursor-pointer items-center rounded-full" for="checkall" data-ripple-dark="true">
+                    <input id="checkAll" type="checkbox" name="checkall" class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 hover:before:opacity-10" />
+                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </label>
+                </div>
+              </th>
+              <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
+                Date
+              </th>
+              <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
+                IP address
+              </th>
+              <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
+                Event
+              </th>
+              <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
+                Location
+              </th>
+            </tr>
+          </thead>
+          <tbody class="w-full text-sm">
+            <% if (logins.length===0) { %>
+            <tr>
+              <th class="py-8 text-blue-700" colspan="5">No Login Activity!</th>
+            </tr>
+            <% } else { %>
+            <% for (let i=0; i < logins.length; i++) { %>
+            <% const login=logins[i]; %>
+            <tr class="text-center font-light hover:bg-blue-50 cursor-pointer">
+              <td class="py-4">
+                <div class="inline-flex items-center">
+                  <label class="relative flex cursor-pointer items-center rounded-full" for="checkbox<%= i %>" data-ripple-dark="true">
+                    <input id="checkbox<%= i %>" type="checkbox" name="selectedRows" value="<%= i %>" class="selectedRows before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 hover:before:opacity-10" />
+                    <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                    </div>
+                  </label>
+                </div>
+              </td>
+              <td class="py-4">
+                <%= (login.timestamp.toLocaleString("en-IN", { 
+                              year: 'numeric' , month: 'numeric' , day: 'numeric'  }))%>
+              </td>
+              <td class="py-4">
+                <%= login.ipAddress %>
+              </td>
+              <% if(login.result==='failed' ){ %>
+              <td class="py-4 uppercase text-red-600">
+                <%= login.result %>
+              </td>
+              <% }else{ %>
+              <td class="py-4 uppercase text-green-600">
+                <%= login.result %>
+              </td>
+              <% } %>
+              <td class="py-4">
+                <%= login.country %>
+              </td>
+            </tr>
+            <% } %>
+            <% } %>
+          </tbody>
+        </table>
+      </form>
+    </section>
+  </main>
+  <script>
+    $(function() {
+      const CheckAll = $("#checkAll");
+      const CheckBoxes = $(".selectedRows");
+
+      CheckAll.on("click", function() {
+        if ($(this).prop("checked")) {
+          $("#loginActionHeader").addClass("bg-blue-100");
+        } else {
+          $("#loginActionHeader").removeClass("bg-blue-100");
+        }
+        CheckBoxes.each(function() {
+          $(this).prop("checked", !$(this).prop("checked"));
+        });
+      });
+      CheckBoxes.on("click", function() {
+        if ($(this).prop("checked")) {
+          $("#loginActionHeader").addClass("bg-blue-100");
+        } else {
+          $("#loginActionHeader").removeClass("bg-blue-100");
+        }
+      });
+
+    });
+  </script>
+  <%- include('./partial/scripts.ejs') %>
+</body>
+
+</html>

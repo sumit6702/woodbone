@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+<body class="bg-gray-50 jagrataFont">
+  <%- include('./partial/AdminNavbar.ejs')  %>
+  <main>
+    <section class="mx-[2%] lg:mx-[8%] bg-green-100 py-7 px-5 my-4 rounded-md shadow bg-[url('https://i.ibb.co/rt29MDq/ADloginbg.png')] bg-no-repeat bg-right-top bg-[length:350px_350px]">
+      <h1 class="text-xl font-semibold">Orders</h1>
+      <p class="text-sm mt-2 flex text-gray-600">
+        <a href="/admin/dashboard">Home</a> <span class="mx-2">•</span> <span>Orders</span>
+      </p>
+    </section>
+    <section class="mx-[2%] lg:mx-[8%] bg-white rounded-md shadow-md">
+      <table class="w-full text-xs lg:text-base">
+        <thead class="border-b">
+          <tr class="">
+            <th class="py-2 text-gray-700">
+              Order No
+            </th>
+            <th class="py-2 text-gray-700">
+              Customer
+            </th>
+            <th class="py-2 text-gray-700 hidden lg:block">
+              Items
+            </th>
+            <th class="py-2 text-gray-700">
+              Total
+            </th>
+            <th class="py-2 text-gray-700">
+              Date
+            </th>
+            <th class="py-2 text-gray-700 hidden lg:block">
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody class="w-full text-gray-500">
+          <% if (orders.length===0) { %>
+          <tr>
+            <th class="py-8 text-blue-700" colspan="5">No Login Activity!</th>
+          </tr>
+          <% } else { %>
+          <% for (let i=0; i < orders.length; i++) { %>
+          <% const order = orders[i]; %>
+          <tr class="hover:bg-blue-50 cursor-pointer"></tr>
+          <td class="py-4 uppercase text-center">
+            <%= order.order_id  %>
+          </td>
+          <td class="py-4 relative group text-center">
+            <%= order.name  %>
+            <span class="hidden absolute bg-white p-1 rounded left-1/2  -translate-x-1/2 border shadow-sm group-hover:block"><%= order.email  %></span>
+          </td>
+          <td class="py-4 text-center hidden lg:block">
+            <%= order.products.length  %>
+          </td>
+          <td class="py-4 indian_Price text-center">
+            <%= order.orderprice  %>
+          </td>
+          <td class="py-4 text-center">
+            <%= formatDate(order.createdAt).replace(',','-')  %>
+          </td>
+          <td class="py-4 text-center hidden lg:block">
+            <span class="px-2 py-1 bg-teal-400 font-medium text-white rounded-md"><%= order.Orderstatus  %></span>
+          </td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <%- include('./partial/scripts.ejs') %>
+</body>
+
+</html>

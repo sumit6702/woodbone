@@ -1,0 +1,124 @@
+<nav class="lg:hidden block mb-[80px]">
+    <section class="mx-2">
+        <div id="navMenu" class="mNav py-2 text-lg font-bold fixed top-0 left-0 z-50 w-full bg-white px-6 border-b-2"
+            x-data="{ hamburger: false }">
+            <section>
+                <li class="flex justify-between py-2">
+                    <a class="navbrand pe-2 my-auto md:pe-5" href="/">Logo</a>
+                    <div class="flex">
+                        <a class="my-auto me-3 h-full" href="/cart">
+                            <div class="relative flex">
+                                <span class="flex mx-auto">
+                                    <svg id="cartSvg" height="22" width="22" data-name="cartsvg"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168.1 225.75">
+                                        <path
+                                            d="m143.63,225.75H24.48c-6.74,0-13.02-2.68-17.68-7.54C2.14,213.33-.27,206.95.02,200.21L5.58,71.21c.57-13.13,11.31-23.42,24.45-23.42h107.64c13.11,0,23.85,10.26,24.45,23.35l5.95,129c.31,6.74-2.08,13.15-6.75,18.03s-10.95,7.57-17.7,7.57ZM30.04,59.79c-6.7,0-12.18,5.24-12.47,11.94l-5.56,129c-.15,3.43,1.08,6.69,3.46,9.17,2.38,2.48,5.58,3.85,9.01,3.85h119.15c3.44,0,6.65-1.37,9.02-3.86s3.6-5.75,3.44-9.19l-5.95-129c-.31-6.67-5.78-11.9-12.46-11.9H30.04Z" />
+                                        <circle cx="40.82" cy="81.11" r="9.45" />
+                                        <circle cx="127.35" cy="81.11" r="9.45" />
+                                        <path
+                                            d="m123.66,59.86H38.38l-.54-5.41c-1.66-16.74,1.89-30.12,10.55-39.78C61.2.38,80.37.01,81.18,0h.4s.4.04.4.04c15.56,1.91,27.21,8.03,34.63,18.17,11.69,15.98,8.12,35.9,7.96,36.74l-.92,4.89Zm-74.2-12h63.73c.13-5.59-.66-14.96-6.32-22.63-5.32-7.22-14.03-11.67-25.89-13.21-2.23.12-15.28,1.25-23.72,10.74-5.38,6.05-7.99,14.48-7.8,25.1Z" />
+                                    </svg>
+                                </span>
+                                <span id="carCount" class="absolute" style="right: -4px;">0</span>
+                            </div>
+                            <p class="text-sm">Cart</p>
+                        </a>
+                        <% if(userid){ %>
+                            <div class="profileNavbtn relative flex mx-4" x-data="{ profileLink: false }"
+                                x-on:click="profileLink = !profileLink" x-transition>
+                                <div class="flex h-full isDisable" href="">
+                                    <div class="my-auto">
+                                        <span class="ms-1 flex m-auto justify-center">
+                                            <i class="fa-regular fa-user"></i>
+                                        </span>
+                                        <p class="text-sm">
+                                            <%= userid.firstName %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div x-show="profileLink"
+                                    class="absolute -left-10 top-16 z-50 bg-white text-black p-3 w-max shadow-lg">
+                                    <ul>
+                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/my-account">My Account</a></li>
+                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/wishlist">Wishlist</a></li>
+                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/orders">Orders</a></li>
+                                        <li class="my-1 py-1 px-2 bg-teal-400 uppercase text-sm text-center"><a
+                                                href="/logout">Logout</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <% }else{ %>
+                                <div class="loginNavbtn mx-4">
+                                    <div class="h-full py-1 relative" x-data="{ logins :  false }" x-on:click="logins = !logins" x-transition>
+                                        <span class="ms-1 flex m-auto justify-center">
+                                            <i class="fa-regular fa-user"></i>
+                                        </span>
+                                        <p class="text-sm">login/Singup</p>
+                                        <div class="py-2 absolute"  x-show="logins">
+                                            <div class="py-1 px-3 bg-white z-50 shadow-md">
+                                                <a class="block pb-1" href="/singup">Singup</a>
+                                                <a class="block pb-1" href="/login">Login</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <div class="cursor-pointer p-3 hamburger-icon" x-on:click="hamburger = !hamburger">
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg id="Menu_Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 331.7 288"
+                                            height="22" width="22">
+                                            <g id="Menu_Group">
+                                                <path id="Menu_bar" data-name="Menu_bar" class="Menu-bar" fill="#3c6665"
+                                                    d="m229.5,31H99.5c-8.56,0-15.5-6.94-15.5-15.5C84,6.94,90.94,0,99.5,0h130.01c20.23.08,20.3,30.91,0,31Z" />
+                                                <path id="Menu_bar-2" data-name="Menu_bar" class="Menu-bar"
+                                                    fill="#3c6665"
+                                                    d="m229.5,288H99.5c-8.56,0-15.5-6.94-15.5-15.5,0-8.56,6.94-15.5,15.5-15.5h130.01c20.23.08,20.3,30.91,0,31Z" />
+                                                <path id="Menu_bar-3" data-name="Menu_bar" class="Menu-bar"
+                                                    fill="#3c6665"
+                                                    d="m316.5,160s-301.01,0-301.01,0c-8.56,0-15.5-6.94-15.5-15.5,0-8.56,6.94-15.5,15.5-15.5,0,0,301.01,0,301.01,0,20.17.07,20.34,30.91,0,31Z" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                    </div>
+                </li>
+            </section>
+            <section class="m-menu" x-show="hamburger" x-transition:enter="transition duration-800 transform linear"
+                x-transition:enter-start="opacity-0 translate-y-[-10%]"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition duration-800 transform ease-in"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 translate-y-[-10%]">
+
+                <ul class="">
+                    <li class="py-3 nav-links"><a class="block w-full" href="/"><span>Home</span></a></li>
+                    <li class="py-3 nav-links">
+                        <a class="double-Click block w-full cursor-pointer" href="/furniture">
+                            <span>Furniture  <i class="fa-solid fa-chevron-down fa-2xs text-gray-400"></i></span>
+                        </a>
+                        <div class="nav-nested-links min-w-max p-8 bg-white text-black">
+                            <div><a class="flex h-full py-2" href="/furniture/beds"><span>Beds</span></a></div>
+                            <div><a class="flex h-full py-2" href="/furniture/storage"><span>Storage</span></a></div>
+                            <div><a class="flex h-full py-2" href="/furniture/seating"><span>Seating</span></a></div>
+                            <div><a class="flex h-full py-2" href="/furniture/tables"><span>Tables</span></a></div>
+                            <div><a class="flex h-full py-2" href="/furniture/outdoors"><span>Outdoor</span></a></div>
+                            <div><a class="flex h-full py-2" href="/furniture/others"><span>Other</span></a></div>
+                        </div>
+                    </li>
+                    <li class="py-3 nav-links"><a class="block w-full" href="/contactus"><span>Contact us</span></a>
+                    </li>
+                    <li class="py-3 nav-links"><a class="block w-full" href=""><span>Blog</span></a></li>
+                    <li class="my-1 py-2 flex justify-between">
+                        <form class="w-full flex searchform relative sm:me-28" action="/search">
+                            <input
+                                class="w-full border px-2 py-1 border-black font-light text-sm text-black placeholder:text-sm placeholder:text-black placeholder:font-light"
+                                id="SearchBar" name="s_query" type="text" placeholder="Search">
+                            <button type="submit" class="h-full my-auto absolute right-0 px-2">
+                                <i class="fa-solid fa-magnifying-glass text-gray-500"></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </section>
+</nav>
