@@ -31,6 +31,103 @@ const dashboardcontroller = async (req, res) => {
 
     return `${day}${monthAbbreviation}-${year}`;
   };
+  /* ---------------------------- Quarterly Orders ---------------------------- */
+  const today = new Date();
+  function getLastDayOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  }
+  function getStartOfMonthAgo(monthsAgo) {
+    const startDate = new Date(today);
+    startDate.setMonth(today.getMonth() - monthsAgo);
+    startDate.setDate(1);
+    return startDate;
+  }
+
+  function getEndOfMonthAgo(monthsAgo) {
+    const endDate = getStartOfMonthAgo(monthsAgo);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0); // Setting to the last day of the previous month
+    return endDate;
+  }
+
+  const thirdLastMonthStart = getStartOfMonthAgo(3);
+  const secondLastMonthStart = getStartOfMonthAgo(2);
+  const lastMonthStart = getStartOfMonthAgo(1);
+
+  const thirdLastMonthEnd = getEndOfMonthAgo(3);
+  const secondLastMonthEnd = getEndOfMonthAgo(2);
+  const lastMonthEnd = getEndOfMonthAgo(1);
+
+  const thirdLastMonthOrders = await ORDERS.find({
+    createdAt: {
+      $gte: thirdLastMonthStart,
+      $lt: thirdLastMonthEnd,
+    },
+  });
+
+  const secondLastMonthOrders = await ORDERS.find({
+    createdAt: {
+      $gte: secondLastMonthStart,
+      $lt: secondLastMonthEnd,
+    },
+  });
+
+  const lastMonthOrders = await ORDERS.find({
+    createdAt: {
+      $gte: lastMonthStart,
+      $lt: lastMonthEnd,
+    },
+  });
+
+  const orderLengths = [
+    thirdLastMonthOrders.length,
+    secondLastMonthOrders.length,
+    lastMonthOrders.length,
+  ];
+
+  /* ---------------------------- Top FOUR Products --------------------------- */
+  const allProductQuantities = [];
+
+  orders.forEach((order) => {
+    order.products.forEach((product) => {
+      allProductQuantities.push({
+        productId: product.product_id,
+        productQuantity: product.ProductQuantity,
+      });
+    });
+  });
+
+  const productQuantityCount = allProductQuantities.reduce(
+    (acc, { productId, productQuantity }) => {
+      if (!acc[productId]) {
+        acc[productId] = 0;
+      }
+      acc[productId] += productQuantity;
+      return acc;
+    },
+    {}
+  );
+
+  const productQuantityCountArray = Object.entries(productQuantityCount).map(
+    ([productId, totalQuantity]) => ({
+      productId,
+      totalQuantity,
+    })
+  );
+
+  productQuantityCountArray.sort((a, b) => b.totalQuantity - a.totalQuantity);
+
+  const top4ProductIds = productQuantityCountArray
+    .slice(0, 4)
+    .map((entry) => entry.productId);
+  let counts = [];
+  productQuantityCountArray.forEach((ids) => {counts.push(ids.totalQuantity)});
+
+  const top4Products = prodcuts.filter((product) =>
+    top4ProductIds.includes(product.id)
+  );
+
+
   res.render("ADdashboard", {
     Revenue,
     admin,
@@ -39,6 +136,9 @@ const dashboardcontroller = async (req, res) => {
     prodcuts,
     Revenue,
     formatDate,
+    orderLengths,
+    top4Products,
+    counts
   });
 };
 
@@ -363,7 +463,6 @@ const statisticsDBcontroller = async (req, res) => {
       ],
     },
   });
-
   res.render("ADstatistics", { admin, orders });
 };
 

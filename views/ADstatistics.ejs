@@ -25,6 +25,7 @@
     var order_price = [];
     var order_dates = [];
     const orders = <%- JSON.stringify(orders) %>
+    console.log(orders)
     orders.forEach((order) => {
       order_price.push(order.orderprice);
 
