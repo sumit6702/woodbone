@@ -276,12 +276,8 @@
                     <input type="hidden" name="adddressId" value="<%= address._id %>">
                     <div class="md:flex mb-2">
                       <div class="flex mb-2 border p-1 ">
-                        <label class="w-max m-auto" for="Addressfirstname">First Name:</label>
-                        <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50" disabled type="text" name="Addressfirstname" id="Addressfirstname" value="<%= address.FirstName %>">
-                      </div>
-                      <div class="flex mb-2 border p-1">
-                        <label class="w-max m-auto" for="Addresslastname">Last Name:</label>
-                        <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50" disabled type="text" name="Addresslastname" id="Addresslastname" value="<%= address.LastName %>">
+                        <label class="w-max m-auto" for="Addressfirstname">Full Name:</label>
+                        <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50" disabled type="text" name="Addressfirstname" id="Addressfirstname" value="<%= address.fullname %>">
                       </div>
                       <div class="flex mb-2 border p-1">
                         <label class="w-max m-auto" for="Addressphno">PhoneNo:</label>
