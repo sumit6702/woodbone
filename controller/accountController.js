@@ -17,6 +17,7 @@ import easyinvoice from "easyinvoice";
 import INVOICE from "../model/InvoiceSchema.js";
 import fs from "fs";
 import path from "path";
+import sendMail from "../middleware/email.js";
 
 const stripe = Stripe(Secret_Key);
 let paymentSuccessful = false;
@@ -30,70 +31,33 @@ const forgetPass = async (req, res) => {
 };
 
 //Email Reset Link
-const verifyMail = async (name, email, user) => {
+const verifyMail = async (username, email, user) => {
   try {
     const token = jwt.sign({ user }, secretKey, {
       expiresIn: tokenExpiration,
     });
-
-    const transpoter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: "raglothbrokking@gmail.com",
-        pass: "xweqwevzihptiahr",
-      },
-    });
-
-    const mailinfo = {
-      from: '"Woodbone" <woodbone@mail.com>',
-      to: email,
-      subject: `Hello ${name}, Password Reset`,
-      text: "<p>Woodbone Verification</p>",
-      html: `
-      <!DOCTYPE html>
-      <html>
-      
-      <head>
-        <style>
-      body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}.verification-link{margin-top:40px}.verification-link a{background-color:#000;padding:12px 22px;text-decoration:none;text-transform:uppercase;color:#fff;box-shadow:2px 2px 2px #00000048}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px;}
-        </style>
-      </head>
-      
-      <body>
-        <div class="container">
-          <div class="logo">
-            <!-- <img src="logo.png" alt="Logo"> -->
-            <h1>LOGO</h1>
-          </div>
-          <div class="content">
-            <h1>Password Reset</h1>
-            <h2>Hello, ${name}!</h2>
-            <p>
-              We have received a request to reset your password. Click the button below to set a new password:
-            </p>
-            <p class="verification-link"><a href="http://localhost:3080/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
-            <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
-            <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
-          </div>
-          <div class="footer">
-            <p>© 2023 Woodbone. All rights reserved.</p>
-          </div>
-        </div>
-      </body>
-      </html>
-          `,
-    };
-
-    transpoter.sendMail(mailinfo, (error, info) => {
-      if (error) {
-        console.log(error.message);
-      } else {
-        console.log("Email has been send");
-      }
-    });
+    const subject = `Hello ${username}, Password Reset`;
+    const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}.verification-link{margin-top:40px}.verification-link a{background-color:#000;padding:12px 22px;text-decoration:none;text-transform:uppercase;color:#fff;box-shadow:2px 2px 2px #00000048}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px;} `;
+    const htmlbody = `<div class="container">
+    <div class="logo">
+      <!-- <img src="logo.png" alt="Logo"> -->
+      <h1>LOGO</h1>
+    </div>
+    <div class="content">
+      <h1>Password Reset</h1>
+      <h2>Hello, ${username}!</h2>
+      <p>
+        We have received a request to reset your password. Click the button below to set a new password:
+      </p>
+      <p class="verification-link"><a href="http://localhost:3080/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
+      <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
+      <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
+    </div>
+    <div class="footer">
+      <p>© 2023 Woodbone. All rights reserved.</p>
+    </div>
+    </div>`;
+    await sendMail(email, subject, htmlStyle, htmlbody);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -247,8 +211,7 @@ const newAddress = async (req, res) => {
       const newAddress = new USERADDRESS({
         userid: user.id,
         address: {
-          FirstName: req.body.addFname,
-          LastName: req.body.addLname,
+          fullname: req.body.addFname,
           PhoneNo: req.body.addPno,
           Address: req.body.addAdd,
           State: req.body.addState,
@@ -261,8 +224,7 @@ const newAddress = async (req, res) => {
       await newAddress.save();
     } else {
       existAdd.address.push({
-        FirstName: req.body.addFname,
-        LastName: req.body.addLname,
+        fullname: req.body.addFname,
         PhoneNo: req.body.addPno,
         Address: req.body.addAdd,
         State: req.body.addState,
@@ -298,7 +260,6 @@ const updateAddress = async (req, res) => {
   const {
     adddressId,
     Addressfirstname,
-    Addresslastname,
     Addressphno,
     AddressAdd,
     AddressState,
@@ -310,21 +271,21 @@ const updateAddress = async (req, res) => {
     userid: req.session.user_id,
   });
   const updatedAddress = {
-    FirstName: Addressfirstname,
-    LastName: Addresslastname,
+    fullname: Addressfirstname,
     PhoneNo: Addressphno,
     Address: AddressAdd,
     State: AddressState,
     City: AddressCity,
     Pincode: AddressPincode,
     Country: AddressCountry,
+    default: true,
   };
   const UserCurrentAddress = UserAddress.address.findIndex(
     (address) => address._id.toString() === adddressId
   );
 
   if (UserCurrentAddress !== -1) {
-    const update = (UserAddress.address[UserCurrentAddress] = updatedAddress);
+    UserAddress.address[UserCurrentAddress] = updatedAddress;
     UserAddress.save();
     console.log("Address updated successfully");
   } else {
@@ -464,6 +425,7 @@ const checkout = async (req, res) => {
 };
 let NewOrder;
 let invoice;
+let Mproducts = [];
 
 const payment = async (req, res) => {
   try {
@@ -501,6 +463,11 @@ const payment = async (req, res) => {
         "tax-rate": 18,
         price: prodcutprice[index] / (1 + 0.18),
       }));
+      Mproducts = prodcutname.map((name, index) => ({
+        Name: name,
+        Quantity: productquantity[index],
+        Prices: prodcutprice[index],
+      }));
     } else {
       products.push({
         product_id: product_id,
@@ -513,6 +480,11 @@ const payment = async (req, res) => {
         description: prodcutname,
         "tax-rate": 18,
         price: prodcutprice / (1 + 0.18),
+      });
+      Mproducts.push({
+        Name: prodcutname,
+        Quantity: productquantity,
+        Prices: prodcutprice,
       });
     }
 
@@ -678,6 +650,58 @@ const paymentS = async (req, res) => {
     });
 
     await orderInvoice.save();
+    const InvoiceDate = new Date().toLocaleDateString("en-IN");
+    const productTable = Mproducts.map(
+      (product) => `
+    <tr>
+      <td>${product.Name}</td>
+      <td>${product.Quantity}</td>
+      <td>Rs.${product.Prices}</td>
+    </tr>
+  `
+    ).join("");
+    const invoiceUrl = `http://localhost:3080/download-invoice/${orderInvoice.id}`;
+    // Send Order Invoice to User
+    const verifyMail = async (username, email, user) => {
+      const subject = `Hello ${username}, Password Reset`;
+      const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
+      const htmlbody = `<div class="container">
+      <div class="logo">
+          <!-- <img src="logo.png" alt="Logo"> -->
+          <h1>LOGO</h1>
+      </div>
+      <div class="content">
+          <h4>Hello, ${username}!</h4>
+          <h3>Thank you for Purchasing</h3>
+          <div>
+              Your orders:
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    ${productTable}
+                  </tbody>
+              </table>
+          </div>
+          <div>
+              <p style="font-weight: 500;">Invoice:</p>
+              <p>Invoice Number: ${orderInvoice.order_id}</p>
+              <p>Invoice Date: ${InvoiceDate}</p>
+              <p>Invoice PDF: <a href="${invoiceUrl}" target="_blank" style=" padding: 5px 10px; text-decoration: none; display: inline-block; border: 1px solid #bababa; color: #000;">Download PDF</a></p>
+          </div>
+      </div>
+      <div class="footer">
+          <p>© 2023 Woodbone. All rights reserved.</p>
+      </div>
+  </div>`;
+      await sendMail(email, subject, htmlStyle, htmlbody);
+    };
+    await verifyMail(user.fullName, user.email, user._id);
 
     res.render("paymentP", { userid: req.user, cartval: req.cartval });
   } else {
