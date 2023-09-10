@@ -392,6 +392,7 @@ function showActiveDiv(conts, links, actCont) {
   });
 }
 showActiveDiv($(".nestedItems"), $(".nested-links"), $("#adminprofile"));
+showActiveDiv($(".nestedItems"), $("#myaccount_Links li a"), $("#userOrders"));
 
 /* ------------------------- EDIT BUTTON FORM ENABLE ------------------------ */
 fromEdit($(".editbtn"), $("#adminprofile form"));
