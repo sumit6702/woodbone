@@ -2,168 +2,188 @@
 <html lang="en">
 <%- include('./partial/header.ejs') %>
 
-<body class="bg-gray-50 jagrataFont">
-  <%- include('./partial/AdminNavbar.ejs')  %>
-  <main>
-    <section class="mx-[2%] lg:mx-[8%] border rounded-md shadow-md bg-white">
-      <div class="h-60 opacity-90">
-        <img class="object-cover w-full h-full" src="https://images.unsplash.com/photo-1636955735635-b4c0fd54f360?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" alt="">
-      </div>
-      <div class="relative">
-        <div class="flex items-center rounded-full h-28 w-28 absolute -top-16 left-1/2 -translate-x-1/2 shadow-md border-[10px] border-white">
-          <img class="object-cover h-full w-full rounded-full" height="" width="" src="/images/profile.jpg" alt="">
-        </div>
-        <div class="text-center pt-14">
-          <p class="text-xl font-semibold text-gray-800">Sumit Kumar</p>
-          <p class=" text-gray-500">Admin</p>
-        </div>
-      </div>
-      <div class="bg-gray-50 py-2 text-gray-700 font-medium">
-        <div class="flex w-fit">
-          <a class="px-3 py-1 nested-links" href="#adminprofile">Account</a>
-          <a class="px-3 py-1 nested-links" href="#adminsecurity">Password</a>
-          <a class="px-3 py-1 nested-links" href="#adminperf">Preferences</a>
-        </div>
-      </div>
-    </section>
-    <section class="mx-[2%] lg:mx-[8%] border rounded-md shadow-md bg-white my-6 py-[3%] relative">
-      <!-- ALERT -->
-      <div class="absolute right-0 rounded bg-gradient-to-l from-teal-500 to-teal-400 text-white font-bold px-3 py-2">
-        <p>Profile is Updated!</p>
-      </div>
-      <!-- ALERT END -->
-      <div id="adminprofile" data-active="" class="nestedItems">
-        <form class="w-80 mx-auto px-6">
-          <div class="my-3 font-medium text-xl">
-            <p>Update your profile</p>
+  <body class="bg-gray-50 jagrataFont">
+    <%- include('./partial/AdminNavbar.ejs') %>
+      <main>
+        <section class="mx-[2%] lg:mx-[8%] border rounded-md shadow-md bg-white">
+          <div class="h-60 opacity-90 ">
+            <img class="object-cover w-full h-full"
+              src="https://images.unsplash.com/photo-1636955735635-b4c0fd54f360?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+              alt="">
           </div>
-          <div>
-            <button class="w-full flex justify-end my-3 p-2 editbtn" type="button">
+          <div class="relative">
+            <button id="profileImg" class="px-2 py-1 -top-16 left-[54%] absolute z-50 rounded-full" type="button">
               <i class="fa-regular fa-pen-to-square"></i>
             </button>
-          </div>
-          <div class="mb-3">
-            <input class="px-3 py-2 border rounded-md w-full" disabled type="text" name="" id="" value="Sumit Kumar">
-          </div>
-          <div class="mb-3">
-            <input class="px-3 py-2 border rounded-md w-full" disabled type="email" name="" id="" value="sumitcar98@gmail.com">
-          </div>
-          <div class="mb-3">
-            <input class="px-3 py-2 border rounded-md w-full" disabled type="number" name="" id="" value="9891997885">
-          </div>
-          <div class="mb-3">
-            <input disabled class="cursor-pointer px-3 py-2 bg-gray-700 text-white font-medium uppercase rounded-md w-full" type="submit" value="update">
-          </div>
-        </form>
-      </div>
-      <div id="adminsecurity" class="nestedItems">
-        <form class="w-80 mx-auto px-6">
-          <div class="my-3 font-medium text-xl">
-            <p>Update your Password</p>
-          </div>
-          <div>
-            <button class="w-full flex justify-end my-3 p-2 editbtn" type="button">
-              <i class="fa-regular fa-pen-to-square"></i>
-            </button>
-          </div>
-          <div class="mb-6">
-            <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="" id="" placeholder="Old password">
-          </div>
-          <div class="my-2">
-            <div class="mb-3">
-              <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="" id="" placeholder="New password">
+            <form id="profileform" action="/admin/profile/updateprofileimg" method="post" enctype="multipart/form-data">
+              <input class="hidden" type="file" name="userProfile" id="userProfile">
+            </form>
+            <div
+              class="flex items-center rounded-full h-28 w-28 absolute -top-16 left-1/2 -translate-x-1/2 shadow-md border-[10px] border-white">
+              <img class="object-cover h-full w-full rounded-full" height="" width="" src="/<%= admin.profileImg.path  %>" alt="">
+              <script>
+                $("#profileImg").on("click", () => {
+                  $("#userProfile").click();
+                })
+                $("#userProfile").on("change", function () {
+                  if (this.files.length > 0) {
+                    $("#profileform").submit();
+                  }
+                });
+              </script>
             </div>
-            <div class="mb-3">
-              <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="" id="" placeholder="Confirm password">
+            <div class="text-center pt-14">
+              <p class="text-xl font-semibold text-gray-800"><%= admin.fullName  %></p>
+              <p class=" text-gray-500">Admin</p>
             </div>
           </div>
-          <div class="my-6">
-            <input disabled class="cursor-pointer px-3 py-2 bg-gray-700 text-white font-medium uppercase rounded-md w-full" type="submit" value="update">
+          <div class="bg-gray-50 py-2 text-gray-700 font-medium">
+            <div class="flex w-fit">
+              <a class="px-3 py-1 nested-links" href="#adminprofile">Account</a>
+              <a class="px-3 py-1 nested-links" href="#adminsecurity">Password</a>
+              <a class="px-3 py-1 nested-links" href="#adminperf">Preferences</a>
+            </div>
           </div>
-        </form>
-      </div>
-      <div id="adminperf" class="nestedItems">
-        <p class="my-3 font-medium text-xl mx-4">Account & Site Preference</p>
-        <!-- GENERAL PERFERENCES -->
-        <div class="lg:flex p-4">
-          <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
-            <p class="font-medium text-blue-700 my-3">General Settings: </p>
-            <div class="mb-3">
-              <label for="siteName">Site Name</label>
-              <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteName" id="siteName" value="" placeholder="Site Name">
+        </section>
+        <section class="mx-[2%] lg:mx-[8%] border rounded-md shadow-md bg-white my-6 py-[3%] relative">
+          <!-- ALERT -->
+          <% if (messages && messages.alert) { %>
+            <div id="Alert"
+              class="absolute right-0 rounded bg-gradient-to-l from-teal-500 to-teal-400 text-white font-bold px-3 py-2">
+              <p>
+                <%= messages.alert %>
+              </p>
             </div>
-            <div class="mb-3">
-              <label for="siteLogo">Site Logo</label>
-              <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo" id="siteLogo" value="" placeholder="Site Logo">
-            </div>
-            <button class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium" type="submit">Update</button>
-          </form>
-          <!-- NOTIFICATION -->
-          <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
-            <p class="font-medium text-blue-700 my-3">Notifications:</p>
-            <div class="mb-3">
-              <p>Order Notifications</p>
-              <div class="relative block w-10 align-middle select-none">
-                <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-gray-300 border-4 appearance-none cursor-pointer " />
-                <label for="toggle" class="toggle-label block w-12 h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+            <% } %>
+              <!-- ALERT END -->
+              <div id="adminprofile" data-active="" class="adminnestedItems">
+                <form class="w-80 mx-auto px-6" action="/admin/profile/updateprofile" method="post">
+                  <div class="my-3 font-medium text-xl">
+                    <p>Update your profile</p>
+                  </div>
+                  <div>
+                    <button class="w-full flex justify-end my-3 p-2 editbtn" type="button">
+                      <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                  </div>
+                  <div class="mb-3">
+                    <input class="px-3 py-2 border rounded-md w-full" disabled type="text" name="adminName"
+                      id="adminName" value="<%= admin.fullName  %>">
+                  </div>
+                  <div class="mb-3">
+                    <input class="px-3 py-2 border rounded-md w-full" disabled type="email" name="adminEmail"
+                      id="adminEmail" value="<%= admin.email  %>">
+                  </div>
+                  <div class="mb-3">
+                    <input class="px-3 py-2 border rounded-md w-full" disabled type="number" name="adminMobile"
+                      id="adminMobile" value="<%= admin.mobile  %>">
+                  </div>
+                  <div class="mb-3">
+                    <input disabled
+                      class="cursor-pointer px-3 py-2 bg-gray-700 text-white font-medium uppercase rounded-md w-full"
+                      type="submit" value="update">
+                  </div>
+                </form>
               </div>
+              <div id="adminsecurity" class="adminnestedItems">
+                <form class="w-80 mx-auto px-6" action="/admin/profile/updatepassword" method="post">
+                  <div class="my-3 font-medium text-xl">
+                    <p>Update your Password</p>
+                  </div>
+                  <div>
+                    <button class="w-full flex justify-end my-3 p-2 editbtn" type="button">
+                      <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                  </div>
+                  <div class="mb-6">
+                    <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="adminoldPass"
+                      id="adminoldPass" placeholder="Old password">
+                  </div>
+                  <div class="my-2">
+                    <div class="mb-3">
+                      <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="adminnewPass"
+                        id="adminnewPass" placeholder="New password">
+                    </div>
+                    <div class="mb-3">
+                      <input class="px-3 py-2 border rounded-md w-full" disabled type="password" name="adminCongPass"
+                        id="adminCongPass" placeholder="Confirm password">
+                    </div>
+                  </div>
+                  <div class="my-6">
+                    <input disabled
+                      class="cursor-pointer px-3 py-2 bg-gray-700 text-white font-medium uppercase rounded-md w-full"
+                      type="submit" value="update">
+                  </div>
+                </form>
+              </div>
+              <div id="adminperf" class="adminnestedItems">
+                <p class="my-3 font-medium text-xl mx-4">Account & Site Preference</p>
+                <!-- GENERAL PERFERENCES -->
+                <div class="lg:flex mt-12 px-8">
+                  <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
+                    <p class="font-medium text-blue-700 my-3">General Settings: </p>
+                    <div class="mb-3">
+                      <label for="siteName">Site Name</label>
+                      <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteName"
+                        id="siteName" value="" placeholder="Site Name">
+                    </div>
+                    <div class="mb-3">
+                      <label for="siteLogo">Site Logo</label>
+                      <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo"
+                        id="siteLogo" value="" placeholder="Site Logo">
+                    </div>
+                    <button
+                      class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium"
+                      type="submit">Update</button>
+                  </form>
+                  <!-- PRODUCT MANAGMENT -->
+                  <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
+                    <p class="font-medium text-blue-700 my-3">Product Management:</p>
+                    <div class="mb-2">
+                      <label class="text-gray-800 font-medium" for="productCategory">Categories:</label>
+                      <ul id="productCategoryList" class="list-decimal pl-7 text-sm">
+                        <li>Category 1</li>
+                        <li>Category 2</li>
+                        <li>Category 3</li>
+                        <!-- Add more existing categories here -->
+                      </ul>
+                    </div>
+                    <div>
+                      <label class="text-gray-500 px-1 font-medium" for="newProductCategory">Add New Product
+                        Category</label>
+                      <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="newProductCategory"
+                        id="newProductCategory" placeholder="New category name">
+                    </div>
+                    <button
+                      class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium"
+                      type="submit">Add Category</button>
+                  </form>
+                </div>
+              </div>
+        </section>
+      </main>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const toggleCheckbox = document.getElementById('toggle');
+          const toggleLabel = document.querySelector('.toggle-label');
 
-            </div>
-            <button class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium" type="submit">Update</button>
-          </form>
-          <!-- PRODUCT MANAGMENT -->
-          <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
-            <p class="font-medium text-blue-700 my-3">Product Management:</p>
-            <div class="mb-2">
-              <label class="text-gray-800 font-medium" for="productCategory">Categories:</label>
-              <ul id="productCategoryList" class="list-decimal pl-7 text-sm">
-                <li>Category 1</li>
-                <li>Category 2</li>
-                <li>Category 3</li>
-                <!-- Add more existing categories here -->
-              </ul>
-            </div>
-            <div>
-              <label class="text-gray-500 px-1 font-medium" for="newProductCategory">Add New Product Category</label>
-              <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="newProductCategory" id="newProductCategory" placeholder="New category name">
-            </div>
-            <button class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium" type="submit">Add Category</button>
-          </form>
-          <!-- CUSTOMIZATION OPTION -->
-          <form class="w-80 mx-auto mb-6 lg:mb-0 lg:mx-2 border py-2 px-4 rounded shadow">
-            <p class="font-medium text-blue-700 my-3">Customization Options:</p>
-            <div>
-              <label for="theme">Select Theme</label>
-              <select class="block px-3 py-2 mt-1 border rounded-md w-full" name="theme" id="theme">
-                <option value="theme1">Theme 1</option>
-                <option value="theme2">Theme 2</option>
-              </select>
-            </div>
-            <button class="mt-3 border border-black hover:border-blue-600 text-black hover:bg-blue-600 hover:text-white py-2 px-4 rounded-md font-medium" type="submit">Apply Theme</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const toggleCheckbox = document.getElementById('toggle');
-      const toggleLabel = document.querySelector('.toggle-label');
+          toggleCheckbox.addEventListener('change', function () {
+            if (toggleCheckbox.checked) {
+              toggleLabel.classList.remove('bg-gray-300');
+              toggleLabel.classList.add('bg-blue-500');
+              toggleCheckbox.classList.add('-right-2');
+            } else {
+              toggleLabel.classList.remove('bg-blue-500');
+              toggleLabel.classList.add('bg-gray-300');
+              toggleCheckbox.classList.remove('-right-2');
+            }
+          });
+        });
 
-      toggleCheckbox.addEventListener('change', function() {
-        if (toggleCheckbox.checked) {
-          toggleLabel.classList.remove('bg-gray-300');
-          toggleLabel.classList.add('bg-blue-500');
-          toggleCheckbox.classList.add('-right-2');
-        } else {
-          toggleLabel.classList.remove('bg-blue-500');
-          toggleLabel.classList.add('bg-gray-300');
-          toggleCheckbox.classList.remove('-right-2');
-        }
-      });
-    });
-  </script>
-  <%- include('./partial/scripts.ejs') %>
-</body>
+        $("#adminprofile").show()
+
+      </script>
+      <%- include('./partial/scripts.ejs') %>
+  </body>
 
 </html>

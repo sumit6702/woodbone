@@ -93,6 +93,9 @@ import {
   updateUser,
   userPasswordUpdate,
   getInvoice,
+  passwordChange,
+  updateAdminProfile,
+  profileUploader,
 } from "../controller/accountController.js";
 
 import limiter from "../middleware/ratemiddleware.js";
@@ -173,7 +176,12 @@ router.post("/admin/login/new_admin_password", newAdminPassword);
 router.post("/admin/login", limiter, adminLoginController);
 router.get("/admin/dashboard", isAdmin, dashboardcontroller);
 router.get("/admin/products", isAdmin, productDBcontroller);
-router.post("/admin/products", isAdmin, upload.array("pd_images", 12), uploadPDcontroller);
+router.post(
+  "/admin/products",
+  isAdmin,
+  upload.array("pd_images", 12),
+  uploadPDcontroller
+);
 router.get("/admin/orders", isAdmin, customerDBcontroller);
 router.get("/admin/log_activity", isAdmin, loginActivityDBcontroller);
 router.post("/delete_adminlogins", isAdmin, deleteloginActcontroller);
@@ -183,9 +191,31 @@ router.get("/admin/profile", isAdmin, adminProfileDBcontroller);
 router.get("/admin/products/delete/:id", isAdmin, deleteproduct);
 router.get("/admin/products/search", isAdmin, productquries);
 router.get("/admin/product/:productId", isAdmin, updateproduct);
-router.get("/img/delete/:productId/:imageId/:index", isAdmin, singleimageremover);
-router.post("/img/edit/updateOne",isAdmin, upload.single("imageInput"), singleimageedit);
-router.post("/admin/product/update",isAdmin, upload.array("pd_images", 12), updatenewProduct);
+router.get(
+  "/img/delete/:productId/:imageId/:index",
+  isAdmin,
+  singleimageremover
+);
+router.post(
+  "/img/edit/updateOne",
+  isAdmin,
+  upload.single("imageInput"),
+  singleimageedit
+);
+router.post(
+  "/admin/product/update",
+  isAdmin,
+  upload.array("pd_images", 12),
+  updatenewProduct
+);
+router.post("/admin/profile/updatepassword", isAdmin, passwordChange);
+router.post("/admin/profile/updateprofile", isAdmin, updateAdminProfile);
+router.post(
+  "/admin/profile/updateprofileimg",
+  isAdmin,
+  upload.single("userProfile"),
+  profileUploader
+);
 
 router.get("/pagetest", pagetesterscontroller);
 

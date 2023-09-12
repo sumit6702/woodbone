@@ -37,6 +37,10 @@ const RegisterSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  profileImg:{
+    filename:String,
+    path:String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

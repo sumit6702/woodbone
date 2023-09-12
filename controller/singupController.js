@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import e from "express";
 import nodemailer from "nodemailer";
 import USERDATA from "../model/UserDataSchema.js";
-
 const singupcontroller = async (req, res) => {
   try {
     res
@@ -16,7 +15,7 @@ const singupcontroller = async (req, res) => {
 };
 
 //email Verification!
-const verifyMail = async (name, email, id) => {
+const verifyMail = async (req, res, name, email, id) => {
   try {
     const transpoter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -57,7 +56,9 @@ const verifyMail = async (name, email, id) => {
               <br> 
               before being able to use your account you need to verify that this is your email address by, Clicking below:
             </p>
-            <p class="verification-link"><a href="http://localhost:3080/singup/verify?id=${id}" target='_self'>Verify Now</a></p>
+            <p class="verification-link"><a href="${req.protocol}://${req.get(
+        "host"
+      )}/singup/verify?id=${id}" target='_self'>Verify Now</a></p>
             <p style="margin: 42px 0;">Thanks! – The <span style="font-weight: 600;">Woodbone</span> team</p>
           </div>
           <div class="footer">
@@ -98,6 +99,10 @@ const newsingupController = async (req, res) => {
       lastName: lastName,
       email: mail,
       password: psw,
+      profileImg:{
+        filename:"",
+        path:""
+      }
     });
 
     if (data) {
@@ -106,7 +111,13 @@ const newsingupController = async (req, res) => {
     } else {
       const user = await newuser.save();
       if (user) {
-        const mailedd = await verifyMail(user.firstName, user.email, user._id);
+        const mailedd = await verifyMail(
+          req,
+          res,
+          user.firstName,
+          user.email,
+          user._id
+        );
       }
       res.send(
         "<p>Check Mail to Verify! <a href ='http://localhost:3080/login'>Login</a></p>"
@@ -114,7 +125,7 @@ const newsingupController = async (req, res) => {
       req.flash("success", "Registration Successful");
     }
   } catch (error) {
-    console.log(error.message + "at NewSingupController");
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -371,27 +371,28 @@ setTimeout(() => {
 }, 3000);
 
 /* ------------------------------- NESTED MENU ------------------------------ */
-function showActiveDiv(conts, links, actCont) {
+function showActiveDiv(nestedItems, itemsLinks, activeItems) {
   const hash = window.location.hash;
+  activeItems.show();
   if (hash) {
-    conts.not(hash).hide();
+    nestedItems.not(hash).hide();
     $(hash).show();
   } else {
-    conts.hide();
-    actCont.show();
+    nestedItems.hide();
+    activeItems.show();
   }
 
   window.addEventListener("hashchange", showActiveDiv);
 
-  links.click(function (e) {
+  itemsLinks.click(function (e) {
     e.preventDefault();
     const target = $(this).attr("href");
-    conts.hide();
+    nestedItems.hide();
     $(target).show();
     window.location.hash = target;
   });
 }
-showActiveDiv($(".nestedItems"), $(".nested-links"), $("#adminprofile"));
+showActiveDiv($(".adminnestedItems"), $(".nested-links"), $("#adminprofile"));
 showActiveDiv($(".nestedItems"), $("#myaccount_Links li a"), $("#userOrders"));
 
 /* ------------------------- EDIT BUTTON FORM ENABLE ------------------------ */

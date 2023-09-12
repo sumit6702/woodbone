@@ -18,6 +18,7 @@ import INVOICE from "../model/InvoiceSchema.js";
 import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
+import ADMINREGISTER from "../model/adminSchema.js";
 
 const stripe = Stripe(Secret_Key);
 let paymentSuccessful = false;
@@ -781,6 +782,98 @@ const getInvoice = async (req, res) => {
   }
 };
 
+const passwordChange = async (req, res) => {
+  try {
+    const oldPass = req.body.adminoldPass;
+    const newPass = req.body.adminnewPass;
+    const confPass = req.body.adminCongPass;
+    const hashPass = bcrypt.hashSync(confPass, 10);
+    const adminData = await ADMINREGISTER.findById(req.session.admin_id);
+
+    if (!adminData) {
+      res.redirect("/admin/profile");
+    } else {
+      const isPass = await bcrypt.compare(oldPass, adminData.password);
+      if (isPass) {
+        if (newPass === confPass) {
+          await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+            password: hashPass,
+          });
+          req.flash("alert", "Password Updated");
+          res.redirect("/admin/profile#adminsecurity");
+        } else {
+          req.flash("alert", "New Password not Matching");
+          res.redirect("/admin/profile");
+        }
+      } else {
+        req.flash("alert", "Incorrect Password");
+        res.redirect("/admin/profile");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
+  }
+};
+
+const updateAdminProfile = async (req, res) => {
+  try {
+    //
+    const { adminName, adminEmail, adminMobile } = req.body;
+    const adminData = await ADMINREGISTER.findById(req.session.admin_id);
+
+    if (!adminData) {
+      req.flash("alert", "Admin Not Found!");
+      res.redirect("/admin/profile");
+    } else {
+      await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+        fullName: adminName,
+        email: adminEmail,
+        mobile: adminMobile,
+      });
+      req.flash("alert", "Profile Updated");
+      res.redirect("/admin/profile#adminprofile");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
+  }
+};
+
+const profileUploader = async (req, res) => {
+  try {
+    const image = req.file;
+
+    if (!image) {
+      req.flash("alert", "No image uploaded");
+      res.redirect("/admin/profile");
+    } else {
+      const adminData = await ADMINREGISTER.findById(req.session.admin_id);
+      const oldImg = adminData.profileImg.path;
+      fs.unlinkSync(oldImg);
+
+      if (!adminData) {
+        req.flash("alert", "Admin Not Found!");
+        res.redirect("/admin/profile");
+      } else {
+        // Use await when updating the admin's profile information
+        await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+          profileImg: {
+            filename: image.filename,
+            path: image.path,
+          },
+        });
+
+        req.flash("alert", "Profile Updated");
+        res.redirect("/admin/profile#adminprofile");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
+  }
+};
+
 export {
   forgetPass,
   PasswordUpdate,
@@ -800,4 +893,7 @@ export {
   updateUser,
   userPasswordUpdate,
   getInvoice,
+  passwordChange,
+  updateAdminProfile,
+  profileUploader,
 };
