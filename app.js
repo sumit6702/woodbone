@@ -27,7 +27,10 @@ app.use(
     secret: secretkey,
     resave: false,
     saveUninitialized: true,
-    store: new session.MemoryStore(),
+    cookie: {
+      secure: false,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    },
   })
 );
 

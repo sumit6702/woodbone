@@ -212,7 +212,6 @@ router.post("/admin/profile/updatepassword", isAdmin, passwordChange);
 router.post("/admin/profile/updateprofile", isAdmin, updateAdminProfile);
 router.post(
   "/admin/profile/updateprofileimg",
-  isAdmin,
   upload.single("userProfile"),
   profileUploader
 );

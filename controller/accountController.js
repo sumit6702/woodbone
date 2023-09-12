@@ -848,16 +848,20 @@ const profileUploader = async (req, res) => {
       req.flash("alert", "No image uploaded");
       res.redirect("/admin/profile");
     } else {
-      const adminData = await ADMINREGISTER.findById(req.session.admin_id);
-      const oldImg = adminData.profileImg.path;
-      fs.unlinkSync(oldImg);
+      const adminData = await USERREGISTERMODEL.findById(req.session.user_id);
+      if(adminData && adminData.profileImg){
+        const oldImg = adminData.profileImg.path;
+        if (fs.existsSync(oldImg)) {
+          fs.unlinkSync(oldImg);
+          console.log('File deleted successfully:', oldImg);
+        }
+      }
 
       if (!adminData) {
         req.flash("alert", "Admin Not Found!");
         res.redirect("/admin/profile");
       } else {
-        // Use await when updating the admin's profile information
-        await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+        await USERREGISTERMODEL.findByIdAndUpdate(req.session.user_id, {
           profileImg: {
             filename: image.filename,
             path: image.path,

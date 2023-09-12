@@ -2,13 +2,14 @@ import USERREGISTERMODEL from "../model/UserAccount.js";
 import ADMINREGISTER from "../model/adminSchema.js";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
-const adminId = uuidv4();
+const uuid = uuidv4();
 import ip from "ip";
 import axios from "axios";
 import LOGINATTEMPT from "../model/Loginattempt.js";
 import NodeCache from "node-cache";
 const otpCache = new NodeCache();
 import nodemailer from "nodemailer";
+import USERTOKEN from "../model/userTokenSchma.js";
 
 const logincontroller = async (req, res) => {
   res.render("login", { userid: req.user, cartval:req.cartval, });
@@ -30,8 +31,26 @@ const userloginController = async (req, res) => {
     if (data) {
       if (await bcrypt.compare(userpassword, data.password)) {
         if(data.isVerified){
-        failedLoginAttempts[clientIP] = 0;
+          //If EveryThing is True
         req.session.user_id = data._id;
+        if (req.session.user_id) {
+          const rememberMeToken = uuid;
+        
+          // Save the token in the database
+          const tokenDocument = new USERTOKEN({
+            userId: data.id,
+            token: rememberMeToken,
+          });
+          await tokenDocument.save();
+          res.cookie("remember_me", rememberMeToken, {
+            expires: new Date(Date.now() + 30 * 24 * 3600 * 1000), // Set to a desired expiration time
+            httpOnly: true,
+            secure: true, // Set to true in a production environment with HTTPS
+          });
+        }
+        
+
+        failedLoginAttempts[clientIP] = 0;
         if(req.session.redirectPage){
           const redirectUrl = req.session.redirectPage;
           delete req.session.redirectPage;
@@ -289,9 +308,14 @@ async function getPublicIP() {
   }
 }
 
-const logoutController = (req, res) => {
+const logoutController = async(req, res) => {
   try {
     req.session.destroy();
+    if (req.cookies.remember_me) {
+      const rememberMeToken = req.cookies.remember_me;
+      await USERTOKEN.deleteOne({ token: rememberMeToken });
+    }
+    res.clearCookie('remember_me');
     res.redirect("/");
   } catch (error) {
     console.log(error.message);

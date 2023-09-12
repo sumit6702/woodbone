@@ -2,434 +2,528 @@
 <html lang="en">
 <%- include('./partial/header.ejs') %>
 
-<body>
-  <%- include('./partial/navbar.ejs') %> <%- include('./partial/mobilenavbar.ejs') %>
-  <main>
-    <section class="bg-gray-100">
-      <div class="grid grid-cols-12 py-6 mx-auto px-[8%]">
-        <!-- Buttons -->
-        <div class="col-span-12 md:col-span-3 p-4 bg-white rounded shadow-md mx-4">
-          <p class="my-2 px-2 text-lg font-medium">Welcome, Jhon Doe</p>
-          <ul id="myaccount_Links">
-            <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
-              <a class="flex" href="#userOrders">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/6735/6735011.png" alt />
-                </span>
-                <p class="my-auto mx-2">Orders</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
-                </span>
-              </a>
-            </li>
-            <li class=" p-2 my-auto hover:bg-gray-100 cursor-pointer ">
-              <a class="flex" href="#userFavorites">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/10557/10557586.png" alt />
-                </span>
-                <p class="my-auto mx-2">Favorites</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
-                </span>
-              </a>
-            </li>
-            <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
-              <a class="flex" href="#userPersonalInfo">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/2815/2815428.png" alt />
-                </span>
-                <p class="my-auto mx-2">Personal Info</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
-                </span>
-              </a>
-            </li>
-            <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
-              <a class="flex" href="#userPassReset">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/10472/10472407.png" alt />
-                </span>
-                <p class="my-auto mx-2">Change password</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
-                </span>
-              </a>
-            </li>
-            <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
-              <a class="flex" href="#userAddress">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/9254/9254720.png" alt /></span>
-                <p class="my-auto mx-2">Addresses</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i></span>
-              </a>
-            </li>
-            <li class=" p-2 my-auto hover:bg-gray-100 cursor-pointer">
-              <a class="flex" href="/logout">
-                <span>
-                  <img src="https://cdn-icons-png.flaticon.com/32/9347/9347205.png" alt /></span>
-                <p class="my-auto mx-2">Sing Out</p>
-                <span class="flex my-auto me-0 ms-auto"><i class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="myaccountContainer" class="col-span-12 md:col-span-9 p-4 bg-white rounded shadow-md mx-4 mt-6 md:mt-0">
-          <p id="accountTitle" class="my-2 px-2 text-lg font-medium">Orders</p>
-          <!-- DIVS -->
+  <body>
+    <%- include('./partial/navbar.ejs') %> <%- include('./partial/mobilenavbar.ejs') %>
+        <main>
+          <section class="bg-gray-100">
+            <div class="grid grid-cols-12 py-6 mx-auto px-[8%]">
+              <!-- Buttons -->
+              <div class="col-span-12 md:col-span-3 p-4 bg-white rounded shadow-md mx-4">
+                <p class="my-2 px-2 text-lg font-medium">Welcome, Jhon Doe</p>
+                <ul id="myaccount_Links">
+                  <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
+                    <a class="flex" href="#userOrders">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/6735/6735011.png" alt />
+                      </span>
+                      <p class="my-auto mx-2">Orders</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class=" p-2 my-auto hover:bg-gray-100 cursor-pointer ">
+                    <a class="flex" href="#userFavorites">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/10557/10557586.png" alt />
+                      </span>
+                      <p class="my-auto mx-2">Favorites</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
+                    <a class="flex" href="#userPersonalInfo">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/2815/2815428.png" alt />
+                      </span>
+                      <p class="my-auto mx-2">Personal Info</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
+                    <a class="flex" href="#userPassReset">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/10472/10472407.png" alt />
+                      </span>
+                      <p class="my-auto mx-2">Change password</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="p-2 my-auto hover:bg-gray-100 cursor-pointer ">
+                    <a class="flex" href="#userAddress">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/9254/9254720.png" alt /></span>
+                      <p class="my-auto mx-2">Addresses</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i></span>
+                    </a>
+                  </li>
+                  <li class=" p-2 my-auto hover:bg-gray-100 cursor-pointer">
+                    <a class="flex" href="/logout">
+                      <span>
+                        <img src="https://cdn-icons-png.flaticon.com/32/9347/9347205.png" alt /></span>
+                      <p class="my-auto mx-2">Sing Out</p>
+                      <span class="flex my-auto me-0 ms-auto"><i
+                          class="fa-solid fa-chevron-right fa-sm text-gray-400"></i>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div id="myaccountContainer"
+                class="col-span-12 md:col-span-9 p-4 bg-white rounded shadow-md mx-4 mt-6 md:mt-0">
+                <p id="accountTitle" class="my-2 px-2 text-lg font-medium">Orders</p>
+                <!-- DIVS -->
 
-          <!-- orders -->
-          <div id="userOrders" data-active="" class="nestedItems">
-            <% if(!orders || orders.length===0){ %>
-            <p class="text-center text-xl font-medium">No Orders Yet.</p>
-            <% }else{ %>
-            <% for(let i=0; i < orders.length; i++) { %>
-            <div class="grid grid-cols-12 mb-5 border-2 rounded-md">
-              <div x-data="{ showElement: window.innerWidth >= 728, showButton: window.innerWidth < 728 }" x-init="window.addEventListener('resize', () => { showElement = window.innerWidth >= 728; showButton = window.innerWidth < 728 })" class="col-span-12 bg-gray-200 text-sm font-medium text-gray-600">
-                <button x-show="showButton" @click="showElement = !showElement" class="flex text-left w-full py-2 px-4 border-b-2 bg-gray-100">
-                  <span>Links</span>
-                  <span class="ms-auto me-0">
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </span>
-                </button>
-                <div class="md:flex py-2 px-4" x-show="showElement">
-                  <p class="">TOTAL: <span class="indian_Price">
-                      <%= orders[i].orderprice %>
-                    </span></p>
-                  <p class="mt-1 md:my-auto md:ms-4">ORDER ON: <%=
+                <!-- orders -->
+                <div id="userOrders" data-active="" class="nestedItems">
+                  <% if(!orders || orders.length===0){ %>
+                    <p class="text-center text-xl font-medium">No Orders Yet.</p>
+                    <% }else{ %>
+                      <% for(let i=0; i < orders.length; i++) { %>
+                        <div class="grid grid-cols-12 mb-5 border-2 rounded-md">
+                          <div x-data="{ showElement: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
+                            x-init="window.addEventListener('resize', () => { showElement = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
+                            class="col-span-12 bg-gray-200 text-sm font-medium text-gray-600">
+                            <button x-show="showButton" @click="showElement = !showElement"
+                              class="flex text-left w-full py-2 px-4 border-b-2 bg-gray-100">
+                              <span>Links</span>
+                              <span class="ms-auto me-0">
+                                <i class="fa-solid fa-chevron-down"></i>
+                              </span>
+                            </button>
+                            <div class="md:flex py-2 px-4" x-show="showElement">
+                              <p class="">TOTAL: <span class="indian_Price">
+                                  <%= orders[i].orderprice %>
+                                </span></p>
+                              <p class="mt-1 md:my-auto md:ms-4">ORDER ON: <%=
                                   formatDate(orders[i].createdAt).replace(',', '-' ) %>
-                  </p>
-                  <p class="mt-1 md:my-auto md:ms-4">SHIP TO: <a class="text-blue-700 hover:underline" href="/my-account">
-                      <%= orders[i].name %>
-                    </a></p>
-                  <p class="mt-1 md:my-auto ms-auto me-0 uppercase">ORDER # <%= orders[i].order_id %>
-                  </p>
-                </div>
-              </div>
-              <div class="col-span-12 md:col-span-8 px-2 md:ps-4 py-2">
-                <div class>
-                  <% for (let j = 0; j < products[i].length; j++) { %>
-                  <div class="flex mb-2">
-                    <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm" src="<%= products[i][j].Image[0].path  %>" alt />
-                    <div class="md:mt-1 mx-2">
-                      <a class="text-blue-600" href="/product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>  %>">
-                        <span class="text-blue-900"><%= products[i][j].name  %></span>
-                        <span class="hidden md:contents">|| <%= products[i][j].title  %></span>
-                      </a>
-                      <a class="flex w-fit py-1 px-2 mt-4 md:mt-1 rounded text-sm bg-blue-100" href="/add-cart/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>/1">
-                        <img class="my-auto me-1" src="https://cdn-icons-png.flaticon.com/16/3875/3875739.png " alt />
-                        Buy it again
-                      </a>
-                    </div>
-                  </div>
-                  <% } %>
-                </div>
-              </div>
-              <div x-data="{ showLinks: window.innerWidth >= 728, showButton: window.innerWidth < 728 }" x-init="window.addEventListener('resize', () => { showLinks = window.innerWidth >= 728; showButton = window.innerWidth < 728 })" class="col-span-12 md:col-span-4">
-                <button x-show="showButton" @click="showLinks = !showLinks" class="flex w-full text-left px-2 pb-1 border-b-2 bg-gray-100 ">
-                  <span>Links</span>
-                  <span class="ms-auto me-0">
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </span>
-                </button>
-                <div x-show="showLinks" class="px-2 md:pe-4 py-2">
-                  <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="/download-invoice/<%= invoices[i].id %>">
-                    <span class="mx-auto">Invoice</span>
-                  </a>
-                  <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
+                              </p>
+                              <p class="mt-1 md:my-auto md:ms-4">SHIP TO: <a class="text-blue-700 hover:underline"
+                                  href="/my-account">
+                                  <%= orders[i].name %>
+                                </a></p>
+                              <p class="mt-1 md:my-auto ms-auto me-0 uppercase">ORDER # <%= orders[i].order_id %>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-span-12 md:col-span-8 px-2 md:ps-4 py-2">
+                            <div class>
+                              <% for (let j=0; j < products[i].length; j++) { %>
+                                <div class="flex mb-2">
+                                  <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm"
+                                    src="<%= products[i][j].Image[0].path  %>" alt />
+                                  <div class="md:mt-1 mx-2">
+                                    <a class="text-blue-600"
+                                      href="/product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>  %>">
+                                      <span class="text-blue-900">
+                                        <%= products[i][j].name %>
+                                      </span>
+                                      <span class="hidden md:contents">|| <%= products[i][j].title %></span>
+                                    </a>
+                                    <a class="flex w-fit py-1 px-2 mt-4 md:mt-1 rounded text-sm bg-blue-100"
+                                      href="/add-cart/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>/1">
+                                      <img class="my-auto me-1"
+                                        src="https://cdn-icons-png.flaticon.com/16/3875/3875739.png " alt />
+                                      Buy it again
+                                    </a>
+                                  </div>
+                                </div>
+                                <% } %>
+                            </div>
+                          </div>
+                          <div x-data="{ showLinks: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
+                            x-init="window.addEventListener('resize', () => { showLinks = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
+                            class="col-span-12 md:col-span-4">
+                            <button x-show="showButton" @click="showLinks = !showLinks"
+                              class="flex w-full text-left px-2 pb-1 border-b-2 bg-gray-100 ">
+                              <span>Links</span>
+                              <span class="ms-auto me-0">
+                                <i class="fa-solid fa-chevron-down"></i>
+                              </span>
+                            </button>
+                            <div x-show="showLinks" class="px-2 md:pe-4 py-2">
+                              <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto"
+                                href="/download-invoice/<%= invoices[i].id %>">
+                                <span class="mx-auto">Invoice</span>
+                              </a>
+                              <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
                               <% for (let j = 0; j < products[i].length; j++) { %>
                                 /product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>?tab=tab-review
                               <% } %>
                               ">
-                    <span class="mx-auto">Write a product review</span>
-                  </a>
-                  <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
-                    <span class="mx-auto">Get product support</span>
-                  </a>
+                                <span class="mx-auto">Write a product review</span>
+                              </a>
+                              <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
+                                <span class="mx-auto">Get product support</span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        <% } %>
+                          <% } %>
                 </div>
-              </div>
-            </div>
-            <% } %>
-            <% } %>
-          </div>
 
-          <!-- favorites -->
-          <div id="userFavorites" class="nestedItems">
-            <% if(!wishproducts || wishproducts.length===0){ %>
-            <p class="text-center text-xl">No Favorites</p>
-            <% }else{ %>
-            <% for(let i=0; i <wishproducts.length; i++ ){ %>
-            <div class="grid grid-cols-12 mb-4 border-2 rounded-md">
-              <div class="col-span-12 px-2 md:ps-4 py-2">
-                <div class="relative">
-                  <div class="flex text-sm md:text-base">
-                    <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm" src="<%= wishproducts[i].Image[0].path  %>" alt />
-                    <div class="md:mt-1 mx-2">
-                      <a class="text-blue-600" href="/product/<%= wishproducts[i].productId %>/<%= encodeURIComponent(wishproducts[i].name) %>">
-                        <span class="text-blue-900">Lotus Wooden Furniture</span>
-                        <span class="hidden md:contents">|| Pavlich Bed is masterpiece of contemporary
-                          design and comfort.</span>
-                      </a>
-                      <p class="mt-2 ">Price: <span class="indian_Price">
-                          <%= wishproducts[i].price.replace(',','') %>
-                        </span></p>
-                      <div class="flex mt-2">
-                        <p class="text-xs md:text-base my-auto px-1 rounded me-1 text-red-500 bg-gray-100 backdrop-blur-md w-fit shadow-inner">
-                          Out of stock</p>
-                        <a class="flex w-fit text-xs md:text-base py-1 px-2 me-1 rounded bg-blue-100" href="/add-cart/<%= wishproducts[i].productId %>/<%= encodeURIComponent(wishproducts[i].name) %>/1">
-                          <img class="my-auto me-1" src="https://cdn-icons-png.flaticon.com/16/10485/10485973.png " alt />
-                          <span class="my-auto">Move to Cart</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="my-1 absolute right-0 top-0 z-30">
-                    <form action="/remove_wishlist/<%= wishproducts[i].productId %>" method="post">
-                      <button class="flex p-2 hover:bg-gray-300" type="submit">
-                        <img height="12" width="12" src="https://cdn-icons-png.flaticon.com/16/1828/1828778.png" alt="">
+                <!-- favorites -->
+                <div id="userFavorites" class="nestedItems">
+                  <% if(!wishproducts || wishproducts.length===0){ %>
+                    <p class="text-center text-xl">No Favorites</p>
+                    <% }else{ %>
+                      <% for(let i=0; i <wishproducts.length; i++ ){ %>
+                        <div class="grid grid-cols-12 mb-4 border-2 rounded-md">
+                          <div class="col-span-12 px-2 md:ps-4 py-2">
+                            <div class="relative">
+                              <div class="flex text-sm md:text-base">
+                                <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm"
+                                  src="<%= wishproducts[i].Image[0].path  %>" alt />
+                                <div class="md:mt-1 mx-2">
+                                  <a class="text-blue-600"
+                                    href="/product/<%= wishproducts[i].productId %>/<%= encodeURIComponent(wishproducts[i].name) %>">
+                                    <span class="text-blue-900">Lotus Wooden Furniture</span>
+                                    <span class="hidden md:contents">|| Pavlich Bed is masterpiece of contemporary
+                                      design and comfort.</span>
+                                  </a>
+                                  <p class="mt-2 ">Price: <span class="indian_Price">
+                                      <%= wishproducts[i].price.replace(',','') %>
+                                    </span></p>
+                                  <div class="flex mt-2">
+                                    <p
+                                      class="text-xs md:text-base my-auto px-1 rounded me-1 text-red-500 bg-gray-100 backdrop-blur-md w-fit shadow-inner">
+                                      Out of stock</p>
+                                    <a class="flex w-fit text-xs md:text-base py-1 px-2 me-1 rounded bg-blue-100"
+                                      href="/add-cart/<%= wishproducts[i].productId %>/<%= encodeURIComponent(wishproducts[i].name) %>/1">
+                                      <img class="my-auto me-1"
+                                        src="https://cdn-icons-png.flaticon.com/16/10485/10485973.png " alt />
+                                      <span class="my-auto">Move to Cart</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="my-1 absolute right-0 top-0 z-30">
+                                <form action="/remove_wishlist/<%= wishproducts[i].productId %>" method="post">
+                                  <button class="flex p-2 hover:bg-gray-300" type="submit">
+                                    <img height="12" width="12"
+                                      src="https://cdn-icons-png.flaticon.com/16/1828/1828778.png" alt="">
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <% } %>
+                          <% } %>
+
+                </div>
+
+                <!-- change password -->
+                <div id="userPassReset" class="nestedItems">
+                  <form class="w-full md:w-72 px-6 mt-4 m-auto" action="/updatePassword" method="post">
+                    <div class="mb-2 flex justify-end">
+                      <button class="editBtn" type="button">
+                        <i class="fa-regular fa-pen-to-square"></i>
                       </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% } %>
-            <% } %>
-
-          </div>
-
-          <!-- change password -->
-          <div id="userPassReset" class="nestedItems">
-            <form class="w-full md:w-72 px-6 mt-4 m-auto" action="/updatePassword" method="post">
-              <div class="mb-2 flex justify-end">
-                <button class="editBtn" type="button">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </button>
-              </div>
-              <div class="mb-2">
-                <label for="olduserPassword">Previous Password</label>
-                <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none" type="password" name="olduserPassword" id="olduserPassword">
-              </div>
-              <div class="mb-2">
-                <label for="newuserPassword">New Password</label>
-                <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none" type="password" name="newuserPassword" id="newuserPassword">
-              </div>
-              <div class="mb-2">
-                <label for="confuserPassword">Confrim Password</label>
-                <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none" type="password" name="confuserPassword" id="confuserPassword">
-              </div>
-              <div class="pt-4">
-                <button disabled class="w-full hover:bg-blue-700 hover:text-white uppercase rounded border-2 py-1" type="submit">update</button>
-              </div>
-            </form>
-          </div>
-
-          <!-- personal info -->
-          <div id="userPersonalInfo" class="nestedItems">
-            <form class="w-full md:w-[30%] px-6 my-4 m-auto" action="/updateuser" method="post">
-              <div class="mb-2 flex justify-end">
-                <button class="editBtn" type="button">
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </button>
-              </div>
-              <div class="mb-2">
-                <img class="mx-auto bg-gray-100 rounded-full" height="72" width="72" src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="">
-              </div>
-              <div class="mb-2">
-                <label for="olduserPassword">Full Name</label>
-                <input class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none" type="text" name="userfullname" disabled id="userfullname" value="<%= userid.fullName %>">
-              </div>
-              <div class="mb-2">
-                <label for="usermail">Email</label>
-                <input class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none" type="email" name="usermail" id="usermail" disabled value="<%= userid.email %>">
-              </div>
-              <div class="pt-2">
-                <a href="">Total address: 2</a>
-              </div>
-              <div class="pt-4">
-                <button disabled class="w-full hover:bg-blue-700 hover:text-white uppercase rounded border-2 py-1" type="submit">update</button>
-              </div>
-            </form>
-          </div>
-
-
-          <!-- address -->
-          <div id="userAddress" class="nestedItems">
-            <% if (adress && adress.length> 0) { %>
-            <ul>
-              <% adress.forEach((address, index)=> { %>
-              <div class="border-2 <% if(address.default){ %> border-blue-400 <% } %> mb-2 rounded AdrresContainer">
-                <div class="flex justify-between px-2">
-                  <div class="flex">
-                    <button class="me-2 formEditBtn" type="button">
-                      <i class="fa-regular fa-pen-to-square "></i>
-                    </button>
-                    <p class="uppercase">Address <%= index + 1 %>
-                    </p>
-                  </div>
-                  <div class="flex">
-                    <form action="/upadtedefaultaddress" method="post">
-                      <label class="my-auto me-1" for="defaultAddress<%= index + 1 %>">Default</label>
-                      <input type="checkbox" <% if(address.default){ %> checked<% } %> name="defaultAddress" id="defaultAddress<%= index + 1 %>" data-address-id="<%= address._id %>">
-                      <input type="hidden" name="addresscheckId" value="<%= address._id %>">
-                    </form>
-                  </div>
-                </div>
-                <div class="bg-gray-50 p-2 text-sm md:text-base md:font-medium relative AddressForm">
-                  <form action="/updateAddress" method="post">
-                    <input type="hidden" name="adddressId" value="<%= address._id %>">
-                    <div class="md:flex mb-2">
-                      <div class="flex mb-2 border p-1 ">
-                        <label class="w-max m-auto" for="Addressfirstname">Full Name:</label>
-                        <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50" disabled type="text" name="Addressfirstname" id="Addressfirstname" value="<%= address.fullname %>">
-                      </div>
-                      <div class="flex mb-2 border p-1">
-                        <label class="w-max m-auto" for="Addressphno">PhoneNo:</label>
-                        <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50" disabled type="number" name="Addressphno" id="Addressphno" value="<%= address.PhoneNo %>">
-                      </div>
                     </div>
-                    <div class="border p-1 ">
-                      <textarea class="focus:outline-none block pe-3  disabled:bg-gray-50 md:w-full md:h-fit" disabled name="AddressAdd" id="" cols="" rows="auto"><%= address.Address %></textarea>
-                      <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled name="AddressState" value="<%= address.State %>">
-                      <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled name="AddressCity" value="<%= address.City %>">
-                      <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled name="AddressPincode" value="<%= address.Pincode %>">
-                      <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled name="AddressCountry" value="<%= address.Country %>">
+                    <div class="mb-2">
+                      <label for="olduserPassword">Previous Password</label>
+                      <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none"
+                        type="password" name="olduserPassword" id="olduserPassword">
                     </div>
-                    <div class="flex mt-3">
-                      <button class="py-1 px-4 me-2 rounded border border-blue-700 hover:bg-blue-700 hover:text-white transition-colors duration-200 ease-in-out" data-type='SubmitForm' type="submit">Update</button>
-                      <button class="py-1 px-4 rounded border border-red-700 hover:bg-red-700 hover:text-white transition-colors duration-200 ease-in-out" data-type="ResetForm" type="button">Cancel</button>
+                    <div class="mb-2">
+                      <label for="newuserPassword">New Password</label>
+                      <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none"
+                        type="password" name="newuserPassword" id="newuserPassword">
                     </div>
-                  </form>
-                  <form class="absolute right-2 bottom-2" action="/deleteAddress" method="post">
-                    <input type="hidden" name="deletadddressId" value="<%= address._id %>">
-                    <button type="submit" class="py-1 px-4 rounded hover:text-red-600 hover:underline transition-colors duration-200 ease-in-out ms-auto me-0" data-type="DeleteForm">Delete Address</button>
-                  </form>
-                </div>
-              </div>
-              <% }); %>
-            </ul>
-            <% } else { %>
-            <p class="text-center text-xl">No addresses found.</p>
-            <% } %>
-            <!-- New Address form -->
-            <div x-data="{ showModal: false }" class="my-4 mt-4">
-              <button @click="showModal = true" class="flex text-lg font-medium py-1 rounded-md p-2 cursor-pointer bg-blue-100 shadow-inner">
-                Add New Address
-              </button>
-
-              <div x-show="showModal" @click.away="showModal = false" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div class="w-full md:w-[55%] p-2 relative">
-                  <button @click="showModal = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 p-2">
-                    <i class="fa-solid fa-xmark fa-xl"></i>
-                  </button>
-                  <form class="w-full p-4 bg-white border-2 rounded-md shadow-md" action="/addAddress" method="post">
-                    <div class="mb-4 md:flex">
-                      <div class="mb-4 md:mb-0 md:mr-2 w-full">
-                        <div class="mb-2">
-                          <label class="text-gray-700" for="addFname">First name</label>
-                          <input type="text" id="addFname" name="addFname" class=" block w-full px-3 py-2 border rounded" />
-                        </div>
-                      </div>
-                      <div class="w-full">
-                        <div class="mb-2">
-                          <label class="text-gray-700" for="addLname">Last name</label>
-                          <input type="text" id="addLname" name="addLname" class=" block w-full px-3 py-2 border rounded" />
-                        </div>
-                      </div>
+                    <div class="mb-2">
+                      <label for="confuserPassword">Confrim Password</label>
+                      <input disabled class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none"
+                        type="password" name="confuserPassword" id="confuserPassword">
                     </div>
-
-                    <div class="mb-4">
-                      <label class="text-gray-700" for="addPno">Phone</label>
-                      <input type="number" id="addPno" name="addPno" class=" block w-full px-3 py-2 border rounded" />
-                    </div>
-
-                    <div class="mb-4">
-                      <label class="text-gray-700" for="addAdd">Address</label>
-                      <input type="text" id="addAdd" name="addAdd" class=" block w-full px-3 py-2 border rounded" />
-                    </div>
-
-                    <div class="mb-4">
-                      <label class="text-gray-700" for="addState">State</label>
-                      <input type="text" id="addState" name="addState" class=" block w-full px-3 py-2 border rounded" />
-                    </div>
-
-                    <div class="mb-4 md:flex">
-                      <div class="mb-4 md:mb-0 md:mr-2 w-full">
-                        <div class="mb-2">
-                          <label class="text-gray-700" for="addCity">City</label>
-                          <input type="text" id="addCity" name="addCity" class=" block w-full px-2 py-2 border rounded" />
-                        </div>
-                      </div>
-                      <div class="w-full">
-                        <div class="mb-2">
-                          <label class="text-gray-700" for="addPinCode">Pincode</label>
-                          <input type="number" id="addPinCode" name="addPinCode" class="block w-full px-2 py-2 border rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="mb-4">
-                      <label class="text-gray-700" for="addCountry">Country</label>
-                      <input type="text" id="addCountry" name="addCountry" value="India" class=" block w-full px-3 py-2 border rounded" />
-                    </div>
-
                     <div class="pt-4">
-                      <button class="flex py-2 px-3 border rounded mx-auto hover:border-blue-400" type="submit">
-                        Save Address
-                      </button>
+                      <button disabled class="w-full hover:bg-blue-700 hover:text-white uppercase rounded border-2 py-1"
+                        type="submit">update</button>
                     </div>
                   </form>
                 </div>
+
+                <!-- personal info -->
+                <div id="userPersonalInfo" class="nestedItems">
+                  <form class="w-full md:w-[30%] px-6 my-4 m-auto" action="/updateuser" method="post"
+                    enctype="multipart/form-data">
+                    <div class="mb-2 flex justify-end">
+                      <button class="editBtn" type="button">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                      </button>
+                    </div>
+                    <div class="mb-2 relative">
+                      <input class="hidden" type="file" name="userProfile" id="userProfile">
+                      <div class="group">
+                        <img id="userImg" class="mx-auto bg-gray-100 rounded-full cursor-pointer" height="72" width="72"
+                          src="/<%= userid.profileImg.path %>" alt="">
+                        <div class="absolute text-gray-400 right-0 text-sm shadow-sm top-1/2 hidden group-hover:block">
+                          Change Profile
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="mb-2">
+                      <label for="olduserPassword">Full Name</label>
+                      <input class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none"
+                        type="text" name="userfullname" disabled id="userfullname" value="<%= userid.fullName %>">
+                    </div>
+                    <div class="mb-2">
+                      <label for="usermail">Email</label>
+                      <input class="block w-full rounded focus:shadow-md py-1 px-2 border-2 focus:outline-none"
+                        type="email" name="usermail" id="usermail" disabled value="<%= userid.email %>">
+                    </div>
+                    <div class="pt-2">
+                      <a href="">Total address: 2</a>
+                    </div>
+                    <div class="pt-4">
+                      <button disabled class="w-full hover:bg-blue-700 hover:text-white uppercase rounded border-2 py-1"
+                        type="submit">update</button>
+                    </div>
+                  </form>
+                </div>
+
+
+                <!-- address -->
+                <div id="userAddress" class="nestedItems">
+                  <% if (adress && adress.length> 0) { %>
+                    <ul>
+                      <% adress.forEach((address, index)=> { %>
+                        <div
+                          class="border-2 <% if(address.default){ %> border-blue-400 <% } %> mb-2 rounded AdrresContainer">
+                          <div class="flex justify-between px-2">
+                            <div class="flex">
+                              <button class="me-2 formEditBtn" type="button">
+                                <i class="fa-regular fa-pen-to-square "></i>
+                              </button>
+                              <p class="uppercase">Address <%= index + 1 %>
+                              </p>
+                            </div>
+                            <div class="flex">
+                              <form action="/upadtedefaultaddress" method="post">
+                                <label class="my-auto me-1" for="defaultAddress<%= index + 1 %>">Default</label>
+                                <input type="checkbox" <% if(address.default){ %> checked<% } %> name="defaultAddress"
+                                  id="defaultAddress<%= index + 1 %>" data-address-id="<%= address._id %>">
+                                      <input type="hidden" name="addresscheckId" value="<%= address._id %>">
+                              </form>
+                            </div>
+                          </div>
+                          <div class="bg-gray-50 p-2 text-sm md:text-base md:font-medium relative AddressForm">
+                            <form action="/updateAddress" method="post">
+                              <input type="hidden" name="adddressId" value="<%= address._id %>">
+                              <div class="md:flex mb-2">
+                                <div class="flex mb-2 border p-1 ">
+                                  <label class="w-max m-auto" for="Addressfirstname">Full Name:</label>
+                                  <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50"
+                                    disabled type="text" name="Addressfirstname" id="Addressfirstname"
+                                    value="<%= address.fullname %>">
+                                </div>
+                                <div class="flex mb-2 border p-1">
+                                  <label class="w-max m-auto" for="Addressphno">PhoneNo:</label>
+                                  <input class="focus:outline-none px-1 w-[100px] md:w-auto disabled:bg-gray-50"
+                                    disabled type="number" name="Addressphno" id="Addressphno"
+                                    value="<%= address.PhoneNo %>">
+                                </div>
+                              </div>
+                              <div class="border p-1 ">
+                                <textarea class="focus:outline-none block pe-3  disabled:bg-gray-50 md:w-full md:h-fit"
+                                  disabled name="AddressAdd" id="" cols="" rows="auto"><%= address.Address %></textarea>
+                                <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled
+                                  name="AddressState" value="<%= address.State %>">
+                                <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled
+                                  name="AddressCity" value="<%= address.City %>">
+                                <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled
+                                  name="AddressPincode" value="<%= address.Pincode %>">
+                                <input class="focus:outline-none disabled:bg-gray-50" type="text" disabled
+                                  name="AddressCountry" value="<%= address.Country %>">
+                              </div>
+                              <div class="flex mt-3">
+                                <button
+                                  class="py-1 px-4 me-2 rounded border border-blue-700 hover:bg-blue-700 hover:text-white transition-colors duration-200 ease-in-out"
+                                  data-type='SubmitForm' type="submit">Update</button>
+                                <button
+                                  class="py-1 px-4 rounded border border-red-700 hover:bg-red-700 hover:text-white transition-colors duration-200 ease-in-out"
+                                  data-type="ResetForm" type="button">Cancel</button>
+                              </div>
+                            </form>
+                            <form class="absolute right-2 bottom-2" action="/deleteAddress" method="post">
+                              <input type="hidden" name="deletadddressId" value="<%= address._id %>">
+                              <button type="submit"
+                                class="py-1 px-4 rounded hover:text-red-600 hover:underline transition-colors duration-200 ease-in-out ms-auto me-0"
+                                data-type="DeleteForm">Delete Address</button>
+                            </form>
+                          </div>
+                        </div>
+                        <% }); %>
+                    </ul>
+                    <% } else { %>
+                      <p class="text-center text-xl">No addresses found.</p>
+                      <% } %>
+                        <!-- New Address form -->
+                        <div x-data="{ showModal: false }" class="my-4 mt-4">
+                          <button @click="showModal = true"
+                            class="flex text-lg font-medium py-1 rounded-md p-2 cursor-pointer bg-blue-100 shadow-inner">
+                            Add New Address
+                          </button>
+
+                          <div x-show="showModal" @click.away="showModal = false"
+                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="w-full md:w-[55%] p-2 relative">
+                              <button @click="showModal = false"
+                                class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 p-2">
+                                <i class="fa-solid fa-xmark fa-xl"></i>
+                              </button>
+                              <form class="w-full p-4 bg-white border-2 rounded-md shadow-md" action="/addAddress"
+                                method="post">
+                                <div class="mb-4 md:flex">
+                                  <div class="mb-4 md:mb-0 md:mr-2 w-full">
+                                    <div class="mb-2">
+                                      <label class="text-gray-700" for="addFname">First name</label>
+                                      <input type="text" id="addFname" name="addFname"
+                                        class=" block w-full px-3 py-2 border rounded" />
+                                    </div>
+                                  </div>
+                                  <div class="w-full">
+                                    <div class="mb-2">
+                                      <label class="text-gray-700" for="addLname">Last name</label>
+                                      <input type="text" id="addLname" name="addLname"
+                                        class=" block w-full px-3 py-2 border rounded" />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4">
+                                  <label class="text-gray-700" for="addPno">Phone</label>
+                                  <input type="number" id="addPno" name="addPno"
+                                    class=" block w-full px-3 py-2 border rounded" />
+                                </div>
+
+                                <div class="mb-4">
+                                  <label class="text-gray-700" for="addAdd">Address</label>
+                                  <input type="text" id="addAdd" name="addAdd"
+                                    class=" block w-full px-3 py-2 border rounded" />
+                                </div>
+
+                                <div class="mb-4">
+                                  <label class="text-gray-700" for="addState">State</label>
+                                  <input type="text" id="addState" name="addState"
+                                    class=" block w-full px-3 py-2 border rounded" />
+                                </div>
+
+                                <div class="mb-4 md:flex">
+                                  <div class="mb-4 md:mb-0 md:mr-2 w-full">
+                                    <div class="mb-2">
+                                      <label class="text-gray-700" for="addCity">City</label>
+                                      <input type="text" id="addCity" name="addCity"
+                                        class=" block w-full px-2 py-2 border rounded" />
+                                    </div>
+                                  </div>
+                                  <div class="w-full">
+                                    <div class="mb-2">
+                                      <label class="text-gray-700" for="addPinCode">Pincode</label>
+                                      <input type="number" id="addPinCode" name="addPinCode"
+                                        class="block w-full px-2 py-2 border rounded" />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="mb-4">
+                                  <label class="text-gray-700" for="addCountry">Country</label>
+                                  <input type="text" id="addCountry" name="addCountry" value="India"
+                                    class=" block w-full px-3 py-2 border rounded" />
+                                </div>
+
+                                <div class="pt-4">
+                                  <button class="flex py-2 px-3 border rounded mx-auto hover:border-blue-400"
+                                    type="submit">
+                                    Save Address
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                </div>
+                <!-- DIVS END -->
               </div>
             </div>
-          </div>
-          <!-- DIVS END -->
-        </div>
-      </div>
-    </section>
-  </main>
-  <script>
-    $(function() {
-      $("input[data-address-id]").on('change', function() {
-        if ($(this).is(':checked')) {
-          $(this).closest('form').submit();
-        }
-      });
-      $("button[data-type='DeleteForm']").hide();
-      $("button[data-type='SubmitForm']").hide();
-      $("button[data-type='ResetForm']").hide();
-      $(".formEditBtn").on('click', function(e) {
-        let addressForm = $(this).closest(".AdrresContainer").find(".AddressForm form");
-        $(this).find("i").addClass("text-blue-500");
-        addressForm.find(".border").addClass("bg-white");
-        addressForm.find("button[data-type='SubmitForm']").show();
-        addressForm.find("button[data-type='ResetForm']").show();
-        addressForm.find("button[data-type='DeleteForm']").show();
-        addressForm.find("input, textarea").addClass("text-red-700");
-        addressForm.find("input, textarea").removeAttr("disabled");
-        $("button[data-type='ResetForm']").on('click', function() {
-          location.reload();
-        });
-      });
+          </section>
+        </main>
+        <script>
+          $(function () {
+            $("input[data-address-id]").on('change', function () {
+              if ($(this).is(':checked')) {
+                $(this).closest('form').submit();
+              }
+            });
+            $("button[data-type='DeleteForm']").hide();
+            $("button[data-type='SubmitForm']").hide();
+            $("button[data-type='ResetForm']").hide();
+            $(".formEditBtn").on('click', function (e) {
+              let addressForm = $(this).closest(".AdrresContainer").find(".AddressForm form");
+              $(this).find("i").addClass("text-blue-500");
+              addressForm.find(".border").addClass("bg-white");
+              addressForm.find("button[data-type='SubmitForm']").show();
+              addressForm.find("button[data-type='ResetForm']").show();
+              addressForm.find("button[data-type='DeleteForm']").show();
+              addressForm.find("input, textarea").addClass("text-red-700");
+              addressForm.find("input, textarea").removeAttr("disabled");
+              $("button[data-type='ResetForm']").on('click', function () {
+                location.reload();
+              });
+            });
 
-      // PERSONAL INFO BUTTON FUNCTION 
-      editForm($("#userPersonalInfo form"));
-      editForm($("#userPassReset form"));
+            // PERSONAL INFO BUTTON FUNCTION 
+            editForm($("#userPersonalInfo form"));
+            editForm($("#userPassReset form"));
 
-      function editForm(form) {
-        const editbtn = form.find('.editBtn');
-        editbtn.on('click', () => {
-          form.find('input').removeAttr('disabled');
-          form.find('button[type="submit"]').removeAttr('disabled');
-        });
-        $(document).on('click', function(event) {
-          if (!form.is(event.target) && form.has(event.target).length === 0) {
-            form.find('input').attr('disabled', 'disabled');
-            form.find('button[type="submit"]').attr('disabled', 'disabled');
-          }
-        });
-      }
-
-
-    });
-  </script>
-  <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs') %>
-</body>
+            function editForm(form) {
+              const editbtn = form.find('.editBtn');
+              editbtn.on('click', () => {
+                form.find('input').removeAttr('disabled');
+                form.find('button[type="submit"]').removeAttr('disabled');
+              });
+              $(document).on('click', function (event) {
+                if (!form.is(event.target) && form.has(event.target).length === 0) {
+                  form.find('input').attr('disabled', 'disabled');
+                  form.find('button[type="submit"]').attr('disabled', 'disabled');
+                }
+              });
+            }
+            $('#userImg').on('click', () => {
+              $('#userProfile').click();
+            })
+            $("#userProfile").on("change", function () {
+              if (this.files.length > 0) {
+                var formData = new FormData();
+                formData.append("userProfile", this.files[0]);
+                $.ajax({
+                  url: "/admin/profile/updateprofileimg",
+                  method: "POST",
+                  data: formData,
+                  contentType: false,
+                  processData: false,
+                  success: function (response) {
+                    console.log("profileUpdate");
+                    window.location.reload();
+                  },
+                  error: function (xhr, status, error) {
+                    console.log(error);
+                  }
+                });
+              }
+            });
+          });
+        </script>
+        <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs') %>
+  </body>
 
 </html>

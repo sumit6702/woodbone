@@ -4,8 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const destinationPath =
-      req.originalUrl.includes('/product') ? './uploads/productImages' : './uploads/profileImages';
+    const destinationPath = req.originalUrl.includes('/product')
+  ? './uploads/productImages'
+  : req.originalUrl.includes('/my-account')
+  ? './uploads/profileImages'
+  : './uploads';
     cb(null, destinationPath);
   },
   filename: async function (req, file, cb) {

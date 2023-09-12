@@ -1,6 +1,18 @@
-const isAuthenticated = (req, res, next) => {
-  if (req.session.user_id) {
-    next();
+import USERTOKEN from "../model/userTokenSchma.js";
+
+const isAuthenticated = async(req, res, next) => {
+  
+  if (req.cookies.remember_me) {
+    const rememberMeToken = req.cookies.remember_me;
+    try {
+      const tokenDocument = await USERTOKEN.findOne({ token: rememberMeToken });
+      if (tokenDocument) {
+        req.session.user_id = tokenDocument.userId;
+        return next();
+      }
+    } catch (error) {
+      console.error('Error looking up Remember Me token:', error);
+    }
   } else {
     req.session.redirectPage = req.originalUrl;
     res.redirect('/login');
