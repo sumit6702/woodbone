@@ -47,6 +47,7 @@ const searchQuries = async (req, res) => {
       totalProducts,
       itemsPerPage: ITEMS_PER_PAGE,
       currentQuery: req.query,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     console.log(error.message);
@@ -75,6 +76,7 @@ const furniturecontroller = async (req, res) => {
       totalProducts: pagiD.totalProducts,
       itemsPerPage: pagiD.itemsPerPage,
       currentQuery: req.query,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -101,6 +103,7 @@ const bedcontroller = async (req, res) => {
       totalProducts: pagiD.totalProducts,
       itemsPerPage: pagiD.itemsPerPage,
       currentQuery: req.query,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -126,6 +129,7 @@ const storagecontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -148,6 +152,7 @@ const seatingcontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -170,6 +175,7 @@ const tablescontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -202,6 +208,7 @@ const studytablecontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -223,6 +230,7 @@ const outdoorcontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -244,6 +252,7 @@ const othercontroller = async (req, res) => {
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
+    siteInfo:req.siteInfo
   });
 };
 

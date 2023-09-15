@@ -42,7 +42,7 @@ const isAdmin = async (req, res, next) => {
     if (req.session.admin_id) {
       next();
     } else {
-      res.render("404page", { userid: req.session.admin_id, cartval:req.cartval });
+      res.render("404page", { userid: req.session.admin_id, cartval:req.cartval,siteInfo:req.siteInfo });
     }
   } catch (error) {
     console.log(error);
@@ -55,7 +55,7 @@ const isAdminLogout = async (req, res, next) => {
     if (req.session.admin_id) {
       res.redirect('/admin/dashboard');
     } else {
-      res.render("adminLogin",{cartval:req.cartval});
+      res.render("adminLogin",{cartval:req.cartval,siteInfo:req.siteInfo});
     }
   } catch (error) {
     console.log(error);

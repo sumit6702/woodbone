@@ -933,9 +933,6 @@ video {
 .min-w-\[300px\]{
   min-width: 300px;
 }
-.min-w-\[370px\]{
-  min-width: 370px;
-}
 .min-w-full{
   min-width: 100%;
 }
@@ -2702,6 +2699,12 @@ input[type="number"]::-webkit-outer-spin-button {
   }
   .md\:w-\[30\%\]{
     width: 30%;
+  }
+  .md\:w-\[33\%\]{
+    width: 33%;
+  }
+  .md\:w-\[370px\]{
+    width: 370px;
   }
   .md\:w-\[55\%\]{
     width: 55%;

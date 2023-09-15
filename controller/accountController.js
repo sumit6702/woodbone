@@ -18,7 +18,7 @@ import INVOICE from "../model/InvoiceSchema.js";
 import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
-import ADMINREGISTER from "../model/adminSchema.js";
+import SITEINFO from "../model/siteInfoSchmea.js";
 
 const stripe = Stripe(Secret_Key);
 let paymentSuccessful = false;
@@ -196,6 +196,7 @@ const useraccount = async (req, res) => {
       wishproducts,
       userdata: data,
       invoices,
+      siteInfo: req.siteInfo,
     });
   } catch (error) {
     console.log(error);
@@ -550,7 +551,7 @@ const payment = async (req, res) => {
       },
       // Your own data
       sender: {
-        company: "Woodbone Pvt Ltd.",
+        company: `${req.siteInfo.site}`,
         address: "B-17, Aya Nagar Extension",
         zip: "110047",
         city: "New Delhi",
@@ -788,15 +789,17 @@ const passwordChange = async (req, res) => {
     const newPass = req.body.adminnewPass;
     const confPass = req.body.adminCongPass;
     const hashPass = bcrypt.hashSync(confPass, 10);
-    const adminData = await ADMINREGISTER.findById(req.session.admin_id);
+    const adminData = await USERREGISTERMODEL.findById(req.session.admin_id);
+    console.log(adminData);
 
     if (!adminData) {
+      req.flash("alert", "Admin Not Found!");
       res.redirect("/admin/profile");
     } else {
       const isPass = await bcrypt.compare(oldPass, adminData.password);
       if (isPass) {
         if (newPass === confPass) {
-          await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+          await USERREGISTERMODEL.findByIdAndUpdate(req.session.admin_id, {
             password: hashPass,
           });
           req.flash("alert", "Password Updated");
@@ -820,13 +823,12 @@ const updateAdminProfile = async (req, res) => {
   try {
     //
     const { adminName, adminEmail, adminMobile } = req.body;
-    const adminData = await ADMINREGISTER.findById(req.session.admin_id);
-
+    const adminData = await USERREGISTERMODEL.findById(req.session.admin_id);
     if (!adminData) {
       req.flash("alert", "Admin Not Found!");
       res.redirect("/admin/profile");
     } else {
-      await ADMINREGISTER.findByIdAndUpdate(req.session.admin_id, {
+      await USERREGISTERMODEL.findByIdAndUpdate(req.session.admin_id, {
         fullName: adminName,
         email: adminEmail,
         mobile: adminMobile,
@@ -848,12 +850,14 @@ const profileUploader = async (req, res) => {
       req.flash("alert", "No image uploaded");
       res.redirect("/admin/profile");
     } else {
-      const adminData = await USERREGISTERMODEL.findById(req.session.user_id);
-      if(adminData && adminData.profileImg){
+      const adminData = await USERREGISTERMODEL.findById(
+        req.session.user_id || req.session.admin_id
+      );
+      if (adminData && adminData.profileImg) {
         const oldImg = adminData.profileImg.path;
         if (fs.existsSync(oldImg)) {
           fs.unlinkSync(oldImg);
-          console.log('File deleted successfully:', oldImg);
+          console.log("File deleted successfully:", oldImg);
         }
       }
 
@@ -861,16 +865,38 @@ const profileUploader = async (req, res) => {
         req.flash("alert", "Admin Not Found!");
         res.redirect("/admin/profile");
       } else {
-        await USERREGISTERMODEL.findByIdAndUpdate(req.session.user_id, {
-          profileImg: {
-            filename: image.filename,
-            path: image.path,
-          },
-        });
+        await USERREGISTERMODEL.findByIdAndUpdate(
+          req.session.user_id || req.session.admin_id,
+          {
+            profileImg: {
+              filename: image.filename,
+              path: image.path,
+            },
+          }
+        );
 
         req.flash("alert", "Profile Updated");
         res.redirect("/admin/profile#adminprofile");
       }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
+  }
+};
+
+const updateSiteInfo = async (req, res) => {
+  try {
+    const siteName = req.body.siteName;
+    const siteLogo = req.file;
+
+    const siteInfo = new SITEINFO({
+      siteName: siteName,
+      siteLogo: siteLogo.path,
+    });
+    const updated = await siteInfo.save();
+    if (updated) {
+      res.redirect("/admin/profile");
     }
   } catch (error) {
     console.log(error);
@@ -900,4 +926,5 @@ export {
   passwordChange,
   updateAdminProfile,
   profileUploader,
+  updateSiteInfo,
 };

@@ -56,6 +56,7 @@ const singlepage = async (req, res) => {
       comments,
       formatDate,
       relatedproducts,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     console.log(error);
@@ -103,27 +104,27 @@ const productComment = async (req, res) => {
 const policypage = async (req, res) => {
   res
     .status(200)
-    .render("returnpolicy", { userid: req.user, cartval: req.cartval });
+    .render("returnpolicy", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
 };
 
 const shippingMethod = async (req, res) => {
   res
     .status(200)
-    .render("shippingMethod", { userid: req.user, cartval: req.cartval });
+    .render("shippingMethod", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
 };
 
 const furntirueAssmbling = async (req, res) => {
   res
     .status(200)
-    .render("furntiureAssmb", { userid: req.user, cartval: req.cartval });
+    .render("furntiureAssmb", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
 };
 
 const vistSotre = async (req, res) => {
-  res.status(200).render("stores", { userid: req.user, cartval: req.cartval });
+  res.status(200).render("stores", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
 };
 
 const aboutus = async (req, res) => {
-  res.status(200).render("aboutus", { userid: req.user, cartval: req.cartval });
+  res.status(200).render("aboutus", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
 };
 
 export {

@@ -96,13 +96,16 @@ import {
   passwordChange,
   updateAdminProfile,
   profileUploader,
+  updateSiteInfo,
 } from "../controller/accountController.js";
 
 import limiter from "../middleware/ratemiddleware.js";
 import upload from "../middleware/imagemiddlerware.js";
 import verifyResetToken from "../middleware/tokkenUtil.js";
 import getUserInfo from "../middleware/dataPassing.js";
+import siteData from "../middleware/siteData.js";
 
+router.use(siteData);
 router.use(getUserInfo);
 router.get("/", indexcontroller);
 router.get("/search", searchQuries);
@@ -215,7 +218,11 @@ router.post(
   upload.single("userProfile"),
   profileUploader
 );
-
+router.post(
+  "/admin/profile/siteInfo",
+  upload.single("siteLogo"),
+  updateSiteInfo
+);
 router.get("/pagetest", pagetesterscontroller);
 
 export default router;

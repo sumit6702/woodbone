@@ -4,7 +4,9 @@
             x-data="{ hamburger: false }">
             <section>
                 <li class="flex justify-between py-2">
-                    <a class="navbrand pe-2 my-auto md:pe-5" href="/">Logo</a>
+                    <a class="navbrand pe-2 my-auto md:pe-5" href="/"><img width="62"
+                            src="<%= siteInfo.siteLogo ? `/${siteInfo.siteLogo}` : 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png' %>"
+                            alt=""></a>
                     <div class="flex">
                         <a class="my-auto me-3 h-full" href="/cart">
                             <div class="relative flex">
@@ -27,20 +29,33 @@
                             <div class="profileNavbtn relative flex mx-4" x-data="{ profileLink: false }"
                                 x-on:click="profileLink = !profileLink" x-transition>
                                 <div class="flex h-full isDisable" href="">
-                                    <div class="my-auto">
-                                        <span class="ms-1 flex m-auto justify-center">
-                                            <i class="fa-regular fa-user"></i>
-                                        </span>
-                                        <p class="text-sm">
-                                            <%= userid.firstName %>
-                                        </p>
+                                    <div class="my-auto cursor-pointer">
+                                        <% if(userid.profileImg.path){ %>
+                                            <img class="rounded-full mx-auto" height="26" width="26"
+                                                src="/<%= userid.profileImg.path %>" alt="">
+                                            <% }else{ %>
+                                                <div class="flex ms-1">
+                                                    <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22"
+                                                        width="22" xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 211.68 252.51">
+                                                        <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
+                                                        <path class="login-svg"
+                                                            d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
+                                                    </svg>
+                                                </div>
+                                                <% } %>
+                                                    <p class="text-sm">
+                                                        <%= userid.firstName %>
+                                                    </p>
                                     </div>
                                 </div>
                                 <div x-show="profileLink"
                                     class="absolute -left-10 top-16 z-50 bg-white text-black p-3 w-max shadow-lg">
                                     <ul>
-                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/my-account">My Account</a></li>
-                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/wishlist">Wishlist</a></li>
+                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/my-account">My
+                                                Account</a></li>
+                                        <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/wishlist">Wishlist</a>
+                                        </li>
                                         <li class="my-1 py-1 px-2 bg-gray-50 text-sm"><a href="/orders">Orders</a></li>
                                         <li class="my-1 py-1 px-2 bg-teal-400 uppercase text-sm text-center"><a
                                                 href="/logout">Logout</a></li>
@@ -49,12 +64,13 @@
                             </div>
                             <% }else{ %>
                                 <div class="loginNavbtn mx-4">
-                                    <div class="h-full py-1 relative" x-data="{ logins :  false }" x-on:click="logins = !logins" x-transition>
+                                    <div class="h-full py-1 relative" x-data="{ logins :  false }"
+                                        x-on:click="logins = !logins" x-transition>
                                         <span class="ms-1 flex m-auto justify-center">
                                             <i class="fa-regular fa-user"></i>
                                         </span>
                                         <p class="text-sm">login/Singup</p>
-                                        <div class="py-2 absolute"  x-show="logins">
+                                        <div class="py-2 absolute" x-show="logins">
                                             <div class="py-1 px-3 bg-white z-50 shadow-md">
                                                 <a class="block pb-1" href="/singup">Singup</a>
                                                 <a class="block pb-1" href="/login">Login</a>
@@ -93,7 +109,7 @@
                     <li class="py-3 nav-links"><a class="block w-full" href="/"><span>Home</span></a></li>
                     <li class="py-3 nav-links">
                         <a class="double-Click block w-full cursor-pointer" href="/furniture">
-                            <span>Furniture  <i class="fa-solid fa-chevron-down fa-2xs text-gray-400"></i></span>
+                            <span>Furniture <i class="fa-solid fa-chevron-down fa-2xs text-gray-400"></i></span>
                         </a>
                         <div class="nav-nested-links min-w-max p-8 bg-white text-black">
                             <div><a class="flex h-full py-2" href="/furniture/beds"><span>Beds</span></a></div>

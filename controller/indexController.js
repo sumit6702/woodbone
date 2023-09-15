@@ -24,7 +24,7 @@ const indexcontroller = async (req, res) => {
     } else {
       products = null;
     }
-    res.render("index", { userid: req.user, cartval:req.cartval, products });
+    res.render("index", { userid: req.user, cartval:req.cartval, products, siteInfo:req.siteInfo });
   } catch (error) {
     console.log(error + " at indexController");
     res.status(500).json({ error: "Internal Server Error" });
@@ -32,7 +32,7 @@ const indexcontroller = async (req, res) => {
 };
 
 const contactcontroller = async (req, res) => {
-  res.render("contactus", { userid: req.user, cartval:req.cartval });
+  res.render("contactus", { userid: req.user, cartval:req.cartval,siteInfo:req.siteInfo });
 };
 
 const contactQueries = async (req, res) => {
@@ -60,7 +60,7 @@ const pagetesterscontroller = async (req, res) => {
 
 const PagenotFound = async (req, res) => {
   try {
-    res.status(404).render("404page", { userid: req.user, cartval:req.cartval });
+    res.status(404).render("404page", { userid: req.user, cartval:req.cartval,siteInfo:req.siteInfo });
   } catch (error) {
     console.log(error.message + " at PageNotController")
     res.status(500).send("Internal Server Error");

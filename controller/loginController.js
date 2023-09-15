@@ -1,5 +1,4 @@
 import USERREGISTERMODEL from "../model/UserAccount.js";
-import ADMINREGISTER from "../model/adminSchema.js";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 const uuid = uuidv4();
@@ -12,7 +11,7 @@ import nodemailer from "nodemailer";
 import USERTOKEN from "../model/userTokenSchma.js";
 
 const logincontroller = async (req, res) => {
-  res.render("login", { userid: req.user, cartval:req.cartval, });
+  res.render("login", { userid: req.user, cartval:req.cartval,siteInfo:req.siteInfo });
 };
 
 const userloginController = async (req, res) => {
@@ -81,7 +80,7 @@ const adminLoginController = async (req, res) => {
   try {
     const adminmail = req.body.adminmail;
     const adminpassword = req.body.adminpass;
-    const adminData = await ADMINREGISTER.findOne({email: adminmail});
+    const adminData = await USERREGISTERMODEL.findOne({email: adminmail, role:"admin"});
     const clientIP = ip.address();
     const failedLoginAttempts = {};
 
@@ -223,7 +222,7 @@ const resetAdminPassController = async(req,res)=>{
   try {
     const mail = req.body.resetmail;
     console.log(mail)
-    const admindata = await ADMINREGISTER.findOne({email: mail});
+    const admindata = await USERREGISTERMODEL.findOne({email: mail, role:"admin"});
 
     if(mail === admindata.email){
       console.log("Submited");
@@ -271,7 +270,7 @@ const newAdminPassword = async(req,res)=>{
     const Confpass = req.body.confnewadminpass;
 
     if(pass === Confpass){
-      const admindata = await ADMINREGISTER.findOne({ email: mail });
+      const admindata = await USERREGISTERMODEL.findOne({ email: mail, role:"admin" });
       if(admindata){
         const hashpass = bcrypt.hashSync(pass, 10);
         admindata.password = hashpass;

@@ -28,6 +28,7 @@ const cartController = async (req, res) => {
             products,
             cartData,
             getQuantityForProduct,
+            siteInfo:req.siteInfo
         });
     } catch (error) {
         console.log(error.message);
@@ -195,7 +196,7 @@ const wishlistcontroller = async (req, res) => {
     const wishlistItemIds = userdata.wishlist;
     const products = await PRODUCTS.find({ productId: { $in: wishlistItemIds } });
     req.session.redirectPage = req.originalUrl;
-    res.render("wishlist", { userid: req.user, cartval:req.cartval, userdata, products });
+    res.render("wishlist", { userid: req.user, cartval:req.cartval, userdata, products, siteInfo:req.siteInfo });
 };
 
 const addwishlistController = async (req, res) => {

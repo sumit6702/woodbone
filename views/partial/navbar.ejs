@@ -2,7 +2,7 @@
   <section class="">
     <div class="navabout uppercase text-sm flex justify-between font-medium py-1 bg-slate-300 border-b">
       <div>
-        <a href="#">support@woodbone.com </a> / <a href="#">+91 41145727 </a>
+        <a href="#">support@<%= siteInfo.siteName  %>.com </a> / <a href="#">+91 41145727 </a>
       </div>
       <div>
         <p>OPEN FROM 9AM TO 5PM – CLOSED ON WEEKENDS</p>
@@ -11,7 +11,7 @@
     <div id="navMenu" class="flex justify-between text-lg font-medium mx-10">
       <section>
         <ul class="flex">
-          <a class="navbrand py-7" href="/">Logo</a>
+          <a class="navbrand py-7" href="/"><img width="64" src="/<%= siteInfo.siteLogo  %>" alt=""></a>
           <li class="nav-links">
             <a class="flex py-7" href="/"><span>Home</span></a>
           </li>
@@ -90,14 +90,20 @@
               <a class="flex" href="/my-account">
                 <div class="flex my-auto">
                   <%= userid.firstName %>
+                  <% if(userid.profileImg.path){ %>
                     <span class="ms-1">
-                      <svg id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 211.68 252.51">
-                        <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
-                        <path class="login-svg"
-                          d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
-                      </svg>
-                    </span>
+                        <img class="rounded-full" height="26" width="26" src="/<%= userid.profileImg.path %>" alt="">
+                      </span>
+                      <% }else{ %>
+                        <div class="flex ms-1">
+                          <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 211.68 252.51">
+                            <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
+                            <path class="login-svg"
+                              d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
+                          </svg>
+                        </div>
+                        <% } %>
                 </div>
               </a>
               <div x-show="profileLink"

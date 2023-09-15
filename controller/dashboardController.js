@@ -6,7 +6,6 @@ import USERREGISTERMODEL from "../model/UserAccount.js";
 import { query } from "express";
 import pagination from "../middleware/pagination.js";
 import { promises as fsPromises } from "fs";
-import ADMINREGISTER from "../model/adminSchema.js";
 
 const admincontroller = (req, res) => {
   res.render("adminLogin");
@@ -14,9 +13,12 @@ const admincontroller = (req, res) => {
 
 const dashboardcontroller = async (req, res) => {
   const orders = await ORDERS.find({});
-  const users = await USERREGISTERMODEL.find({});
+  const users = await USERREGISTERMODEL.find({ role: "user" });
   const prodcuts = await PRODUCTS.find({});
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   let Revenue = 0;
   orders.forEach((o) => {
     Revenue += o.orderprice;
@@ -121,12 +123,13 @@ const dashboardcontroller = async (req, res) => {
     .slice(0, 4)
     .map((entry) => entry.productId);
   let counts = [];
-  productQuantityCountArray.forEach((ids) => {counts.push(ids.totalQuantity)});
+  productQuantityCountArray.forEach((ids) => {
+    counts.push(ids.totalQuantity);
+  });
 
   const top4Products = prodcuts.filter((product) =>
     top4ProductIds.includes(product.id)
   );
-
 
   res.render("ADdashboard", {
     Revenue,
@@ -138,7 +141,8 @@ const dashboardcontroller = async (req, res) => {
     formatDate,
     orderLengths,
     top4Products,
-    counts
+    counts,
+    siteInfo: req.siteInfo,
   });
 };
 
@@ -150,7 +154,10 @@ const productDBcontroller = async (req, res) => {
     const { sort } = req.query;
     const noofproducts = products.length;
     req.session.redirectPage = req.originalUrl;
-    const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+    const admin = await USERREGISTERMODEL.findOne({
+      _id: req.session.admin_id,
+      role: "admin",
+    });
 
     res.render("ADproducts", {
       products: pagiD.items,
@@ -161,6 +168,7 @@ const productDBcontroller = async (req, res) => {
       currentQuery: req.query,
       noofproducts,
       admin,
+      siteInfo: req.siteInfo,
     });
   } catch (error) {
     console.log(error);
@@ -191,7 +199,10 @@ const productquries = async (req, res) => {
     const pagiD = pagination(req, Queryproduct);
     const noofproducts = Queryproduct.length;
     req.session.redirectPage = req.originalUrl;
-    const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+    const admin = await USERREGISTERMODEL.findOne({
+      _id: req.session.admin_id,
+      role: "admin",
+    });
 
     res.render("ADproducts", {
       products: pagiD.items,
@@ -202,6 +213,7 @@ const productquries = async (req, res) => {
       currentQuery: req.query,
       noofproducts,
       admin,
+      siteInfo: req.siteInfo,
     });
 
     // res.render("ADproducts", {
@@ -219,9 +231,12 @@ const productquries = async (req, res) => {
 const updateproduct = async (req, res) => {
   const { productId } = req.params;
   const product = await PRODUCTS.findOne({ productId: productId });
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   req.session.redirectPage = req.originalUrl;
-  res.render("ADeditproduct", { product, admin });
+  res.render("ADeditproduct", { product, admin, siteInfo: req.siteInfo });
 };
 
 const deleteproduct = async (req, res) => {
@@ -394,7 +409,10 @@ const updatenewProduct = async (req, res) => {
 };
 
 const customerDBcontroller = async (req, res) => {
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   const orders = await ORDERS.find({});
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "2-digit" };
@@ -406,13 +424,16 @@ const customerDBcontroller = async (req, res) => {
 
     return `${day}${monthAbbreviation}-${year}`;
   };
-  res.render("ADorders", { orders, formatDate, admin });
+  res.render("ADorders", { orders, formatDate, admin, siteInfo: req.siteInfo });
 };
 
 const loginActivityDBcontroller = async (req, res) => {
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   const logins = await LOGINATTEMPT.find({}).sort({ timestamp: -1 });
-  res.render("ADloginactivity", { logins, admin });
+  res.render("ADloginactivity", { logins, admin, siteInfo: req.siteInfo });
 };
 
 const deleteloginActcontroller = async (req, res) => {
@@ -436,7 +457,10 @@ const deleteloginActcontroller = async (req, res) => {
 };
 
 const transcationDBcontroller = async (req, res) => {
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   const orders = await ORDERS.find({});
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "2-digit" };
@@ -448,11 +472,19 @@ const transcationDBcontroller = async (req, res) => {
 
     return `${day}${monthAbbreviation}-${year}`;
   };
-  res.render("TranscationDB", { orders, formatDate, admin });
+  res.render("TranscationDB", {
+    orders,
+    formatDate,
+    admin,
+    siteInfo: req.siteInfo,
+  });
 };
 
 const statisticsDBcontroller = async (req, res) => {
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   const orders = await ORDERS.find({
@@ -463,7 +495,7 @@ const statisticsDBcontroller = async (req, res) => {
       ],
     },
   });
-  res.render("ADstatistics", { admin, orders });
+  res.render("ADstatistics", { admin, orders, siteInfo: req.siteInfo });
 };
 
 const uploadPDcontroller = async (req, res) => {
@@ -543,8 +575,11 @@ const uploadPDcontroller = async (req, res) => {
 };
 
 const adminProfileDBcontroller = async (req, res) => {
-  const admin = await ADMINREGISTER.findOne({ _id: req.session.admin_id });
-  res.render("ADprofile", { admin });
+  const admin = await USERREGISTERMODEL.findOne({
+    _id: req.session.admin_id,
+    role: "admin",
+  });
+  res.render("ADprofile", { admin, siteInfo: req.siteInfo });
 };
 
 export {

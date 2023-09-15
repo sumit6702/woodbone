@@ -389,6 +389,7 @@ function showActiveDiv(nestedItems, itemsLinks, activeItems) {
     const target = $(this).attr("href");
     nestedItems.hide();
     $(target).show();
+    $(target).scrollIntoView();
     window.location.hash = target;
   });
 }

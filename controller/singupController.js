@@ -7,7 +7,7 @@ const singupcontroller = async (req, res) => {
   try {
     res
       .status(200)
-      .render("singup", { userid: req.user, cartval: req.cartval });
+      .render("singup", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
   } catch (error) {
     console.log(error.message + "at SingupController");
     res.status(500).json({ error: "Internal Server Error" });
