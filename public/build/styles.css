@@ -1026,6 +1026,9 @@ video {
 .justify-evenly{
   justify-content: space-evenly;
 }
+.gap-1{
+  gap: 0.25rem;
+}
 .gap-2{
   gap: 0.5rem;
 }
@@ -2600,12 +2603,6 @@ input[type="number"]::-webkit-outer-spin-button {
 @media (min-width: 768px){
   .md\:bottom-5{
     bottom: 1.25rem;
-  }
-  .md\:col-span-10{
-    grid-column: span 10 / span 10;
-  }
-  .md\:col-span-2{
-    grid-column: span 2 / span 2;
   }
   .md\:col-span-3{
     grid-column: span 3 / span 3;

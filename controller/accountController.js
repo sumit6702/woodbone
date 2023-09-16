@@ -28,6 +28,7 @@ const forgetPass = async (req, res) => {
     userid: req.user,
     cartval: req.cartval,
     isUserFound: false,
+    siteInfo:req.siteInfo
   });
 };
 
@@ -100,6 +101,7 @@ const PasswordUpdated = async (req, res) => {
       userid: req.user,
       cartval: req.cartval,
       token: token,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     console.log(error.message);
@@ -367,6 +369,7 @@ const order = async (req, res) => {
       formatDate,
       products,
       invoices,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     console.log(error);
@@ -419,6 +422,7 @@ const checkout = async (req, res) => {
       total,
       quantity,
       totalPricePerItem,
+      siteInfo:req.siteInfo
     });
   } catch (error) {
     console.log(error);
@@ -705,7 +709,7 @@ const paymentS = async (req, res) => {
     };
     await verifyMail(user.fullName, user.email, user._id);
 
-    res.render("paymentP", { userid: req.user, cartval: req.cartval });
+    res.render("paymentP", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
   } else {
     res.redirect("/error");
   }
@@ -713,7 +717,7 @@ const paymentS = async (req, res) => {
 
 const paymentF = async (req, res) => {
   if (paymentSuccessful) {
-    res.render("paymentF", { userid: req.user, cartval: req.cartval });
+    res.render("paymentF", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
   } else {
     res.redirect("/error");
   }

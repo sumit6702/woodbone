@@ -74,7 +74,7 @@ const productComment = async (req, res) => {
     });
 
     if (isExist) {
-      req.flash("commentalert", ["Review Already Submited! Thank You."]);
+      req.flash("alert", ["Review Already Submited! Thank You."]);
       if (req.session.redirectPage) {
         const redirectUrl = req.session.redirectPage;
         delete req.session.redirectPage;

@@ -2,518 +2,654 @@
 <html lang="en">
 <%- include('./partial/header.ejs') %>
 
-<body>
-  <style>
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  <body>
+    <style>
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-    .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    .swiper {
-      width: 100%;
-      height: 300px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+      .swiper {
+        width: 100%;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+      }
 
-    .swiper-slide {
-      background-size: cover;
-      background-position: center;
-    }
+      .swiper-slide {
+        background-size: cover;
+        background-position: center;
+      }
 
-    .mySwiper2 {
-      height: 40%;
-      width: 100%;
-    }
+      .mySwiper2 {
+        height: 40%;
+        width: 100%;
+      }
 
-    .mySwiper {
-      height: 18%;
-      box-sizing: border-box;
-      padding: 10px 0;
-    }
+      .mySwiper {
+        height: 18%;
+        box-sizing: border-box;
+        padding: 10px 0;
+      }
 
-    .mySwiper .swiper-slide {
-      width: 25%;
-      height: 100%;
-      opacity: 0.4;
-    }
+      .mySwiper .swiper-slide {
+        width: 25%;
+        height: 100%;
+        opacity: 0.4;
+      }
 
-    .mySwiper .swiper-slide-thumb-active {
-      opacity: 1;
-    }
+      .mySwiper .swiper-slide-thumb-active {
+        opacity: 1;
+      }
 
-    .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    .swiper-button-next,
-    .swiper-button-prev {
-      padding: 0px;
-    }
+      .swiper-button-next,
+      .swiper-button-prev {
+        padding: 0px;
+      }
 
-    .swiper-button-next::after,
-    .swiper-button-prev::after {
-      color: #000000;
-      font-size: 22px;
-      font-weight: 800;
-    }
-  </style>
-  <%- include('./partial/navbar.ejs') %>
-  <%- include('./partial/mobilenavbar.ejs') %>
-  <main class="container mx-auto my-5">
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <section class="px-[8%]">
-        <div class="py-[5%] px-[8%] md:px-0">
-          <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
-            <div class="swiper-wrapper">
-              <% for(const image of product.Image){ %>
-              <div class="swiper-slide">
-                <img src="/<%= image.path %>" />
-              </div>
-              <% } %>
-            </div>
-          </div>
-          <div thumbsSlider="" class="swiper mySwiper">
-            <div class="swiper-wrapper">
-              <% for(const image of product.Image){ %>
-              <div class="swiper-slide">
-                <img src="/<%= image.path %>" />
-              </div>
-              <% } %>
-            </div>
-            <div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="py-[5%] px-[8%] md:px-[2%] ">
-          <!-- Item Deatils -->
-          <div class="mx-5">
-            <div>
-              <h1 class="text-4xl font-medium pb-2">
-                <%= product.name %>
-              </h1>
-              <span class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price"><%= product.price %>
-              </span>
-            </div>
-            <div class="my-5">
-
-            </div>
-            <div class="my-5">
-              <p>
-                <%= product.title %>
-              </p>
-            </div>
-          </div>
-          <!-- Product Actions -->
-          <div class="my-10">
-            <div class="flex justify-center md:justify-normal">
-              <!-- Quntity button -->
-              <div class="flex justify-center md:justify-normal">
-                <div class="number-input flex border mx-4">
-                  <div class="flex items-center py-1 px-2 border-r cursor-pointer quantity_btn_minus">
-                    <i class="fa-solid fa-minus fa-xs text-neutral-500"></i>
-                  </div>
-                  <input type="hidden" class="productId" data-product-index="1" value="<%= product.productId %>" />
-                  <input type="hidden" class="productname" data-product-index="1" value=" <%= encodeURIComponent(product.name) %>" />
-                  <input class="quantity border-t w-12 quantity-input" min="1" max="5" name="quantity" value="1" type="number" id="productqt1" step="1" data-product-index="1" data-product-id="<%= product.productId %>" />
-                  <div class="flex items-center p-1 px-2 border-l cursor-pointer quantity_btn_plus">
-                    <i class="fa-solid fa-plus fa-xs text-neutral-500"></i>
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+        color: #000000;
+        font-size: 22px;
+        font-weight: 800;
+      }
+    </style>
+    <%- include('./partial/navbar.ejs') %>
+      <%- include('./partial/mobilenavbar.ejs') %>
+        <main class="container mx-auto my-5">
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <section class="px-[8%]">
+              <div class="py-[5%] px-[8%] md:px-0">
+                <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
+                  <div class="swiper-wrapper">
+                    <% for(const image of product.Image){ %>
+                      <div class="swiper-slide">
+                        <img src="/<%= image.path %>" />
+                      </div>
+                      <% } %>
                   </div>
                 </div>
+                <div thumbsSlider="" class="swiper mySwiper">
+                  <div class="swiper-wrapper">
+                    <% for(const image of product.Image){ %>
+                      <div class="swiper-slide">
+                        <img src="/<%= image.path %>" />
+                      </div>
+                      <% } %>
+                  </div>
+                  <div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section>
+              <div class="py-[5%] px-[8%] md:px-[2%] ">
+                <!-- Item Deatils -->
+                <div class="mx-5">
+                  <div>
+                    <h1 class="text-4xl font-medium pb-2">
+                      <%= product.name %>
+                    </h1>
+                    <span class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price">
+                      <%= product.price %>
+                    </span>
+                  </div>
+                  <div class="my-5">
 
-                <button class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all" type="submit" data-product-index="1">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-            <div>
-              <form action="/add_wishlist/<%= product.productId %>" method="post">
-                <button class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" type="submit">
-                  Add to Whishlist
-                  <span class="my-auto px-2">
-                    <img src="https://i.ibb.co/FsZgZ14/heart.png">
-                  </span>
-                </button>
-              </form>
-            </div>
-          </div>
-          <!-- Product Details -->
-          <div class="px-3">
-            <table class="text-sm font-light">
-              <tr class="">
-                <td>SKU: <span class="font-medium">
-                    <%= product.sku%>
-                  </span></td>
-              </tr>
-              <tr class="">
-                <td>CATEGORY:<span><a class="hover:border-b hover:border-black mx-1 font-medium" href="">
-                      <%= product.category %>
-                    </a></span></td>
-              </tr>
-              <tr class="">
-                <td>TAG:<span><a class="hover:border-b hover:border-black mx-1 font-medium" href="">Accessories</a></span></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </section>
-    </div>
-    <section class="px-[8%]">
-      <!-- Product Deatils -->
-      <div class="">
-        <div class="my-1 py-2 border-b" id="tab-navigation">
-          <a class="text-lg me-2 pb-[11px] hover:border-b hover:border-black hover:transition-all" href="#tab-description">Description</a>
-          <a class="text-lg mx-2 pb-[11px] hover:border-b hover:border-black hover:transition-all" href="#tab-info">Info</a>
-          <a class="text-lg ms-2 pb-[11px] hover:border-b hover:border-black hover:transition-all" href="#tab-review">Reviews (<span>0</span>)</a>
-        </div>
-        <div class="my-4">
-          <div class="WhiteList" id="tab-description">
-            <%- desc %>
-          </div>
-          <div class="" id="tab-info">
-            <table>
-              <tr class="my-4">
-                <td class="uppercase">Dimension:</td>
-                <td class="px-3">
-                  <%= product.Information.dimension%>
-                </td>
-              </tr>
-              <tr class="my-4">
-                <td class="uppercase">Vaiants:</td>
-                <td class="px-3">
-                  <%= product.Information.variants%>
-                </td>
-              </tr>
-              <tr class="my-4">
-                <td class="uppercase">Color:</td>
-                <td class="px-3">
-                  <%= product.Information.color%>
-                </td>
-              </tr>
-              <tr class="my-4">
-                <td class="uppercase">Style:</td>
-                <td class="px-3">
-                  <%= product.Information.style%>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="" id="tab-review">
-            <% if (messages.commentalert && messages.commentalert.length> 0) { %>
-            <div id="Alert" class="bg-gray-100 px-4 py-2 w-fit text-red-500 border-2 border-red-500">
-              <p class="flex">
-                <img src="https://cdn-icons-png.flaticon.com/32/4201/4201973.png" alt=""> <span class="m-auto ps-2">
-                  <%= messages.commentalert[0] %>
-                </span>
-              </p>
-            </div>
-            <% } %>
-            <div class="my-2">
-              <h1 class="text-2xl font-medium py-3">Reviews</h1>
-              <% if(comments && comments.length> 0){ %>
-              <div id="prodcutComments" class="p-2">
-                <div class="comments-overlay"><span>All Comments</span></div>
-                <% for (let i=0; i < comments.length; i++) { %>
-                <div class="grid grid-cols-12 mb-2 border-b text-sm md:text-base comment-container bg-gray-50 shadow-sm">
-                  <div class="col-span-12 md:col-span-2 p-2">
-                    <div class="w-fit">
-                      <span class="block text-lg w-fit">
-                        <%= comments[i].user %>
-                      </span>
-                      <span class="block text-sm w-fit text-gray-600"><%=formatDate(comments[i].timestamp).replace(',','-')
-                                        %></span>
-                    </div>
                   </div>
-                  <div class="col-span-12 md:col-span-10 p-2 comment-content">
-                    <div class="comment-full">
-                      <%= comments[i].comment %>
-                    </div>
+                  <div class="my-5">
+                    <p>
+                      <%= product.title %>
+                    </p>
                   </div>
                 </div>
-                <% } %>
-              </div>
-              <% }else{ %>
-              <div>
-                <span class="text-gray-500 font-light">There is no review yet.</span>
-              </div>
-              <% } %>
-            </div>
-            <% if(userid){ %>
-            <% if(!isExist){ %>
-            <div>
-              <h1 class="text-2xl font-medium py-3">Be the first to review of “<span>
-                  <%= product.name%>
-                </span>”</h1>
-              <p class="text-gray-500 font-light">Your email address will not be published.
-                <span class="font-medium text-red-400">Required fields are marked *</span>
-              </p>
-              <form action="/product_comment" method="post">
-                <div class="my-3">
-                  <p class="uppercase text-gray-500 font-light">Your Rating *</p>
-                  <div class="rating">
-                    <input type="radio" id="star5" name="rate" value="5" />
-                    <label for="star5" title="text">5 stars</label>
-                    <input type="radio" id="star4" name="rate" value="4" />
-                    <label for="star4" title="text">4 stars</label>
-                    <input type="radio" id="star3" name="rate" value="3" />
-                    <label for="star3" title="text">3 stars</label>
-                    <input type="radio" id="star2" name="rate" value="2" />
-                    <label for="star2" title="text">2 stars</label>
-                    <input type="radio" id="star1" name="rate" value="1" />
-                    <label for="star1" title="text">1 star</label>
-                  </div>
-                </div>
-                <div class="my-2">
-                  <textarea class="border border-black w-full focus:outline-none p-2" name="reviewerTextarea" id="reviewerTextarea" cols="30" rows="10" placeholder="Your Review *"></textarea>
-                </div>
-                <div class="flex my-2">
-                  <input class="border-b border-black w-full me-2 focus:outline-none px-2" type="text" name="reviewerName" id="reviewerName" placeholder="Your Name *">
-                  <input type="hidden" name="productId" value="<%= product.id%>">
-                </div>
-                <div class="my-4">
-                  <button class="px-4 py-1 border border-black hover:bg-black hover:text-white hover:transition-all" type="submit">Submit</button>
-                </div>
-              </form>
-            </div>
-            <% } %>
-            <% }else{ %>
-            <div class="my-2">
-              <p class="text-2xl">To review please Login.</p>
-              <a class="flex w-fit px-2 py-2 bg-black text-white font-medium mt-2" href="/login">Login
-                to review</a>
-            </div>
-            <% } %>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="container px-[6%] mx-auto mt-[5%] border-t">
-      <!-- Product Heading -->
-      <div class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <% if (relatedproducts.length===0) { %>
-        <%}else{%> <% for (let i=0; i < 4; i++) { %>
-        <% const product=relatedproducts[i];%>
-        <div class="my-4 px-6 md:px-0">
-          <h1 class="text-xl font-medium my-1">Related products</h1>
-        </div>
-        <div class="product-wrapper relative border " x-data="{ open: false }" x x-on:toggle-modal.window="open = !open">
-          <div class="product-Img-Wrapper relative">
-            <div class="divContainer">
-              <img class="" src="/<%= product.Image[0].path %>" alt="Product Image" />
-            </div>
-            <div class="product-actions lg:absolute top-0 left-0 w-full h-full lg:bg-gray-100 lg:opacity-0 lg:transition-opacity lg:duration-200 ease-out">
-              <div class="product-actions-links flex items-center justify-center relative top-1/2 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 z-40 w-fit lg:px-2 my-2 lg:my-0 lg:p-0">
-                <a class="mx-2 p-2 border border-black" href="/add-cart/<%= product.productId %>/<%= encodeURIComponent(product.name) %>/1">
-                  <img src="https://cdn-icons-png.flaticon.com/16/3144/3144456.png" alt="Add_Cart" />
-                </a>
-                <div>
-                  <form action="/add_wishlist/<%= product.productId %>" method="post">
-                    <button class="mx-2 p-2 border border-black" type="submit">
-                      <img src="https://cdn-icons-png.flaticon.com/16/3132/3132924.png" alt="Add_Whishlist">
-                    </button>
-                  </form>
-                </div>
-                <a class="mx-2 p-2 border border-black isDisable" x-on:click="open = true" x-transition href="https://localhost:3080/zoomin/?<%= product.productId %>">
-                  <img src="https://cdn-icons-png.flaticon.com/16/10561/10561282.png" alt="Zoom_Item" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="product-Content-Wrapper px-2 py-4">
-            <div class="product-title flex justify-between text-lg">
-              <p><%= product.name %></p>
-              <p class="text-red-600 indian_Price"><%= product.price %></p>
-            </div>
-          </div>
-          <a class="product-link absolute top-0 left-0 right-0 bottom-0 z-20" href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
-          </a>
-          <div x-show.important="open" x-transition class="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-10 z-50 modal">
-            <div x-on:click.away="open = false" x-transition class="w-5/6 h-2/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-sm md:flex overflow-scroll md:overflow-auto">
-              <div class="md:w-1/2">
-                <a href="/productpage">
-                  <img class="h-full w-full object-cover" src="/<%= product.Image[0].path %>" alt="" />
-                </a>
-              </div>
-              <div class="md:w-1/2">
-                <div class="py-[5%] px-[2%] md:px-[2%]">
-                  <!-- Item Deatils -->
-                  <div class="mx-5">
-                    <div>
-                      <h1 class="text-4xl font-medium pb-2">
-                        <%= product.name %>
-                      </h1>
-                      <span class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price"><%= product.price %>
-                      </span>
-                    </div>
-                    <div class="my-5 font-light h-24 md:h-12 overflow-hidden">
-                      <p><%- product.htmldesc %></p>
-                    </div>
-                  </div>
-                  <!-- Product Actions -->
-                  <div class="my-4 md:my-10">
+                <!-- Product Actions -->
+                <div class="my-10">
+                  <div class="flex justify-center md:justify-normal">
+                    <!-- Quntity button -->
                     <div class="flex justify-center md:justify-normal">
                       <div class="number-input flex border mx-4">
                         <div class="flex items-center py-1 px-2 border-r cursor-pointer quantity_btn_minus">
                           <i class="fa-solid fa-minus fa-xs text-neutral-500"></i>
                         </div>
-                        <input type="hidden" class="productId" data-product-index="<%= i %>" value="<%= product.productId %>" />
-                        <input type="hidden" class="productname" data-product-index="<%= i %>
-                            value=" <%= encodeURIComponent(product.name) %>" />
-                        <input class="quantity border-t w-12 quantity-input" min="1" max="5" name="quantity" value="1" type="number" id="productqt<%= i %>" step="1" data-product-index="<%= i %>" data-product-id="<%= product.productId %>" />
+                        <input type="hidden" class="productId" data-product-index="1"
+                          value="<%= product.productId %>" />
+                        <input type="hidden" class="productname" data-product-index="1"
+                          value=" <%= encodeURIComponent(product.name) %>" />
+                        <input class="quantity border-t w-12 quantity-input" min="1" max="5" name="quantity" value="1"
+                          type="number" id="productqt1" step="1" data-product-index="1"
+                          data-product-id="<%= product.productId %>" />
                         <div class="flex items-center p-1 px-2 border-l cursor-pointer quantity_btn_plus">
                           <i class="fa-solid fa-plus fa-xs text-neutral-500"></i>
                         </div>
                       </div>
 
-                      <button class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all" type="submit" data-product-index="<%= i %>">
+                      <button
+                        class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all"
+                        type="submit" data-product-index="1">
                         Add to Cart
                       </button>
                     </div>
-                    <div>
-                      <form action="/add_wishlist/<%= product.productId %>" method="post">
-                        <button class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" type="submit">
-                          Add to Whishlist
-                          <span class="my-auto px-2">
-                            <img src="https://i.ibb.co/FsZgZ14/heart.png">
-                          </span>
-                        </button>
-                      </form>
-                    </div>
                   </div>
-                  <!-- Product Details -->
-                  <div class="px-3">
-                    <table class="text-sm font-light">
-                      <tr class="">
-                        <td>
-                          SKU:
-                          <span class="font-medium">
-                            <%= product.sku %>
-                          </span>
-                        </td>
-                      </tr>
-                      <tr class="">
-                        <td>
-                          CATEGORY:
-                          <span>
-                            <a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/furniture/<%= product.category %>">
-                              <%= product.category %>
-                            </a>
-                          </span>
-                        </td>
-                      </tr>
-                      <tr class="">
-                        <td>
-                          Product Id:
-                          <span><a class="hover:border-b hover:border-black mx-1 font-medium" href="http://localhost:3080/product/<%= product.productId %>/<%= product.name %>">
-                              <%= product.productId %>
-                            </a>
-                          </span>
-                        </td>
-                      </tr>
-                    </table>
+                  <div>
+                    <form action="/add_wishlist/<%= product.productId %>" method="post">
+                      <button class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" type="submit">
+                        Add to Whishlist
+                        <span class="my-auto px-2">
+                          <img src="https://i.ibb.co/FsZgZ14/heart.png">
+                        </span>
+                      </button>
+                    </form>
                   </div>
                 </div>
+                <!-- Product Details -->
+                <div class="px-3">
+                  <table class="text-sm font-light">
+                    <tr class="">
+                      <td>SKU: <span class="font-medium">
+                          <%= product.sku%>
+                        </span></td>
+                    </tr>
+                    <tr class="">
+                      <td>CATEGORY:<span><a class="hover:border-b hover:border-black mx-1 font-medium" href="">
+                            <%= product.category %>
+                          </a></span></td>
+                    </tr>
+                    <tr class="">
+                      <td>TAG:<span><a class="hover:border-b hover:border-black mx-1 font-medium"
+                            href="">Accessories</a></span></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
-              <div class="fixed top-0 right-0">
-                <button x-on:click="open = false" x-transition class="px-2 py-1 mx-2 my-1 bg-black bg-opacity-20">
-                  <i class="fa-solid fa-xmark fa-xl text-white md:text-black"></i>
-                </button>
+            </section>
+          </div>
+          <section class="px-[8%]">
+            <!-- Product Deatils -->
+            <div class="">
+              <div class="my-1 py-2 border-b" id="tab-navigation">
+                <a class="text-lg me-2 pb-[11px] hover:border-b hover:border-black hover:transition-all"
+                  href="#tab-description">Description</a>
+                <a class="text-lg mx-2 pb-[11px] hover:border-b hover:border-black hover:transition-all"
+                  href="#tab-info">Info</a>
+                <a class="text-lg ms-2 pb-[11px] hover:border-b hover:border-black hover:transition-all"
+                  href="#tab-review">Reviews (<span>
+                    <%= comments.length %>
+                  </span>)</a>
+              </div>
+              <div class="my-4">
+                <div class="WhiteList" id="tab-description">
+                  <%- desc %>
+                </div>
+                <div class="" id="tab-info">
+                  <table>
+                    <tr class="my-4">
+                      <td class="uppercase">Dimension:</td>
+                      <td class="px-3">
+                        <%= product.Information.dimension%>
+                      </td>
+                    </tr>
+                    <tr class="my-4">
+                      <td class="uppercase">Vaiants:</td>
+                      <td class="px-3">
+                        <%= product.Information.variants%>
+                      </td>
+                    </tr>
+                    <tr class="my-4">
+                      <td class="uppercase">Color:</td>
+                      <td class="px-3">
+                        <%= product.Information.color%>
+                      </td>
+                    </tr>
+                    <tr class="my-4">
+                      <td class="uppercase">Style:</td>
+                      <td class="px-3">
+                        <%= product.Information.style%>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="" id="tab-review">
+                  <% if (messages.alert && messages.alert.length> 0) { %>
+                    <div id="Alert" class="bg-gray-100 px-4 py-2 w-fit text-red-500 border-2 border-red-500">
+                      <p class="flex">
+                        <img src="https://cdn-icons-png.flaticon.com/32/4201/4201973.png" alt=""> <span
+                          class="m-auto ps-2">
+                          <%= messages.alert[0] %>
+                        </span>
+                      </p>
+                    </div>
+                    <% } %>
+                      <div class="my-2">
+                        <% if (!comments && comments.length< 0) { %>
+                          <p>No Rating</p>
+                          <% }else{ %>
+                            <div class="p-4">
+                              <p class="uppercase text-2xl">Average Rating</p>
+                              <div id="StarRating" class="flex p-4">
+                                <% let sumOfRatings=0; %>
+                                  <% for (let i=0; i < comments.length; i++) { %>
+                                    <% sumOfRatings +=comments[i].rating; %>
+                                      <% } %>
+                                        <% const averageRating=sumOfRatings / comments.length; %>
+                                          <% const wholeStars=Math.floor(averageRating); %>
+                                            <% const hasHalfStar=averageRating - wholeStars>= 0.5; %>
+
+                                              <div class="flex">
+                                                <% for (let j=0; j < wholeStars; j++) { %>
+                                                  <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                      viewBox="0 0 24 24" fill="#FFC107">
+                                                      <path
+                                                        d="M12 2l2.4 6.5h6.3l-5 4.4 1.7 6.6-5-4.3-5 4.3 1.7-6.6-5-4.4h6.3z" />
+                                                    </svg>
+                                                  </span>
+                                                  <% } %>
+
+                                                    <% if (hasHalfStar) { %>
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
+                                                        viewBox="0 0 24 24">
+                                                        <!-- Define a gradient fill -->
+                                                        <defs>
+                                                          <linearGradient id="halfStarGradient" x1="0%" y1="0%"
+                                                            x2="100%" y2="0%">
+                                                            <stop offset="50%" style="stop-color: #FFC107;" />
+                                                            <stop offset="50%" style="stop-color: #b3b3b3;" />
+                                                          </linearGradient>
+                                                        </defs>
+                                                        <polygon
+                                                          points="12 2 15 9 22 9 16 14 18 22 12 17 6 22 8 14 2 9 9 9"
+                                                          fill="url(#halfStarGradient)" />
+                                                      </svg>
+                                                      <% } %>
+
+                                                        <% const emptyStars=5 - averageRating; %>
+                                                          <% for (let j=0; j < Math.floor(emptyStars); j++) { %>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                              height="24" viewBox="0 0 24 24" fill="#b3b3b3">
+                                                              <path
+                                                                d="M12 2l2.4 6.5h6.3l-5 4.4 1.7 6.6-5-4.3-5 4.3 1.7-6.6-5-4.4h6.3z" />
+                                                            </svg>
+                                                            <% } %>
+                                              </div>
+                                              <p class="ms-2">
+                                                <%= averageRating %> out of 5 Stars
+                                              </p>
+                              </div>
+                            </div>
+                            <% } %>
+                              <div class="p-4">
+                                <p class="font-medium text-gray-500">Customer Reviews </p>
+                              </div>
+                              <% if(comments && comments.length> 0){ %>
+                                <div id="prodcutComments" class="p-2">
+                                  <div class="comments-overlay"><span>All Comments</span></div>
+                                  <% for (let i=0; i < comments.length; i++) { %>
+                                    <div
+                                      class="grid grid-cols-12 p-4 mb-2 border-b text-sm md:text-base comment-container shadow-md border rounded-md">
+                                      <div class="col-span-12 pb-2 flex justify-between">
+                                        <div class="flex w-fit">
+                                          <div>
+                                            <span class="flex text-lg w-fit font-medium leading-tight">
+                                              <%= comments[i].user %>
+                                                <span class="my-auto"><img height="12" width="12"
+                                                    src="https://cdn-icons-png.flaticon.com/512/5290/5290076.png"
+                                                    alt=""></span>
+                                            </span>
+                                            <span class="block text-sm w-fit text-gray-500 font-medium leading-tight">
+                                              <%=formatDate(comments[i].timestamp).replace(',','-') %>
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="flex gap-1">
+                                          <% const rating=comments[i].rating; %>
+                                            <% for (let j=0; j < 5; j++) { %>
+                                              <% if (j < rating) { %>
+                                                <span>
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="#FFC107" <!-- Set the fill color to yellow
+                                                    -->
+                                                    >
+                                                    <path
+                                                      d="M12 2l2.4 6.5h6.3l-5 4.4 1.7 6.6-5-4.3-5 4.3 1.7-6.6-5-4.4h6.3z" />
+                                                  </svg>
+
+                                                </span>
+                                                <% } else { %>
+                                                  <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                      viewBox="0 0 24 24" fill="#b3b3b3">
+                                                      <path
+                                                        d="M12 2l2.4 6.5h6.3l-5 4.4 1.7 6.6-5-4.3-5 4.3 1.7-6.6-5-4.4h6.3z" />
+                                                    </svg>
+                                                  </span>
+                                                  <% } %>
+                                                    <% } %>
+                                        </div>
+                                      </div>
+                                      <div class="col-span-12 pt-2 comment-content">
+                                        <div class="comment-full font-light">
+                                          <%= comments[i].comment %>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <% } %>
+                                </div>
+                                <% }else{ %>
+                                  <div>
+                                    <span class="text-gray-500 font-light">There is no review yet.</span>
+                                  </div>
+                                  <% } %>
+                      </div>
+                      <% if(userid){ %>
+                        <% if(!isExist){ %>
+                          <div>
+                            <h1 class="text-2xl font-medium py-3">Be the first to review of “<span>
+                                <%= product.name%>
+                              </span>”</h1>
+                            <p class="text-gray-500 font-light">Your email address will not be published.
+                              <span class="font-medium text-red-400">Required fields are marked *</span>
+                            </p>
+                            <form action="/product_comment" method="post">
+                              <div class="my-3">
+                                <p class="uppercase text-gray-500 font-light">Your Rating *</p>
+                                <div class="rating">
+                                  <input type="radio" id="star5" name="rate" value="5" />
+                                  <label for="star5" title="text">5 stars</label>
+                                  <input type="radio" id="star4" name="rate" value="4" />
+                                  <label for="star4" title="text">4 stars</label>
+                                  <input type="radio" id="star3" name="rate" value="3" />
+                                  <label for="star3" title="text">3 stars</label>
+                                  <input type="radio" id="star2" name="rate" value="2" />
+                                  <label for="star2" title="text">2 stars</label>
+                                  <input type="radio" id="star1" name="rate" value="1" />
+                                  <label for="star1" title="text">1 star</label>
+                                </div>
+                              </div>
+                              <div class="my-2">
+                                <textarea class="border border-black w-full focus:outline-none p-2"
+                                  name="reviewerTextarea" id="reviewerTextarea" cols="30" rows="10"
+                                  placeholder="Your Review *"></textarea>
+                              </div>
+                              <div class="flex my-2">
+                                <input class="border-b border-black w-full me-2 focus:outline-none px-2" type="text"
+                                  name="reviewerName" id="reviewerName" placeholder="Your Name *">
+                                <input type="hidden" name="productId" value="<%= product.id%>">
+                              </div>
+                              <div class="my-4">
+                                <button
+                                  class="px-4 py-1 border border-black hover:bg-black hover:text-white hover:transition-all"
+                                  type="submit">Submit</button>
+                              </div>
+                            </form>
+                          </div>
+                          <% } %>
+                            <% }else{ %>
+                              <div class="my-2">
+                                <p class="text-2xl">To review please Login.</p>
+                                <a class="flex w-fit px-2 py-2 bg-black text-white font-medium mt-2" href="/login">Login
+                                  to review</a>
+                              </div>
+                              <% } %>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <% }; %>
-        <%}%>
-      </div>
-    </section>
-  </main>
-  <script>
-    $(function() {
-      $(".comment-container").on('click', function() {
-        const $this = $(this);
-        $this.toggleClass('expanded');
+          </section>
+          <section class="container px-[6%] mx-auto mt-[5%] border-t">
+            <!-- Product Heading -->
+            <div
+              class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <% if (relatedproducts.length===0) { %>
+                <%}else{%>
+                  <% for (let i=0; i < 4; i++) { %>
+                    <% const product=relatedproducts[i];%>
+                      <div class="my-4 px-6 md:px-0">
+                        <h1 class="text-xl font-medium my-1">Related products</h1>
+                      </div>
+                      <div class="product-wrapper relative border " x-data="{ open: false }" x
+                        x-on:toggle-modal.window="open = !open">
+                        <div class="product-Img-Wrapper relative">
+                          <div class="divContainer">
+                            <img class="" src="/<%= product.Image[0].path %>" alt="Product Image" />
+                          </div>
+                          <div
+                            class="product-actions lg:absolute top-0 left-0 w-full h-full lg:bg-gray-100 lg:opacity-0 lg:transition-opacity lg:duration-200 ease-out">
+                            <div
+                              class="product-actions-links flex items-center justify-center relative top-1/2 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 z-40 w-fit lg:px-2 my-2 lg:my-0 lg:p-0">
+                              <a class="mx-2 p-2 border border-black"
+                                href="/add-cart/<%= product.productId %>/<%= encodeURIComponent(product.name) %>/1">
+                                <img src="https://cdn-icons-png.flaticon.com/16/3144/3144456.png" alt="Add_Cart" />
+                              </a>
+                              <div>
+                                <form action="/add_wishlist/<%= product.productId %>" method="post">
+                                  <button class="mx-2 p-2 border border-black" type="submit">
+                                    <img src="https://cdn-icons-png.flaticon.com/16/3132/3132924.png"
+                                      alt="Add_Whishlist">
+                                  </button>
+                                </form>
+                              </div>
+                              <a class="mx-2 p-2 border border-black isDisable" x-on:click="open = true" x-transition
+                                href="https://localhost:3080/zoomin/?<%= product.productId %>">
+                                <img src="https://cdn-icons-png.flaticon.com/16/10561/10561282.png" alt="Zoom_Item" />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="product-Content-Wrapper px-2 py-4">
+                          <div class="product-title flex justify-between text-lg">
+                            <p>
+                              <%= product.name %>
+                            </p>
+                            <p class="text-red-600 indian_Price">
+                              <%= product.price %>
+                            </p>
+                          </div>
+                        </div>
+                        <a class="product-link absolute top-0 left-0 right-0 bottom-0 z-20"
+                          href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
+                        </a>
+                        <div x-show.important="open" x-transition
+                          class="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-10 z-50 modal">
+                          <div x-on:click.away="open = false" x-transition
+                            class="w-5/6 h-2/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-sm md:flex overflow-scroll md:overflow-auto">
+                            <div class="md:w-1/2">
+                              <a href="/productpage">
+                                <img class="h-full w-full object-cover" src="/<%= product.Image[0].path %>" alt="" />
+                              </a>
+                            </div>
+                            <div class="md:w-1/2">
+                              <div class="py-[5%] px-[2%] md:px-[2%]">
+                                <!-- Item Deatils -->
+                                <div class="mx-5">
+                                  <div>
+                                    <h1 class="text-4xl font-medium pb-2">
+                                      <%= product.name %>
+                                    </h1>
+                                    <span
+                                      class="flex w-fit text-3xl font-medium py-2 border-b border-black indian_Price">
+                                      <%= product.price %>
+                                    </span>
+                                  </div>
+                                  <div class="my-5 font-light h-24 md:h-12 overflow-hidden">
+                                    <p><%- product.htmldesc %></p>
+                                  </div>
+                                </div>
+                                <!-- Product Actions -->
+                                <div class="my-4 md:my-10">
+                                  <div class="flex justify-center md:justify-normal">
+                                    <div class="number-input flex border mx-4">
+                                      <div
+                                        class="flex items-center py-1 px-2 border-r cursor-pointer quantity_btn_minus">
+                                        <i class="fa-solid fa-minus fa-xs text-neutral-500"></i>
+                                      </div>
+                                      <input type="hidden" class="productId" data-product-index="<%= i %>"
+                                        value="<%= product.productId %>" />
+                                      <input type="hidden" class="productname" data-product-index="<%= i %>
+                            value=" <%=encodeURIComponent(product.name) %>" />
+                                      <input class="quantity border-t w-12 quantity-input" min="1" max="5"
+                                        name="quantity" value="1" type="number" id="productqt<%= i %>" step="1"
+                                        data-product-index="<%= i %>" data-product-id="<%= product.productId %>" />
+                                      <div class="flex items-center p-1 px-2 border-l cursor-pointer quantity_btn_plus">
+                                        <i class="fa-solid fa-plus fa-xs text-neutral-500"></i>
+                                      </div>
+                                    </div>
 
-        $(window).on('scroll', function() {
-          if (!isElementInViewport($this)) {
-            $this.removeClass('expanded');
-          }
-        });
+                                    <button
+                                      class="add_cart px-4 py-2 font-medium border border-black mx-1 hover:bg-black hover:text-white hover:transition-all"
+                                      type="submit" data-product-index="<%= i %>">
+                                      Add to Cart
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <form action="/add_wishlist/<%= product.productId %>" method="post">
+                                      <button class="flex p-2 mx-2 my-3 font-medium hover:text-gray-600" type="submit">
+                                        Add to Whishlist
+                                        <span class="my-auto px-2">
+                                          <img src="https://i.ibb.co/FsZgZ14/heart.png">
+                                        </span>
+                                      </button>
+                                    </form>
+                                  </div>
+                                </div>
+                                <!-- Product Details -->
+                                <div class="px-3">
+                                  <table class="text-sm font-light">
+                                    <tr class="">
+                                      <td>
+                                        SKU:
+                                        <span class="font-medium">
+                                          <%= product.sku %>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                    <tr class="">
+                                      <td>
+                                        CATEGORY:
+                                        <span>
+                                          <a class="hover:border-b hover:border-black mx-1 font-medium"
+                                            href="http://localhost:3080/furniture/<%= product.category %>">
+                                            <%= product.category %>
+                                          </a>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                    <tr class="">
+                                      <td>
+                                        Product Id:
+                                        <span><a class="hover:border-b hover:border-black mx-1 font-medium"
+                                            href="http://localhost:3080/product/<%= product.productId %>/<%= product.name %>">
+                                            <%= product.productId %>
+                                          </a>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="fixed top-0 right-0">
+                              <button x-on:click="open = false" x-transition
+                                class="px-2 py-1 mx-2 my-1 bg-black bg-opacity-20">
+                                <i class="fa-solid fa-xmark fa-xl text-white md:text-black"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <% }; %>
+                        <%}%>
+            </div>
+          </section>
+        </main>
+        <script>
+          $(function () {
+            $(".comment-container").on('click', function () {
+              const $this = $(this);
+              $this.toggleClass('expanded');
 
-        $(document).on('click', function(event) {
-          if (!$this.is(event.target) && $this.has(event.target).length === 0) {
-            $this.removeClass('expanded');
-          }
-        });
-      });
+              $(window).on('scroll', function () {
+                if (!isElementInViewport($this)) {
+                  $this.removeClass('expanded');
+                }
+              });
+
+              $(document).on('click', function (event) {
+                if (!$this.is(event.target) && $this.has(event.target).length === 0) {
+                  $this.removeClass('expanded');
+                }
+              });
+            });
 
 
-      const $prodcutComments = $("#prodcutComments");
-      const prodcutContainers = $prodcutComments.find('.comment-container');
-      if (prodcutContainers.length > 2) {
-        $prodcutComments.removeClass('blank');
-        $prodcutComments.on('click', function() {
-          const $this = $(this);
-          $this.addClass('blank');
-        });
-      } else {
-        $prodcutComments.addClass('blank');
-      }
+            const $prodcutComments = $("#prodcutComments");
+            const prodcutContainers = $prodcutComments.find('.comment-container');
+            if (prodcutContainers.length > 2) {
+              $prodcutComments.removeClass('blank');
+              $prodcutComments.on('click', function () {
+                const $this = $(this);
+                $this.addClass('blank');
+              });
+            } else {
+              $prodcutComments.addClass('blank');
+            }
 
 
-      function isElementInViewport($element) {
-        const elementTop = $element.offset().top;
-        const elementBottom = elementTop + $element.outerHeight();
-        const viewportTop = $(window).scrollTop();
-        const viewportBottom = viewportTop + $(window).height();
-        return elementBottom > viewportTop && elementTop < viewportBottom;
-      }
+            function isElementInViewport($element) {
+              const elementTop = $element.offset().top;
+              const elementBottom = elementTop + $element.outerHeight();
+              const viewportTop = $(window).scrollTop();
+              const viewportBottom = viewportTop + $(window).height();
+              return elementBottom > viewportTop && elementTop < viewportBottom;
+            }
 
 
 
-    });
-  </script>
-  <%- include('./partial/footer.ejs') %>
-        <%- include('./partial/scripts.ejs') %>
-        <script type="module">
-          import Swiper from "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.esm.browser.min.js";
-
-          var swiper = new Swiper(".mySwiper", {
-            loop: true,
-            spaceBetween: 10,
-            slidesPerView: 4,
-            freeMode: true,
-            watchSlidesProgress: true,
-          });
-          var swiper2 = new Swiper(".mySwiper2", {
-            loop: true,
-            spaceBetween: 10,
-            navigation: {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            },
-            thumbs: {
-              swiper: swiper,
-            },
           });
         </script>
-</body>
+        <%- include('./partial/footer.ejs') %>
+          <%- include('./partial/scripts.ejs') %>
+            <script type="module">
+              import Swiper from "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.esm.browser.min.js";
+
+              var swiper = new Swiper(".mySwiper", {
+                loop: true,
+                spaceBetween: 10,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
+              });
+              var swiper2 = new Swiper(".mySwiper2", {
+                loop: true,
+                spaceBetween: 10,
+                navigation: {
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                },
+                thumbs: {
+                  swiper: swiper,
+                },
+              });
+            </script>
+  </body>
 
 </html>
