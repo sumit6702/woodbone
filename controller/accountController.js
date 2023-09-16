@@ -704,7 +704,7 @@ const paymentS = async (req, res) => {
       <div class="footer">
           <p>© 2023 Woodbone. All rights reserved.</p>
       </div>
-  </div>`;
+    </div>`;
       await sendMail(email, subject, htmlStyle, htmlbody);
     };
     await verifyMail(user.fullName, user.email, user._id);
