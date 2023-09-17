@@ -118,8 +118,10 @@
                           </span>
                         </button>
                         <div x-show="showLinks" class="px-2 md:pe-4 py-2">
-                          <% if ( orders[i].Orderstatus !=='cancelled' && orders[i].Orderstatus !=='cancellation rejected' &&
-                            orders[i].Orderstatus !=='cancellation approved' && orders[i].Orderstatus !=='cancellation initiated' && orders[i].Orderstatus == "deliverd" ) { %>
+                          <% if ( orders[i].Orderstatus !=='cancelled' && orders[i].Orderstatus
+                            !=='cancellation rejected' && orders[i].Orderstatus !=='cancellation approved' &&
+                            orders[i].Orderstatus !=='cancellation initiated' && orders[i].Orderstatus=="deliverd" ) {
+                            %>
                             <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto"
                               href="/download-invoice/<%= invoices[i].id %>">
                               <span class="mx-auto">Invoice</span>
@@ -129,8 +131,8 @@
                                               /product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>?tab=tab-review
                                               <% } %>
                                               ">
-                                <span class="mx-auto">Write a product review</span>
-                              </a>
+                              <span class="mx-auto">Write a product review</span>
+                            </a>
                             <% } %>
                               <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
                                 <span class="mx-auto">Get product support</span>
