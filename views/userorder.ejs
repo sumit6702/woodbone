@@ -56,7 +56,9 @@
                                 <div class="my-1">
                                   <p class="uppercase text-gray-400">Staus:
                                     <% if(orders[i].Orderstatus=='cancelled' ||
-                                      orders[i].Orderstatus=='cancellation rejected' ){ %>
+                                      orders[i].Orderstatus=='cancellation rejected' ||
+                                      orders[i].Orderstatus=="cancellation approved" ||
+                                      orders[i].Orderstatus=="cancellation initiated" ){ %>
                                       <span class=" text-red-700 font-medium">
                                         <%= orders[i].Orderstatus %>
                                       </span>
@@ -74,9 +76,31 @@
                                       src="https://cdn-icons-png.flaticon.com/16/3875/3875739.png " alt />
                                     Buy it again
                                   </a>
-                                  <a class="underline text-gray-700 font-light"
-                                    href="/order/cancel/<%= orders[i].id %>">Cancel</a>
-
+                                  <% if(orders[i].Orderstatus=='cancelled' ||
+                                    orders[i].Orderstatus=='cancellation rejected' ||
+                                    orders[i].Orderstatus=="cancellation approved" ||
+                                    orders[i].Orderstatus=="cancellation initiated" ){ %>
+                                    <%}else{ %>
+                                      <div x-data="{ showModal: false }">
+                                        <a class="underline text-gray-700 font-light cursor-pointer" id="cancelOrder"
+                                          @click="showModal = true">
+                                          Cancel
+                                        </a>
+                                        <div x-show="showModal"
+                                          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+                                          <div class="modal">
+                                            <div class="bg-white p-4 shadow-lg rounded">
+                                              <p>Are you sure you want to cancel this order?</p>
+                                              <div class="mt-4">
+                                                <button @click="showModal = false" class="mr-2">No</button>
+                                                <a @click="console.log('Order canceled'); showModal = false"
+                                                  href="/order/cancel/<%= orders[i].id %>">Yes</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <%}%>
                                 </div>
                               </div>
                             </div>
@@ -94,20 +118,23 @@
                           </span>
                         </button>
                         <div x-show="showLinks" class="px-2 md:pe-4 py-2">
-                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto"
-                            href="/download-invoice/<%= invoices[i].id %>">
-                            <span class="mx-auto">Invoice</span>
-                          </a>
-                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
-                      <% for (let j = 0; j < products[i].length; j++) { %>
-                      /product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>?tab=tab-review
-                      <% } %>
-                      ">
-                            <span class="mx-auto">Write a product review</span>
-                          </a>
-                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
-                            <span class="mx-auto">Get product support</span>
-                          </a>
+                          <% if ( orders[i].Orderstatus !=='cancelled' && orders[i].Orderstatus !=='cancellation rejected' &&
+                            orders[i].Orderstatus !=='cancellation approved' && orders[i].Orderstatus !=='cancellation initiated' && orders[i].Orderstatus == "deliverd" ) { %>
+                            <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto"
+                              href="/download-invoice/<%= invoices[i].id %>">
+                              <span class="mx-auto">Invoice</span>
+                            </a>
+                            <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
+                                              <% for (let j = 0; j < products[i].length; j++) { %>
+                                              /product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>?tab=tab-review
+                                              <% } %>
+                                              ">
+                                <span class="mx-auto">Write a product review</span>
+                              </a>
+                            <% } %>
+                              <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
+                                <span class="mx-auto">Get product support</span>
+                              </a>
                         </div>
                       </div>
                     </div>

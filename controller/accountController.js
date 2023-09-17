@@ -393,6 +393,22 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+const updateOrder = async (req, res) => {
+  try {
+    const {orderid, orderStatus} = req.body;
+    const order = await ORDERS.findOne({order_id:orderid});
+    if (order) {
+      await ORDERS.findByIdAndUpdate(order.id, { Orderstatus: orderStatus });
+      res.redirect("/admin/orders");
+    } else {
+      res.redirect("/admin/orders");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Internal Server Error");
+  }
+};
+
 const checkout = async (req, res) => {
   try {
     const address = await USERADDRESS.findOne({ userid: req.session.user_id });
@@ -940,6 +956,7 @@ const updateSiteInfo = async (req, res) => {
   }
 };
 
+
 export {
   forgetPass,
   PasswordUpdate,
@@ -964,4 +981,5 @@ export {
   profileUploader,
   updateSiteInfo,
   cancelOrder,
+  updateOrder
 };

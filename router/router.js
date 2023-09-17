@@ -98,6 +98,7 @@ import {
   profileUploader,
   updateSiteInfo,
   cancelOrder,
+  updateOrder,
 } from "../controller/accountController.js";
 
 import limiter from "../middleware/ratemiddleware.js";
@@ -224,7 +225,8 @@ router.post(
   upload.single("siteLogo"),
   updateSiteInfo
 );
-router.get("/order/cancel/:id?", cancelOrder);
+router.get("/order/cancel/:id?",isAuthenticated, cancelOrder);
+router.post("/order/orderStaus", isAdmin , updateOrder);
 router.get("/pagetest", pagetesterscontroller);
 
 export default router;

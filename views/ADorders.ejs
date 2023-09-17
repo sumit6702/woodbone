@@ -3,7 +3,7 @@
 <%- include('./partial/header.ejs') %>
 
 <body class="bg-gray-50 jagrataFont">
-  <%- include('./partial/AdminNavbar.ejs')  %>
+  <%- include('./partial/AdminNavbar.ejs') %>
   <main>
     <section class="mx-[2%] lg:mx-[8%] bg-green-100 py-7 px-5 my-4 rounded-md shadow bg-[url('https://i.ibb.co/rt29MDq/ADloginbg.png')] bg-no-repeat bg-right-top bg-[length:350px_350px]">
       <h1 class="text-xl font-semibold">Orders</h1>
@@ -33,6 +33,9 @@
             <th class="py-2 text-gray-700 hidden lg:block">
               Status
             </th>
+            <th class="py-2 text-gray-700">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody class="w-full text-gray-500">
@@ -42,26 +45,46 @@
           </tr>
           <% } else { %>
           <% for (let i=0; i < orders.length; i++) { %>
-          <% const order = orders[i]; %>
+          <% const order=orders[i]; %>
           <tr class="hover:bg-blue-50 cursor-pointer"></tr>
           <td class="py-4 uppercase text-center">
-            <%= order.order_id  %>
+            <%= order.order_id %>
           </td>
           <td class="py-4 relative group text-center">
-            <%= order.name  %>
-            <span class="hidden absolute bg-white p-1 rounded left-1/2  -translate-x-1/2 border shadow-sm group-hover:block"><%= order.email  %></span>
+            <%= order.name %>
+            <span class="hidden absolute bg-white p-1 rounded left-1/2  -translate-x-1/2 border shadow-sm group-hover:block">
+              <%= order.email %>
+            </span>
           </td>
           <td class="py-4 text-center hidden lg:block">
-            <%= order.products.length  %>
+            <%= order.products.length %>
           </td>
           <td class="py-4 indian_Price text-center">
-            <%= order.orderprice  %>
+            <%= order.orderprice %>
           </td>
           <td class="py-4 text-center">
-            <%= formatDate(order.createdAt).replace(',','-')  %>
+            <%= formatDate(order.createdAt).replace(',','-') %>
           </td>
           <td class="py-4 text-center hidden lg:block">
-            <span class="px-2 py-1 bg-teal-400 font-medium text-white rounded-md"><%= order.Orderstatus  %></span>
+            <span class="px-2 py-1 bg-teal-400 font-bold text-white rounded-md">
+              <%= order.Orderstatus %>
+            </span>
+          </td>
+          <td class="py-4 text-center">
+            <form class="orderStatus" action="/order/orderStaus" method="POST">
+              <input type="hidden" name="orderid" value="<%= order.order_id %>">
+              <select class="border rounded-md p-1 focus:outline-none" name="orderStatus">
+                <option value="packed & ready" <%=order.Orderstatus==='packed & ready' ? 'selected' : '' %>>packed & ready</option>
+                <option value="shipped" <%=order.Orderstatus==='shipped' ? 'selected' : '' %>>shipped</option>
+                <option value="deliverd" <%=order.Orderstatus==='deliverd' ? 'selected' : '' %>>deliverd
+                </option>
+                <option value="cancellation approved" <%=order.Orderstatus==='cancellation approved'
+                            ? 'selected' : '' %>>cancellation approved</option>
+                <option value="cancellation rejected" <%=order.Orderstatus==='cancellation rejected'
+                            ? 'selected' : '' %>>cancellation rejected</option>
+                <option value="cancelled" <%=order.Orderstatus==='cancelled' ? 'selected' : '' %>>cancelled</option>
+              </select>
+            </form>
           </td>
           </tr>
           <% } %>
@@ -69,6 +92,14 @@
         </tbody>
       </table>
     </section>
+    <script>
+      $(function() {
+        $(".orderStatus select").on("change", function() {
+          const value = $(this).closest("form");
+          value.submit();
+        });
+      });
+    </script>
   </main>
   <%- include('./partial/scripts.ejs') %>
 </body>
