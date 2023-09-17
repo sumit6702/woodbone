@@ -394,7 +394,7 @@ function showActiveDiv(nestedItems, itemsLinks, activeItems) {
   });
 }
 showActiveDiv($(".adminnestedItems"), $(".nested-links"), $("#adminprofile"));
-showActiveDiv($(".nestedItems"), $("#myaccount_Links li a"), $("#userOrders"));
+showActiveDiv($(".nestedItems"), $("#myaccount_Links li a"), $("#userFavorites"));
 
 /* ------------------------- EDIT BUTTON FORM ENABLE ------------------------ */
 fromEdit($(".editbtn"), $("#adminprofile form"));

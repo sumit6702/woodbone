@@ -42,9 +42,9 @@ const userloginController = async (req, res) => {
           });
           await tokenDocument.save();
           res.cookie("remember_me", rememberMeToken, {
-            expires: new Date(Date.now() + 30 * 24 * 3600 * 1000), // Set to a desired expiration time
+            expires: new Date(Date.now() + 30 * 24 * 3600 * 1000),
             httpOnly: true,
-            secure: true, // Set to true in a production environment with HTTPS
+            secure: true,
           });
         }
         

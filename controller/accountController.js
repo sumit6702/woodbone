@@ -28,7 +28,7 @@ const forgetPass = async (req, res) => {
     userid: req.user,
     cartval: req.cartval,
     isUserFound: false,
-    siteInfo:req.siteInfo
+    siteInfo: req.siteInfo,
   });
 };
 
@@ -101,7 +101,7 @@ const PasswordUpdated = async (req, res) => {
       userid: req.user,
       cartval: req.cartval,
       token: token,
-      siteInfo:req.siteInfo
+      siteInfo: req.siteInfo,
     });
   } catch (error) {
     console.log(error.message);
@@ -239,7 +239,7 @@ const newAddress = async (req, res) => {
       });
       await existAdd.save();
     }
-    res.redirect("/my-account");
+    res.redirect("/my-account#userAddress");
   } catch (error) {}
 };
 
@@ -256,7 +256,7 @@ const updatedefaultAddress = async (req, res) => {
       });
     }
     await userD.save();
-    res.redirect("/my-account");
+    res.redirect("/my-account#userAddress");
   } catch (error) {}
 };
 
@@ -295,7 +295,7 @@ const updateAddress = async (req, res) => {
   } else {
     console.log("Address not found");
   }
-  res.redirect("/my-account");
+  res.redirect("/my-account#userAddress");
 };
 
 const deletAddress = async (req, res) => {
@@ -312,7 +312,7 @@ const deletAddress = async (req, res) => {
       UserAddress.address.splice(UserCurrentAddress, 1);
       await UserAddress.save();
 
-      res.status(200).redirect("/my-account");
+      res.status(200).redirect("/my-account#userAddress");
     } else {
       res.status(404).json({ message: "Address not found" });
     }
@@ -369,8 +369,24 @@ const order = async (req, res) => {
       formatDate,
       products,
       invoices,
-      siteInfo:req.siteInfo
+      siteInfo: req.siteInfo,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Internal Server Error");
+  }
+};
+
+const cancelOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const order = await ORDERS.findById(orderId);
+    if (order) {
+      await ORDERS.findByIdAndUpdate(orderId, { Orderstatus: "cancellation initiated" });
+      res.redirect("/orders");
+    } else {
+      res.redirect("/orders");
+    }
   } catch (error) {
     console.log(error);
     res.status(400).send("Internal Server Error");
@@ -393,25 +409,33 @@ const checkout = async (req, res) => {
       defaultAdd = null;
       total = null;
     } else {
-      const productID = Cart.map((item) => item.productId);
-      products = await PRODUCTS.find({ productId: { $in: productID } });
-      quantity = Cart.map((quan) => quan.quantity);
-      totalPricePerItem = products.map((item, index) => {
-        const numericPrice = item.price;
-        const itemQuantity = Cart[index].quantity;
-        const totalPrice = numericPrice * itemQuantity;
-        return totalPrice;
-      });
-      const addArray = address.address;
-      addArray.forEach((addres) => {
-        if (addres.default == true) {
-          defaultAdd = addres;
-        }
-        return defaultAdd;
-      });
-      total = totalPricePerItem.reduce(
-        (acc, product) => acc + parseInt(product, 0)
-      );
+      if (!address) {
+        res.redirect("/my-account#userAddress");
+        req.flash("alert", "Please Add Address!");
+        products = {};
+        quantity = {};
+        totalPricePerItem = {};
+      } else {
+        const productID = Cart.map((item) => item.productId);
+        products = await PRODUCTS.find({ productId: { $in: productID } });
+        quantity = Cart.map((quan) => quan.quantity);
+        totalPricePerItem = products.map((item, index) => {
+          const numericPrice = item.price;
+          const itemQuantity = Cart[index].quantity;
+          const totalPrice = numericPrice * itemQuantity;
+          return totalPrice;
+        });
+        const addArray = address.address;
+        addArray.forEach((addres) => {
+          if (addres.default == true) {
+            defaultAdd = addres;
+          }
+          return defaultAdd;
+        });
+        total = totalPricePerItem.reduce(
+          (acc, product) => acc + parseInt(product, 0)
+        );
+      }
     }
     res.render("checkout.ejs", {
       userid: req.user,
@@ -422,7 +446,7 @@ const checkout = async (req, res) => {
       total,
       quantity,
       totalPricePerItem,
-      siteInfo:req.siteInfo
+      siteInfo: req.siteInfo,
     });
   } catch (error) {
     console.log(error);
@@ -709,7 +733,11 @@ const paymentS = async (req, res) => {
     };
     await verifyMail(user.fullName, user.email, user._id);
 
-    res.render("paymentP", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+    res.render("paymentP", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
   } else {
     res.redirect("/error");
   }
@@ -717,7 +745,11 @@ const paymentS = async (req, res) => {
 
 const paymentF = async (req, res) => {
   if (paymentSuccessful) {
-    res.render("paymentF", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+    res.render("paymentF", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
   } else {
     res.redirect("/error");
   }
@@ -931,4 +963,5 @@ export {
   updateAdminProfile,
   profileUploader,
   updateSiteInfo,
+  cancelOrder,
 };

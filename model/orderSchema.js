@@ -56,7 +56,11 @@ const OrderSchema = new mongoose.Schema({
     ],
     Orderstatus:{
         type:String,
-        default:"Placed"
+        enum: ["orderd", "packed & ready","shipped", "deliverd","cancellation initiated", "cancellation approved","cancellation rejected", "cancelled"],
+        default:"orderd"
+    },
+    description:{
+        type:String
     },
     PaymentInformation:{
         type:String,

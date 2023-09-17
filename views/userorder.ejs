@@ -1,88 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('./partial/header.ejs') %>
-<body>
+<%- include('./partial/header.ejs') %>
+
+  <body>
     <%- include('./partial/navbar.ejs') %>
-    <%- include('./partial/mobilenavbar.ejs') %>
-    <main>
-        <section class="px-6 mx-[8%]">
+      <%- include('./partial/mobilenavbar.ejs') %>
+        <main>
+          <section class="px-2 lg:px-6 mx-[2%] lg:mx-[8%]">
             <p class="my-2 px-2 text-3xl font-medium">Orders</p>
             <div>
-              <% if(!orders || orders.length === 0){ %>
+              <% if(!orders || orders.length===0){ %>
                 <p class="text-center text-xl font-medium">No Orders Yet.</p>
-              <% }else{ %>
-              <% for(let i = 0; i < orders.length; i++) { %>
-                <div class="grid grid-cols-12 mb-5 border-2 rounded-md">
-                  <div x-data="{ showElement: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
-                    x-init="window.addEventListener('resize', () => { showElement = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
-                    class="col-span-12 bg-gray-200 text-sm font-medium text-gray-600">
-                    <button x-show="showButton" @click="showElement = !showElement"
-                      class="flex text-left w-full py-2 px-4 border-b-2 bg-gray-100">
-                      <span>Links</span>
-                      <span class="ms-auto me-0">
-                        <i class="fa-solid fa-chevron-down"></i>
-                      </span>
-                    </button>
-                    <div class="md:flex py-2 px-4" x-show="showElement">
-                      <p class="">TOTAL: <span class="indian_Price"><%= orders[i].orderprice  %></span></p>
-                      <p class="mt-1 md:my-auto md:ms-4">ORDER ON: <%= formatDate(orders[i].createdAt).replace(',', '-') %></p>
-                      <p class="mt-1 md:my-auto md:ms-4">SHIP TO: <a class="text-blue-700 hover:underline" href="/my-account"><%= orders[i].name  %></a></p>
-                      <p class="mt-1 md:my-auto ms-auto me-0 uppercase">ORDER # <%= orders[i].order_id  %></p>
-                    </div>
-                  </div>
-                  <div class="col-span-12 md:col-span-8 px-2 md:ps-4 py-2">
-                    <div class>
-                      <% for (let j = 0; j < products[i].length; j++) { %>
-                      <div class="flex mb-2">
-                        <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm"
-                          src="<%= products[i][j].Image[0].path  %>" alt />
-                        <div class="md:mt-1 mx-2">
-                          <a class="text-blue-600" href="/product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>">
-                            <span class="text-blue-900"><%= products[i][j].name  %></span>
-                            <span class="hidden md:contents">|| <%= products[i][j].title  %></span>
-                          </a>
-                          <a class="flex w-fit py-1 px-2 mt-4 md:mt-1 rounded text-sm bg-blue-100" href="/add-cart/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>/1">
-                            <img class="my-auto me-1" src="https://cdn-icons-png.flaticon.com/16/3875/3875739.png " alt />
-                            Buy it again
-                          </a>
+                <% }else{ %>
+                  <% for(let i=0; i < orders.length; i++) { %>
+                    <div class="grid grid-cols-12 mb-5 rounded-md shadow-md">
+                      <div x-data="{ showElement: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
+                        x-init="window.addEventListener('resize', () => { showElement = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
+                        class="col-span-12 font-medium text-gray-600">
+                        <button x-show="showButton" @click="showElement = !showElement"
+                          class="flex text-left w-full py-2 px-4 border rounded-tl-md rounded-tr-md">
+                          <span>Information</span>
+                          <span class="ms-auto me-0">
+                            <i class="fa-solid fa-chevron-down"></i>
+                          </span>
+                        </button>
+                        <div class="md:flex py-2 px-4 border lg:rounded-tl-md lg:rounded-tr-md" x-show="showElement">
+                          <p class="">TOTAL: <span class="indian_Price">
+                              <%= orders[i].orderprice %>
+                            </span></p>
+                          <p class="mt-1 md:my-auto md:ms-4">ORDER ON: <%=
+                              formatDate(orders[i].createdAt).replace(',', '-' ) %>
+                          </p>
+                          <p class="mt-1 md:my-auto md:ms-4">SHIP TO: <a class="text-blue-700 hover:underline"
+                              href="/my-account">
+                              <%= orders[i].name %>
+                            </a></p>
+                          <p class="mt-1 md:my-auto ms-auto me-0 uppercase">ORDER # <%= orders[i].order_id %>
+                          </p>
                         </div>
                       </div>
-                      <% } %>
-                    </div>
-                  </div>
-                  <div x-data="{ showLinks: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
-                    x-init="window.addEventListener('resize', () => { showLinks = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
-                    class="col-span-12 md:col-span-4">
-                    <button x-show="showButton" @click="showLinks = !showLinks"
-                      class="flex w-full text-left px-2 pb-1 border-b-2 bg-gray-100 ">
-                      <span>Links</span>
-                      <span class="ms-auto me-0">
-                        <i class="fa-solid fa-chevron-down"></i>
-                      </span>
-                    </button>
-                    <div x-show="showLinks" class="px-2 md:pe-4 py-2">
-                      <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="/download-invoice/<%= invoices[i].id %>">
-                        <span class="mx-auto">Invoice</span>
-                      </a>
-                      <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
+                      <div class="col-span-12 md:col-span-8 px-2 md:ps-4 py-2">
+                        <div class>
+                          <% for (let j=0; j < products[i].length; j++) { %>
+                            <div class="flex mb-2">
+                              <img class="w-20 h-20 md:w-24 md:h-24 rounded-sm"
+                                src="<%= products[i][j].Image[0].path  %>" alt />
+                              <div class="md:mt-1 mx-2">
+                                <a class="text-gray-700"
+                                  href="/product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>">
+                                  <span class="">
+                                    <%= products[i][j].name %>
+                                  </span>
+                                  <span class="hidden md:contents">| <%= products[i][j].title %></span>
+                                </a>
+                                <div class="my-1">
+                                  <p class="uppercase text-gray-400">Staus:
+                                    <% if(orders[i].Orderstatus=='cancelled' ||
+                                      orders[i].Orderstatus=='cancellation rejected' ){ %>
+                                      <span class=" text-red-700 font-medium">
+                                        <%= orders[i].Orderstatus %>
+                                      </span>
+                                      <% }else{ %>
+                                        <span class=" text-green-700 font-medium">
+                                          <%= orders[i].Orderstatus %>
+                                        </span>
+                                        <% } %>
+                                  </p>
+                                </div>
+                                <div class="flex items-center">
+                                  <a class="flex w-fit py-1 px-2 me-2 md:mt-1 rounded text-sm bg-green-200"
+                                    href="/add-cart/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>/1">
+                                    <img class="my-auto me-1"
+                                      src="https://cdn-icons-png.flaticon.com/16/3875/3875739.png " alt />
+                                    Buy it again
+                                  </a>
+                                  <a class="underline text-gray-700 font-light"
+                                    href="/order/cancel/<%= orders[i].id %>">Cancel</a>
+
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                        </div>
+                      </div>
+                      <div x-data="{ showLinks: window.innerWidth >= 728, showButton: window.innerWidth < 728 }"
+                        x-init="window.addEventListener('resize', () => { showLinks = window.innerWidth >= 728; showButton = window.innerWidth < 728 })"
+                        class="col-span-12 md:col-span-4">
+                        <button x-show="showButton" @click="showLinks = !showLinks"
+                          class="flex w-full text-left px-2 pb-1 border-b-2 border rounded-bl-md rounded-br-md">
+                          <span>Action</span>
+                          <span class="ms-auto me-0">
+                            <i class="fa-solid fa-chevron-down"></i>
+                          </span>
+                        </button>
+                        <div x-show="showLinks" class="px-2 md:pe-4 py-2">
+                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto"
+                            href="/download-invoice/<%= invoices[i].id %>">
+                            <span class="mx-auto">Invoice</span>
+                          </a>
+                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm border-2 mx-auto" href="
                       <% for (let j = 0; j < products[i].length; j++) { %>
                       /product/<%= products[i][j].productId %>/<%= encodeURIComponent(products[i][j].name) %>?tab=tab-review
                       <% } %>
                       ">
-                        <span class="mx-auto">Write a product review</span>
-                      </a>
-                      <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
-                        <span class="mx-auto">Get product support</span>
-                      </a>
+                            <span class="mx-auto">Write a product review</span>
+                          </a>
+                          <a class="flex w-full md:w-40 py-1 mt-2 rounded text-sm bg-blue-100 mx-auto" href="#">
+                            <span class="mx-auto">Get product support</span>
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              <% } %>
-              <% } %>
+                    <% } %>
+                      <% } %>
             </div>
-        </section>
-    </main>
-    <%- include('./partial/footer.ejs') %>
-    <%- include('./partial/scripts.ejs') %>
-</body>
+          </section>
+        </main>
+        <%- include('./partial/footer.ejs') %>
+          <%- include('./partial/scripts.ejs') %>
+  </body>
+
 </html>
