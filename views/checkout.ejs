@@ -2,292 +2,323 @@
 <html lang="en">
 <%- include('./partial/header.ejs') %>
 
-<body>
-  <%- include('./partial/navbar.ejs') %> <%-
-    include('./partial/mobilenavbar.ejs') %>
-  <main>
-    <!-- Stepper -->
-    <section class="my-4 pt-6 mx-[2%] lg:mx-[15%]">
-      <ul class="relative m-0 flex list-none justify-between overflow-hidden p-0 transition-[height] duration-200 ease-in-out">
-        <!--First item-->
-        <li class="w-[4.5rem] flex-auto">
-          <a class="flex cursor-pointer items-center pl-2 leading-[1.3rem] no-underline after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]" href="/cart">
-            <span class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
-              1
-            </span>
-            <span class="font-medium text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
-              Cart
-            </span>
-          </a>
-        </li>
+  <body>
+    <%- include('./partial/navbar.ejs') %> <%- include('./partial/mobilenavbar.ejs') %>
+        <main>
+          <!-- Stepper -->
+          <section class="my-4 pt-6 mx-[2%] lg:mx-[15%]">
+            <ul
+              class="relative m-0 flex list-none justify-between overflow-hidden p-0 transition-[height] duration-200 ease-in-out">
+              <!--First item-->
+              <li class="w-[4.5rem] flex-auto">
+                <a class="flex cursor-pointer items-center pl-2 leading-[1.3rem] no-underline after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]"
+                  href="/cart">
+                  <span
+                    class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
+                    1
+                  </span>
+                  <span
+                    class="font-medium text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                    Cart
+                  </span>
+                </a>
+              </li>
 
-        <!--Second item-->
-        <li class="w-[4.5rem] flex-auto">
-          <a class="flex cursor-pointer items-center leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
-            <span class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#01cae4] text-sm font-medium text-[#40464f]">
-              2
-            </span>
-            <span class="text-[#01cae4] after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
-              Checkout
-            </span>
-          </a>
-        </li>
+              <!--Second item-->
+              <li class="w-[4.5rem] flex-auto">
+                <a
+                  class="flex cursor-pointer items-center leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
+                  <span
+                    class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#01cae4] text-sm font-medium text-[#40464f]">
+                    2
+                  </span>
+                  <span
+                    class="text-[#01cae4] after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                    Checkout
+                  </span>
+                </a>
+              </li>
 
-        <!--Third item-->
-        <li class="w-[4.5rem] flex-auto">
-          <a class="flex cursor-pointer items-center pr-2 leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
-            <span class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
-              3
-            </span>
-            <span class="text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
-              Payment
-            </span>
-          </a>
-        </li>
-      </ul>
-    </section>
-    <!-- Checkout -->
-    <section class="px-1 md:px-7 md:mx-[8%]">
-      <div>
-        <form id="paynowform" action="/paynow" method="post">
-          <div class="grid grid-cols-12 grid-col md:gap-12">
-            <div class="col-span-12 md:col-span-6">
-              <p class="my-2 px-2 text-xl">Billing and shipping details</p>
-              <% if(defaultAdd==null){ %>
-              <div class="border rounded-md">
-                <div class="flex justify-between px-2 py-1 border-b">
-                  <p>Address</p>
-                  <p>No Address found</p>
-                </div>
-                <div class="flex justify-between px-2 py-1 font-medium my-3">
-                  <a class="text-red-600 w-full text-center" href="/my-account">Set a default Address</a>
-                </div>
-              </div>
-              <% }else{ %>
-              <div class="border rounded-md shadow-md p-2">
-                <div class="flex justify-between px-2 py-1 font-medium border-b">
-                  <p class="flex w-full justify-between">
-                    <span>Address</span>
-                    <span class="cursor-pointer">
-                      <i class="fa-solid fa-pen-to-square   "></i>
-                    </span>
-                  </p>
-                </div>
-                <!-- ADDRESS -->
-                <div class="p-2 m-2">
-                  <div class="my-4" id="showAddress">
-                    <div class="flex w-full gap-4 pb-2">
-                      <div id="nameSection">
-                        <label class="font-medium" for="">Name</label>
-                        <div class="text-gray-700">
-                          <%= defaultAdd.fullname %>
+              <!--Third item-->
+              <li class="w-[4.5rem] flex-auto">
+                <a
+                  class="flex cursor-pointer items-center pr-2 leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
+                  <span
+                    class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
+                    3
+                  </span>
+                  <span
+                    class="text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                    Payment
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </section>
+          <!-- Checkout -->
+          <section class="px-1 md:px-7 md:mx-[8%]">
+            <div>
+              <form id="paynowform" action="/paynow" method="post">
+                <div class="grid grid-cols-12 grid-col md:gap-12">
+                  <div class="col-span-12 md:col-span-6">
+                    <p class="my-2 px-2 text-xl">Billing and shipping details</p>
+                    <% if(defaultAdd==null){ %>
+                      <div class="border rounded-md">
+                        <div class="flex justify-between px-2 py-1 border-b">
+                          <p>Address</p>
+                          <p>No Address found</p>
+                        </div>
+                        <div class="flex justify-between px-2 py-1 font-medium my-3">
+                          <a class="text-red-600 w-full text-center" href="/my-account">Set a default Address</a>
                         </div>
                       </div>
-                      <div id="phoneNoSection">
-                        <label class="font-medium" for="">Phone No</label>
-                        <div class=" text-gray-700"><%= defaultAdd.PhoneNo %></div>
-                      </div>
-                    </div>
+                      <% }else{ %>
+                        <div class="border rounded-md shadow-md p-2">
+                          <div class="flex justify-between px-2 py-1 font-medium border-b">
+                            <p class="flex w-full justify-between">
+                              <span>Address</span>
+                              <span class="cursor-pointer">
+                                <i class="fa-solid fa-pen-to-square   "></i>
+                              </span>
+                            </p>
+                          </div>
+                          <!-- ADDRESS -->
+                          <div class="p-2 m-2">
+                            <div class="my-4" id="showAddress">
+                              <div class="flex w-full gap-4 pb-2">
+                                <div id="nameSection">
+                                  <label class="font-medium" for="">Name</label>
+                                  <div class="text-gray-700">
+                                    <%= defaultAdd.fullname %>
+                                  </div>
+                                </div>
+                                <div id="phoneNoSection">
+                                  <label class="font-medium" for="">Phone No</label>
+                                  <div class=" text-gray-700">
+                                    <%= defaultAdd.PhoneNo %>
+                                  </div>
+                                </div>
+                              </div>
 
-                    <div class="my-2" id="addressSection">
-                      <label class="font-medium" for="">Address</label>
-                      <p class="text-gray-700">
-                        <%= defaultAdd.Address %>,
-                        <%= defaultAdd.City %>,
-                        <%= defaultAdd.State %>,
-                        <%= defaultAdd.Pincode %>,
-                        <%= defaultAdd.Country %>
-                      </p>
-                    </div>
+                              <div class="my-2" id="addressSection">
+                                <label class="font-medium" for="">Address</label>
+                                <p class="text-gray-700">
+                                  <%= defaultAdd.Address %>,
+                                    <%= defaultAdd.City %>,
+                                      <%= defaultAdd.State %>,
+                                        <%= defaultAdd.Pincode %>,
+                                          <%= defaultAdd.Country %>
+                                </p>
+                              </div>
+                            </div>
+                            <div class="my-4 hidden" id="editAddress">
+                              <input type="hidden" name="adddressId" value="<%= defaultAdd._id %>">
+                              <div class="flex gap-2">
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="text" name="FirstName" id="" required placeholder="Full Name"
+                                  value="<%= defaultAdd.fullname %>" />
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="number" name="PhoneNo" id="" required placeholder="Phone Number"
+                                  value="<%= defaultAdd.PhoneNo %>" />
+                              </div>
+                              <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 block w-full"
+                                type="text" name="Address" id="" required placeholder="Address"
+                                value="<%= defaultAdd.Address %>" />
+                              <div class="flex gap-2">
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="text" name="City" id="" required placeholder="City"
+                                  value="<%= defaultAdd.City %>" />
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="text" name="State" id="" required placeholder="State"
+                                  value="<%= defaultAdd.State %>" />
+                              </div>
+                              <div class="flex gap-2">
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="number" name="Pincode" id="" required placeholder="Pincode"
+                                  value="<%= defaultAdd.Pincode %>" />
+                                <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full"
+                                  type="text" name="Country" id="" required placeholder="Country"
+                                  value="<%= defaultAdd.Country %>" />
+                              </div>
+                              <div class="flex gap-2">
+                                <button
+                                  class="border border-black text-black font-medium p-1 w-full rounded-md shadow-sm hover:bg-blue-400 hover:text-white transition-colors"
+                                  id="updateCancel" type="button">Cancel</button>
+                                <button id="editAddressForm"
+                                  class="border border-blue-400 text-blue-500 font-medium p-1 w-full rounded-md shadow-sm hover:bg-blue-400 hover:text-white transition-colors"
+                                  type="button">
+                                  Update
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <% } %>
+                          <div class="mt-6 text-center">
+                            <p class="text-gray-400">OR</p>
+                            <p class="mt-6"><a class="underline text-blue-700" href="/my-account#userAddress">Add
+                                Address</a></p>
+                          </div>
                   </div>
-                  <div class="my-4 hidden" id="editAddress">
-                    <input type="hidden" name="adddressId" value="<%= defaultAdd._id %>">
-                    <div class="flex gap-2">
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="text" name="FirstName" id="" required placeholder="Full Name" value="<%= defaultAdd.fullname %>" />
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="number" name="PhoneNo" id="" required placeholder="Phone Number" value="<%= defaultAdd.PhoneNo %>" />
+
+                  <div class="col-span-12 md:col-span-6">
+                    <p class="my-2 px-2 text-xl">Your order</p>
+                    <div class="p-4 border rounded-md shadow-md">
+                      <table class="w-full">
+                        <thead>
+                          <tr class="uppercase m-2 border-b">
+                            <th class="w-1/2 py-2">Product</th>
+                            <th class="w-1/2 py-2">SubTotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for (let i=0; i < products.length; i++) { %>
+                            <tr class="bg-white">
+                              <td class="text-center py-2">
+                                <%= products[i].name %> × <%= quantity[i] %>
+                                    <input type="hidden" name="product_id" value="<%= products[i].id %>" />
+                                    <input type="hidden" name="prodcutname" value="<%= products[i].name %>" />
+                                    <input type="hidden" name="productquantity" value="<%= quantity[i] %>" />
+                                    <input type="hidden" name="prodcutprice" value="<%= products[i].price %>" />
+                              </td>
+                              <td class="text-center py-2 indian_Price">
+                                <%= products[i].price %>
+                              </td>
+                            </tr>
+                            <% } %>
+                              <tr class="border-t bg-white">
+                                <td class="text-center py-2">+ Shipping</td>
+                                <td class="text-center py-2">₹499.00</td>
+                              </tr>
+                              <tr class="border-b bg-white">
+                                <td class="text-center py-2">- Shipping Discount</td>
+                                <td class="text-center py-2">-₹499.00</td>
+                              </tr>
+                              <tr class="border-b font-medium bg-white">
+                                <td class="text-center py-2 uppercase">Total</td>
+                                <td class="text-center py-2 indian_Price">
+                                  <%= total %>
+                                </td>
+                                <input type="hidden" name="totalPrice" value="<%= total %>" />
+                              </tr>
+                              <tr>
+                                <td class="py-2 px-2 font-medium text-lg" colspan="2">
+                                  Payment Method
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="flex cursor-pointer">
+                                  <label class="mx-auto py-1 cursor-pointer" for="othMethod">Other Method</label>
+                                </td>
+                                <td>
+                                  <input class="flex mx-auto" type="radio" name="paymentMethod" required
+                                    id="othMethod" />
+                                </td>
+                              </tr>
+                        </tbody>
+                      </table>
+                      <style>
+                        input[type="radio"] {
+                          appearance: none;
+                          -webkit-appearance: none;
+                          width: 15px;
+                          height: 15px;
+                          border: 2px solid #ccc;
+                          background-color: white;
+                          border-radius: 100%;
+                        }
+
+                        input[type="radio"]:checked {
+                          border-color: #000000;
+                          background-color: #0fb600;
+                        }
+                      </style>
                     </div>
-                    <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 block w-full" type="text" name="Address" id="" required placeholder="Address" value="<%= defaultAdd.Address %>" />
-                    <div class="flex gap-2">
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="text" name="City" id="" required placeholder="City" value="<%= defaultAdd.City %>" />
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="text" name="State" id="" required placeholder="State" value="<%= defaultAdd.State %>" />
-                    </div>
-                    <div class="flex gap-2">
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="number" name="Pincode" id="" required placeholder="Pincode" value="<%= defaultAdd.Pincode %>" />
-                      <input class="p-1 focus:outline-none border rounded-md shadow-sm mb-2 w-full" type="text" name="Country" id="" required placeholder="Country" value="<%= defaultAdd.Country %>" />
-                    </div>
-                    <div class="flex gap-2">
-                      <button class="border border-black text-black font-medium p-1 w-full rounded-md shadow-sm hover:bg-blue-400 hover:text-white transition-colors" id="updateCancel" type="button">Cancel</button>
-                      <button id="editAddressForm" class="border border-blue-400 text-blue-500 font-medium p-1 w-full rounded-md shadow-sm hover:bg-blue-400 hover:text-white transition-colors" type="button">
-                        Update
-                      </button>
-                    </div>
+                    <p class="my-2 text-sm text-gray-600">
+                      Your personal data will be used to process your order, support
+                      your experience throughout this website, and for other
+                      purposes described in our privacy policy.
+                    </p>
+                  </div>
+
+                  <div class="col-span-12 my-4">
+                    <button type="submit"
+                      class="flex py-2 px-4 mx-auto rounded shadow-md bg-blue-600 font-medium uppercase text-white">
+                      Place Order
+                    </button>
                   </div>
                 </div>
-              </div>
-              <% } %>
-              <div class="mt-6 text-center">
-                <p class="text-gray-400">OR</p>
-                <p class="mt-6"><a class="underline text-blue-700" href="/my-account#userAddress">Add Address</a></p>
-              </div>
+              </form>
             </div>
-
-            <div class="col-span-12 md:col-span-6">
-              <p class="my-2 px-2 text-xl">Your order</p>
-              <div class="p-4 border rounded-md shadow-md">
-                <table class="w-full">
-                  <thead>
-                    <tr class="uppercase m-2 border-b">
-                      <th class="w-1/2 py-2">Product</th>
-                      <th class="w-1/2 py-2">SubTotal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for (let i=0; i < products.length; i++) { %>
-                    <tr class="bg-white">
-                      <td class="text-center py-2">
-                        <%= products[i].name %> × <%= quantity[i] %>
-                        <input type="hidden" name="product_id" value="<%= products[i].id %>" />
-                        <input type="hidden" name="prodcutname" value="<%= products[i].name %>" />
-                        <input type="hidden" name="productquantity" value="<%= quantity[i] %>" />
-                        <input type="hidden" name="prodcutprice" value="<%= products[i].price %>" />
-                      </td>
-                      <td class="text-center py-2 indian_Price">
-                        <%= products[i].price %>
-                      </td>
-                    </tr>
-                    <% } %>
-                    <tr class="border-t bg-white">
-                      <td class="text-center py-2">+ Shipping</td>
-                      <td class="text-center py-2">₹499.00</td>
-                    </tr>
-                    <tr class="border-b bg-white">
-                      <td class="text-center py-2">- Shipping Discount</td>
-                      <td class="text-center py-2">-₹499.00</td>
-                    </tr>
-                    <tr class="border-b font-medium bg-white">
-                      <td class="text-center py-2 uppercase">Total</td>
-                      <td class="text-center py-2 indian_Price">
-                        <%= total %>
-                      </td>
-                      <input type="hidden" name="totalPrice" value="<%= total %>" />
-                    </tr>
-                    <tr>
-                      <td class="py-2 px-2 font-medium text-lg" colspan="2">
-                        Payment Method
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="flex cursor-pointer">
-                        <label class="mx-auto py-1 cursor-pointer" for="othMethod">Other Method</label>
-                      </td>
-                      <td>
-                        <input class="flex mx-auto" type="radio" name="paymentMethod" required id="othMethod" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <style>
-                  input[type="radio"] {
-                    appearance: none;
-                    -webkit-appearance: none;
-                    width: 15px;
-                    height: 15px;
-                    border: 2px solid #ccc;
-                    background-color: white;
-                    border-radius: 100%;
-                  }
-
-                  input[type="radio"]:checked {
-                    border-color: #000000;
-                    background-color: #0fb600;
-                  }
-                </style>
-              </div>
-              <p class="my-2 text-sm text-gray-600">
-                Your personal data will be used to process your order, support
-                your experience throughout this website, and for other
-                purposes described in our privacy policy.
-              </p>
-            </div>
-
-            <div class="col-span-12 my-4">
-              <button class="flex py-2 px-4 mx-auto rounded shadow-md bg-blue-600 font-medium uppercase text-white">
-                Place Order
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
-  <script>
-    $(function() {
-      $("#paynowform").submit(function(e) {
-        if ($("#othMethod").prop("checked")) {
-          $(this.submit);
-        } else {
-          e.preventDefault();
-        }
-      });
-    });
-    $(".fa-pen-to-square").on("click", function() {
-      $("#showAddress").addClass("hidden");
-      $("#editAddress").removeClass("hidden");
-    });
-    $("#updateCancel").on("click", function() {
-      $("#showAddress").removeClass("hidden");
-      $("#editAddress").addClass("hidden");
-    });
-    
-    $(document).ready(function() {
-      $("#editAddressForm").click(function() {
-        const formData = {
-          adddressId: $("input[name='adddressId']").val(),
-          Addressfirstname: $("input[name='FirstName']").val(),
-          Addressphno: $("input[name='PhoneNo']").val(),
-          AddressAdd: $("input[name='Address']").val(),
-          AddressCity: $("input[name='City']").val(),
-          AddressState: $("input[name='State']").val(),
-          AddressPincode: $("input[name='Pincode']").val(),
-          AddressCountry: $("input[name='Country']").val()
-        };
-
-
-        $.ajax({
-          type: "POST",
-          url: "/updateAddress",
-          data: formData,
-          success: function(response) {
-            console.log(formData.Addressphno)
-            $("#nameSection .text-gray-700").text(formData.Addressfirstname);
-
-            // Update 'Phone No' section
-            $("#phoneNoSection .text-gray-700").text(formData.Addressphno);
-
-            // Update 'Address' section
-            $("#addressSection .text-gray-700").text(
-              formData.AddressAdd +
-            ", " +
-            formData.AddressCity +
-            ", " +
-            formData.AddressState +
-            ", " +
-            formData.AddressPincode +
-            ", " +
-            formData.AddressCountry
-            );
+          </section>
+        </main>
+        <script>
+          $(function () {
+            $("#paynowform").submit(function (e) {
+              if ($("#othMethod").prop("checked")) {
+                $(this.submit);
+              } else {
+                e.preventDefault();
+              }
+            });
+          });
+          $(".fa-pen-to-square").on("click", function () {
+            $("#showAddress").addClass("hidden");
+            $("#editAddress").removeClass("hidden");
+          });
+          $("#updateCancel").on("click", function () {
             $("#showAddress").removeClass("hidden");
             $("#editAddress").addClass("hidden");
-          },
-          error: function(error) {
-            console.error("Update failed", error);
-          }
-        });
-      });
-    });
-  </script>
-  <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs')
-    %>
-</body>
+          });
+
+          $(document).ready(function () {
+            $("#editAddressForm").click(function () {
+              const formData = {
+                adddressId: $("input[name='adddressId']").val(),
+                Addressfirstname: $("input[name='FirstName']").val(),
+                Addressphno: $("input[name='PhoneNo']").val(),
+                AddressAdd: $("input[name='Address']").val(),
+                AddressCity: $("input[name='City']").val(),
+                AddressState: $("input[name='State']").val(),
+                AddressPincode: $("input[name='Pincode']").val(),
+                AddressCountry: $("input[name='Country']").val()
+              };
+
+
+              $.ajax({
+                type: "POST",
+                url: "/updateAddress",
+                data: formData,
+                success: function (response) {
+                  console.log(formData.Addressphno)
+                  $("#nameSection .text-gray-700").text(formData.Addressfirstname);
+
+                  // Update 'Phone No' section
+                  $("#phoneNoSection .text-gray-700").text(formData.Addressphno);
+
+                  // Update 'Address' section
+                  $("#addressSection .text-gray-700").text(
+                    formData.AddressAdd +
+                    ", " +
+                    formData.AddressCity +
+                    ", " +
+                    formData.AddressState +
+                    ", " +
+                    formData.AddressPincode +
+                    ", " +
+                    formData.AddressCountry
+                  );
+                  $("#showAddress").removeClass("hidden");
+                  $("#editAddress").addClass("hidden");
+                },
+                error: function (error) {
+                  console.error("Update failed", error);
+                }
+              });
+            });
+          });
+        </script>
+        <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs') %>
+  </body>
 
 </html>

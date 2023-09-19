@@ -19,9 +19,11 @@ import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
 import SITEINFO from "../model/siteInfoSchmea.js";
+import 'dotenv/config'
 
 const stripe = Stripe(Secret_Key);
 let paymentSuccessful = false;
+
 
 const forgetPass = async (req, res) => {
   res.render("forgetPass", {
@@ -595,7 +597,7 @@ const payment = async (req, res) => {
       },
       // Your own data
       sender: {
-        company: `${req.siteInfo.site}`,
+        company: "Woodbone",
         address: "B-17, Aya Nagar Extension",
         zip: "110047",
         city: "New Delhi",
@@ -648,6 +650,7 @@ const payment = async (req, res) => {
     res.status(400).send("Internal Server Error");
   }
 };
+
 
 const paymentResponse = async (req, res) => {
   try {
