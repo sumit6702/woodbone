@@ -23,6 +23,8 @@ import 'dotenv/config'
 
 const stripe = Stripe(Secret_Key);
 let paymentSuccessful = false;
+const endpointSecret =
+  "whsec_9b386253ef51b34efa1411140798a8af886c03a5d10dafcc93ed97b40938f230";
 
 
 const forgetPass = async (req, res) => {
@@ -471,6 +473,15 @@ const checkout = async (req, res) => {
     res.status(400).send("Internal Server Error");
   }
 };
+
+/* ----------------------------- Stripe Payment ----------------------------- */
+
+
+
+
+
+
+
 let NewOrder;
 let invoice;
 let Mproducts = [];
