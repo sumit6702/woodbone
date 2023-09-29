@@ -477,6 +477,9 @@ let Mproducts = [];
 
 const payment = async (req, res) => {
   try {
+    const siteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 }).exec();
+    const siteName = siteInfo.siteName;
+    const siteLogo = siteInfo.siteLogo;
     const YOUR_DOMAIN = "http://localhost:3080";
     const total = req.body.totalPrice;
     const fullname = `${req.body.FirstName} ${req.body.LastName}`;
@@ -597,7 +600,7 @@ const payment = async (req, res) => {
       },
       // Your own data
       sender: {
-        company: "Woodbone",
+        company: siteName,
         address: "B-17, Aya Nagar Extension",
         zip: "110047",
         city: "New Delhi",
@@ -662,6 +665,9 @@ const paymentResponse = async (req, res) => {
 
 const paymentS = async (req, res) => {
   if (paymentSuccessful) {
+    const siteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 }).exec();
+    const siteName = siteInfo.siteName;
+    const siteLogo = siteInfo.siteLogo;
     const data = await USERDATA.findOne({ user: req.session.user_id });
     const user = await USERREGISTERMODEL.findOne({ _id: req.session.user_id });
     const Cart = data.cart;
@@ -709,7 +715,6 @@ const paymentS = async (req, res) => {
     </tr>
   `
     ).join("");
-    const invoiceUrl = `http://localhost:3080/download-invoice/${orderInvoice.id}`;
     // Send Order Invoice to User
     const verifyMail = async (username, email, user) => {
       const subject = `Hello ${username}, Password Reset`;
@@ -741,11 +746,10 @@ const paymentS = async (req, res) => {
               <p style="font-weight: 500;">Invoice:</p>
               <p>Invoice Number: ${orderInvoice.order_id}</p>
               <p>Invoice Date: ${InvoiceDate}</p>
-              <p>Invoice PDF: <a href="${invoiceUrl}" target="_blank" style=" padding: 5px 10px; text-decoration: none; display: inline-block; border: 1px solid #bababa; color: #000;">Download PDF</a></p>
           </div>
       </div>
       <div class="footer">
-          <p>© 2023 Woodbone. All rights reserved.</p>
+          <p>© 2023 ${siteName}. All rights reserved.</p>
       </div>
     </div>`;
       await sendMail(email, subject, htmlStyle, htmlbody);

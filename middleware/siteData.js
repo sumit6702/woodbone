@@ -3,7 +3,7 @@ import SITEINFO from "../model/siteInfoSchmea.js";
 const siteData = async (req, res, next) => {
   try {
     const siteInfo = await SITEINFO.findOne({})
-      .sort({ timeStamp: -1 }) // Sort in descending order
+      .sort({ timeStamp: -1 })
       .exec();
     if (siteInfo) {
       req.siteInfo = siteInfo;
