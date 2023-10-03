@@ -7,7 +7,11 @@ const singupcontroller = async (req, res) => {
   try {
     res
       .status(200)
-      .render("singup", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+      .render("singup", {
+        userid: req.user,
+        cartval: req.cartval,
+        siteInfo: req.siteInfo,
+      });
   } catch (error) {
     console.log(error.message + "at SingupController");
     res.status(500).json({ error: "Internal Server Error" });
@@ -99,10 +103,10 @@ const newsingupController = async (req, res) => {
       lastName: lastName,
       email: mail,
       password: psw,
-      profileImg:{
-        filename:"",
-        path:""
-      }
+      profileImg: {
+        filename: "",
+        path: "",
+      },
     });
 
     if (data) {

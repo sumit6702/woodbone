@@ -416,7 +416,6 @@ function fromEdit(btn, form) {
 /* ----------------------------- FORM VALIDATION ---------------------------- */
 formValidation($("#adminprofile form"));
 formValidation($("#adminsecurity form"));
-formValidation($("#adminperf div form"));
 
 function formValidation(form) {
   form.on("submit", function (event) {
@@ -439,3 +438,4 @@ function formValidation(form) {
     }
   });
 }
+

@@ -19,13 +19,9 @@ import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
 import SITEINFO from "../model/siteInfoSchmea.js";
-import 'dotenv/config'
+import "dotenv/config";
 
 const stripe = Stripe(Secret_Key);
-let paymentSuccessful = false;
-const endpointSecret =
-  "whsec_9b386253ef51b34efa1411140798a8af886c03a5d10dafcc93ed97b40938f230";
-
 
 const forgetPass = async (req, res) => {
   res.render("forgetPass", {
@@ -140,26 +136,8 @@ const useraccount = async (req, res) => {
     const data = await USERDATA.findOne({ user: req.session.user_id });
     const orders = await ORDERS.find({ user: req.session.user_id });
     let alladress;
-    let products = [];
     let wishproducts;
     if (data) {
-      let prodcutIds = [];
-      orders.forEach((order) => {
-        const orderProductIds = order.products.map(
-          (product) => product.product_id
-        );
-        prodcutIds.push(orderProductIds);
-      });
-
-      //Ordered Products
-      for (const Id of prodcutIds) {
-        const orderProducts = await Promise.all(
-          Id.map(async (mId) => {
-            return await PRODUCTS.findById(mId);
-          })
-        );
-        products.push(orderProducts);
-      }
       //Whislist
       const wishlistItemIds = data.wishlist;
       wishproducts = await PRODUCTS.find({
@@ -186,22 +164,14 @@ const useraccount = async (req, res) => {
       return `${day}${monthAbbreviation}-${year}`;
     };
 
-    const invoices = [];
-    for (const order of orders) {
-      const invoice = await INVOICE.findOne({ order_id: order.id });
-      invoices.push(invoice);
-    }
-
     res.render("useraccount.ejs", {
       userid: req.user,
       cartval: req.cartval,
       adress: alladress,
       orders,
       formatDate,
-      products,
       wishproducts,
       userdata: data,
-      invoices,
       siteInfo: req.siteInfo,
     });
   } catch (error) {
@@ -360,7 +330,7 @@ const order = async (req, res) => {
     for (const Id of prodcutIds) {
       const orderProducts = await Promise.all(
         Id.map(async (mId) => {
-          return await PRODUCTS.findById(mId);
+          return await PRODUCTS.findOne({ productId: mId });
         })
       );
       products.push(orderProducts);
@@ -386,7 +356,9 @@ const cancelOrder = async (req, res) => {
     const orderId = req.params.id;
     const order = await ORDERS.findById(orderId);
     if (order) {
-      await ORDERS.findByIdAndUpdate(orderId, { Orderstatus: "cancellation initiated" });
+      await ORDERS.findByIdAndUpdate(orderId, {
+        Orderstatus: "cancellation initiated",
+      });
       res.redirect("/orders");
     } else {
       res.redirect("/orders");
@@ -399,8 +371,8 @@ const cancelOrder = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const {orderid, orderStatus} = req.body;
-    const order = await ORDERS.findOne({order_id:orderid});
+    const { orderid, orderStatus } = req.body;
+    const order = await ORDERS.findOne({ order_id: orderid });
     if (order) {
       await ORDERS.findByIdAndUpdate(order.id, { Orderstatus: orderStatus });
       res.redirect("/admin/orders");
@@ -419,7 +391,6 @@ const checkout = async (req, res) => {
     const data = await USERDATA.findOne({ user: req.session.user_id });
 
     const Cart = data.cart;
-
     let products, totalPricePerItem, quantity, defaultAdd, total;
     if (!Cart || Cart.length === 0 || Cart === null) {
       res.redirect("/cart");
@@ -475,319 +446,274 @@ const checkout = async (req, res) => {
 };
 
 /* ----------------------------- Stripe Payment ----------------------------- */
-
-
-
-
-
-
-
-let NewOrder;
-let invoice;
-let Mproducts = [];
-
-const payment = async (req, res) => {
+const stripePay = async (req, res) => {
   try {
-    const siteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 }).exec();
-    const siteName = siteInfo.siteName;
-    const siteLogo = siteInfo.siteLogo;
-    const YOUR_DOMAIN = "http://localhost:3080";
-    const total = req.body.totalPrice;
-    const fullname = `${req.body.FirstName} ${req.body.LastName}`;
-    const phoneno = req.body.PhoneNo;
-    const Address = `${req.body.Address}, ${req.body.City}, ${req.body.State}, ${req.body.Pincode}, ${req.body.Country}`;
-    const user = await USERREGISTERMODEL.findOne({ _id: req.session.user_id });
+    if (req.query.allowed == req.session.user_id) {
+      
+    const userinfo = await USERREGISTERMODEL.findById(req.session.user_id);
     const address = await USERADDRESS.findOne({ userid: req.session.user_id });
-    const addArray = address.address;
-    let defaultAdd;
-    addArray.forEach((addres) => {
-      if (addres.default == true) {
-        defaultAdd = addres;
-      }
-      return defaultAdd;
-    });
-    const { prodcutname, product_id, prodcutprice, productquantity } = req.body;
-    const isMultipleProducts = Array.isArray(prodcutname);
-
-    let products = [];
-    let invoiceProducts = [];
-
-    if (isMultipleProducts) {
-      products = prodcutname.map((name, index) => ({
-        product_id: product_id[index],
-        productname: name,
-        ProductQuantity: productquantity[index],
-        productPrices: prodcutprice[index],
-      }));
-      invoiceProducts = prodcutname.map((name, index) => ({
-        quantity: productquantity[index],
-        description: name,
-        "tax-rate": 18,
-        price: prodcutprice[index] / (1 + 0.18),
-      }));
-      Mproducts = prodcutname.map((name, index) => ({
-        Name: name,
-        Quantity: productquantity[index],
-        Prices: prodcutprice[index],
-      }));
-    } else {
-      products.push({
-        product_id: product_id,
-        productname: prodcutname,
-        ProductQuantity: productquantity,
-        productPrices: prodcutprice,
-      });
-      invoiceProducts.push({
-        quantity: productquantity,
-        description: prodcutname,
-        "tax-rate": 18,
-        price: prodcutprice / (1 + 0.18),
-      });
-      Mproducts.push({
-        Name: prodcutname,
-        Quantity: productquantity,
-        Prices: prodcutprice,
-      });
-    }
-
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: "inr",
-            unit_amount: total * 100,
-            product_data: {
-              name: "Furniture Site",
-              metadata: {
-                address: Address,
-                fullname: fullname,
-                phoneNo: phoneno,
-              },
-            },
-          },
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${YOUR_DOMAIN}/order/succesful`,
-      cancel_url: `${YOUR_DOMAIN}/order/failed`,
-    });
-    const suuid = uuidv4().slice(25, 36);
-    const orderID = `WBPVT${suuid}`;
-
-    NewOrder = new ORDERS({
-      order_id: orderID,
-      user: user._id,
-      name: fullname,
-      email: user.email,
-      phoneno: phoneno,
-      ShippingAddress: Address,
-      BillingAddress: Address,
-      orderprice: total,
-      products: products,
-      PaymentInformation: "Card",
-    });
-
-    const BillerDetail = {
-      company: fullname,
-      address: req.body.Address,
-      zip: req.body.Pincode,
-      city: req.body.City,
-      country: req.body.Country,
-    };
-
-    const __dirname = path.resolve();
-    const invoicePath = path.join(__dirname, "config", "invoicetemp.html");
-
-    invoice = {
-      customize: {
-        template: fs.readFileSync(invoicePath, "base64"),
-      },
-      images: {
-        // The logo on top of your invoice
-        logo: "https://i.ibb.co/hXsmcBZ/Logo.png",
-        // The invoice background
-        background: "",
-      },
-      // Your own data
-      sender: {
-        company: siteName,
-        address: "B-17, Aya Nagar Extension",
-        zip: "110047",
-        city: "New Delhi",
-        country: "India",
-      },
-      // Your recipient
-      client: BillerDetail,
-      information: {
-        // Invoice number
-        number: uuidv4().slice(1, 8),
-        date: new Date().toLocaleDateString("en-IN", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
-      },
-      products: invoiceProducts,
-      "bottom-notice": "Thank you for your order! - Woodbone",
-      settings: {
-        currency: "INR",
-        // "locale": "nl-NL",
-        // "margin-top": 25,
-        // "margin-right": 25,
-        // "margin-left": 25,
-        // "margin-bottom": 25,
-        // "format": "A4"
-        // "height": "1000px",
-        // "width": "500px",
-        // "orientation": "landscape",
-      },
-      translate: {
-        // "invoice": "FACTUUR",  // Default to 'INVOICE'
-        // "number": "Nummer", // Defaults to 'Number'
-        // "date": "Datum", // Default to 'Date'
-        // "due-date": null, // Defaults to 'Due Date'
-        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
-        // "products": "Producten", // Defaults to 'Products'
-        // "quantity": "Aantal", // Default to 'Quantity'
-        // "price": "Prijs", // Defaults to 'Price'
-        // "product-total": "Totaal", // Defaults to 'Total'
-        // "total": "Totaal", // Defaults to 'Total'
-        vat: "GST", // Defaults to 'vat'
-      },
-    };
-
-    paymentSuccessful = true;
-    res.redirect(303, session.url);
-  } catch (error) {
-    console.log(error);
-    res.status(400).send("Internal Server Error");
-  }
-};
-
-
-const paymentResponse = async (req, res) => {
-  try {
-  } catch (error) {
-    console.log(error);
-    res.status(400).send("Internal Server Error");
-  }
-};
-
-const paymentS = async (req, res) => {
-  if (paymentSuccessful) {
-    const siteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 }).exec();
-    const siteName = siteInfo.siteName;
-    const siteLogo = siteInfo.siteLogo;
     const data = await USERDATA.findOne({ user: req.session.user_id });
-    const user = await USERREGISTERMODEL.findOne({ _id: req.session.user_id });
     const Cart = data.cart;
-    const productID = Cart.map((item) => item.productId);
-    const total = req.body.totalPrice;
-    const address = await USERADDRESS.findOne({ userid: req.session.user_id });
-    const addArray = address.address;
+    
+    if (!Cart || Cart.length === 0 || Cart === null){
+      res.redirect("/cart");
+    }else{
+      let products, totalPricePerItem, quantity, defaultAdd, total;
+      defaultAdd = address.address.find((addr) => addr.default === true);
+    defaultAdd = JSON.stringify(defaultAdd);
 
-    let defaultAdd;
-    addArray.forEach((addres) => {
-      if (addres.default == true) {
-        defaultAdd = addres;
-      }
-      return defaultAdd;
+    const productID = Cart.map((item) => item.productId);
+    products = await PRODUCTS.find({ productId: { $in: productID } });
+    quantity = Cart.map((quan) => quan.quantity);
+
+    totalPricePerItem = products.map((item, index) => {
+      const numericPrice = item.price;
+      const itemQuantity = Cart[index].quantity;
+      const totalPrice = numericPrice * itemQuantity;
+      return totalPrice;
     });
 
-    await USERDATA.updateOne({ user: req.user.id }, { $set: { cart: [] } });
-
-    const UpdateOrder = await NewOrder.save();
-    const order = {
-      orderID: UpdateOrder.id,
-    };
-
-    await USERDATA.updateOne(
-      { userid: req.user.id },
-      { $push: { orders: order } },
-      { $push: { cart: {} } }
+    total = totalPricePerItem.reduce(
+      (acc, product) => acc + parseInt(product, 0)
     );
 
-    const result = await easyinvoice.createInvoice(invoice);
-
-    const orderInvoice = new INVOICE({
-      order_id: UpdateOrder.id,
-      invoice: result.pdf,
-    });
-
-    await orderInvoice.save();
-    const InvoiceDate = new Date().toLocaleDateString("en-IN");
-    const productTable = Mproducts.map(
-      (product) => `
-    <tr>
-      <td>${product.Name}</td>
-      <td>${product.Quantity}</td>
-      <td>Rs.${product.Prices}</td>
-    </tr>
-  `
-    ).join("");
-    // Send Order Invoice to User
-    const verifyMail = async (username, email, user) => {
-      const subject = `Hello ${username}, Password Reset`;
-      const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
-      const htmlbody = `<div class="container">
-      <div class="logo">
-          <!-- <img src="logo.png" alt="Logo"> -->
-          <h1>LOGO</h1>
-      </div>
-      <div class="content">
-          <h4>Hello, ${username}!</h4>
-          <h3>Thank you for Purchasing</h3>
-          <div>
-              Your orders:
-              <table>
-                  <thead>
-                      <tr>
-                          <th>Product</th>
-                          <th>Quantity</th>
-                          <th>Price</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    ${productTable}
-                  </tbody>
-              </table>
-          </div>
-          <div>
-              <p style="font-weight: 500;">Invoice:</p>
-              <p>Invoice Number: ${orderInvoice.order_id}</p>
-              <p>Invoice Date: ${InvoiceDate}</p>
-          </div>
-      </div>
-      <div class="footer">
-          <p>© 2023 ${siteName}. All rights reserved.</p>
-      </div>
-    </div>`;
-      await sendMail(email, subject, htmlStyle, htmlbody);
-    };
-    await verifyMail(user.fullName, user.email, user._id);
-
-    res.render("paymentP", {
+    res.render("paynow", {
       userid: req.user,
+      userinfo: userinfo,
       cartval: req.cartval,
       siteInfo: req.siteInfo,
+      products,
+      totalPricePerItem,
+      quantity,
+      defaultAdd,
+      total,
     });
-  } else {
-    res.redirect("/error");
+    }
+    } else {
+      res.status(404).render("404page", { userid: req.user, cartval:req.cartval,siteInfo:req.siteInfo });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
   }
 };
 
-const paymentF = async (req, res) => {
-  if (paymentSuccessful) {
-    res.render("paymentF", {
-      userid: req.user,
-      cartval: req.cartval,
-      siteInfo: req.siteInfo,
-    });
-  } else {
-    res.redirect("/error");
-  }
+const stripePay_ = async (req, res) => {
+  const { metadata } = req.body;
+  const totalPriceInRupee = metadata.totalprice * 100;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalPriceInRupee,
+    currency: "inr",
+    receipt_email: metadata.useremail,
+    metadata: metadata,
+  });
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
 };
+
+const paymentSuccessfull = async (req, res) => {
+  // const YOUR_DOMAIN = "https://localhost:3080";
+  const meta = req.body;
+  const rawProducts = JSON.parse(meta.userproducts);
+  const total = meta.totalprice;
+  const userDefaultAdd = JSON.parse(meta.userAddress);
+  const userid = meta.userid;
+
+  /* Generating Order Id */
+  const suuid = uuidv4().slice(25, 36);
+  const orderID = `WBPVT${suuid}`;
+  /* Invoice File */
+  const __dirname = path.resolve();
+  const invoicePath = path.join(__dirname, "config", "invoicetemp.html");
+  /* User Data */
+  const user_ = await USERREGISTERMODEL.findOne({ _id: userid });
+  const user_data = await USERDATA.findOne({ user: userid });
+  const allProducts = await PRODUCTS.find({});
+  const user_address = await USERADDRESS.findOne({
+    userid: userid,
+  });
+
+  const fullname = userDefaultAdd.fullname;
+  const phoneno = userDefaultAdd.PhoneNo || "";
+  const Address = `${userDefaultAdd.Address}, ${userDefaultAdd.City}, ${userDefaultAdd.State}, ${userDefaultAdd.Pincode}, ${userDefaultAdd.Country}`;
+
+  const products = [];
+  for (let i = 0; i < rawProducts.length; i++) {
+    const element = rawProducts[i];
+    products.push({
+      product_id: element.productId,
+      productname: element.productName,
+      ProductQuantity: Number(element.productQuantity),
+      productPrices: Number(element.productPrice),
+    });
+  }
+
+  /* Generating New Order */
+  const NewOrder = new ORDERS({
+    order_id: orderID,
+    user: user_._id,
+    name: fullname,
+    email: user_.email,
+    phoneno: Number(phoneno),
+    ShippingAddress: Address,
+    BillingAddress: Address,
+    orderprice: Number(total),
+    products: products,
+    PaymentInformation: "Card",
+  });
+
+  /* Invoice Generating */
+  const BillerDetail = {
+    company: fullname,
+    address: userDefaultAdd.Address,
+    zip: Number(userDefaultAdd.Pincode),
+    city: userDefaultAdd.City,
+    country: userDefaultAdd.Country,
+  };
+
+  const invoiceProducts = [];
+  for (let i = 0; i < rawProducts.length; i++) {
+    const product = rawProducts[i];
+    invoiceProducts.push({
+      quantity: Number(product.productQuantity),
+      description: product.productName,
+      "tax-rate": 18,
+      price: Number(product.productPrice) / (1 + 0.18),
+    });
+  }
+  const siteData = req.siteInfo;
+  const invoice = {
+    customize: {
+      template: fs.readFileSync(invoicePath, "base64"),
+    },
+    images: {
+      // The logo on top of your invoice
+      logo: siteData.URL+siteData.siteLogo,
+      // The invoice background
+      background: "",
+    },
+    // Your own data
+    sender: {
+      company: siteData.siteName,
+      address: siteData.coAddress.address,
+      zip: siteData.coAddress.pincode,
+      city: siteData.coAddress.city,
+      country: siteData.coAddress.country,
+    },
+    // Your recipient
+    client: BillerDetail,
+    information: {
+      // Invoice number
+      number: uuidv4().slice(1, 8),
+      date: new Date().toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
+    },
+    products: invoiceProducts,
+    "bottom-notice": `Thank you for your order! - ${siteData.siteName}`,
+    settings: {
+      currency: "INR",
+      // "locale": "nl-NL",
+      // "margin-top": 25,
+      // "margin-right": 25,
+      // "margin-left": 25,
+      // "margin-bottom": 25,
+      // "format": "A4"
+      // "height": "1000px",
+      // "width": "500px",
+      // "orientation": "landscape",
+    },
+    translate: {
+      // "invoice": "FACTUUR",  // Default to 'INVOICE'
+      "number": "Invoice No", // Defaults to 'Number'
+      // "date": "Datum", // Default to 'Date'
+      // "due-date": null, // Defaults to 'Due Date'
+      // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+      // "products": "Producten", // Defaults to 'Products'
+      // "quantity": "Aantal", // Default to 'Quantity'
+      // "price": "Prijs", // Defaults to 'Price'
+      // "product-total": "Totaal", // Defaults to 'Total'
+      // "total": "Totaal", // Defaults to 'Total'
+      vat: "GST", // Defaults to 'vat'
+    },
+  };
+
+  const UpdateOrder = await NewOrder.save();
+  const order = {
+    orderID: UpdateOrder.id,
+  };
+  user_data.cart = [];
+
+  // if (!Array.isArray(user_data.orders)) {
+  //   user_data.orders = [];
+  // }
+  // user_data.orders.push(order);
+  
+  await user_data.save();
+
+  const result = await easyinvoice.createInvoice(invoice);
+  const orderInvoice = new INVOICE({
+    order_id: UpdateOrder.id,
+    invoice: result.pdf,
+  });
+  await orderInvoice.save();
+
+  /* Generating Email */
+  const InvoiceDate = new Date().toLocaleDateString("en-IN");
+  const productTable = rawProducts
+    .map(
+      (product) =>
+        `<tr>
+          <td>${product.productName}</td>
+          <td>${product.productQuantity}</td>
+          <td>Rs.${product.productPrice}</td>
+       </tr>`
+    )
+    .join("");
+
+  const verifyMail = async (username, email, user) => {
+    const subject = `Hello ${username}, New Order`;
+    const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
+    const htmlbody = `<div class="container">
+        <div class="logo">
+            <img src="${siteData.URL+siteData.siteLogo}" alt="Logo">
+            <h1>LOGO</h1>
+        </div>
+        <div class="content">
+            <h4>Hello, ${username}!</h4>
+            <h3>Thank you for Purchasing</h3>
+            <div>
+                <p>Invoice No: ${orderInvoice.order_id}</p>
+                <p>Date: ${InvoiceDate}</p>
+            </div>
+            <div>
+                Your orders:
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      ${productTable}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2023 Woodbone. All rights reserved.</p>
+        </div>
+      </div>`;
+    await sendMail(email, subject, htmlStyle, htmlbody);
+  };
+  await verifyMail(user_.fullName, user_.email, user_._id);
+};
+/* ------------------------ END Stripe Payment END ------------------------ */
 
 const updateUser = async (req, res) => {
   try {
@@ -959,10 +885,25 @@ const updateSiteInfo = async (req, res) => {
   try {
     const siteName = req.body.siteName;
     const siteLogo = req.file;
+    const siteUrl = req.body.siteURL;
+    const SiteAddress = req.body.address;
+    const pincode = req.body.pincode;
+    const city = req.body.city;
+    const country = req.body.country;
+    const siteDescription = req.body.description;
+    const contactInfo = req.body.contactInfo;
 
     const siteInfo = new SITEINFO({
       siteName: siteName,
       siteLogo: siteLogo.path,
+      siteURL: siteUrl,
+      coAddress: {
+        address: SiteAddress,
+        pincode: pincode,
+        city: city,
+        country: country,
+      },
+      siteDescription:siteDescription,
     });
     const updated = await siteInfo.save();
     if (updated) {
@@ -974,7 +915,6 @@ const updateSiteInfo = async (req, res) => {
   }
 };
 
-
 export {
   forgetPass,
   PasswordUpdate,
@@ -983,10 +923,6 @@ export {
   useraccount,
   order,
   checkout,
-  payment,
-  paymentResponse,
-  paymentS,
-  paymentF,
   newAddress,
   updatedefaultAddress,
   updateAddress,
@@ -999,5 +935,8 @@ export {
   profileUploader,
   updateSiteInfo,
   cancelOrder,
-  updateOrder
+  updateOrder,
+  stripePay,
+  stripePay_,
+  paymentSuccessfull,
 };

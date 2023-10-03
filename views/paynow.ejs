@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partial/header.ejs') %>
+
+    <body>
+        <link rel="stylesheet" href="css/checkout.css">
+        <script src="js/checkout.js" defer></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <%- include('./partial/navbar.ejs') %>
+            <%- include('./partial/mobilenavbar.ejs') %>
+
+                <main>
+                    <section class="my-4 pt-6 mx-[2%] lg:mx-[15%]">
+                        <ul
+                            class="relative m-0 flex list-none justify-between overflow-hidden p-0 transition-[height] duration-200 ease-in-out">
+                            <!--First item-->
+                            <li class="w-[4.5rem] flex-auto">
+                                <a class="flex cursor-pointer items-center pl-2 leading-[1.3rem] no-underline after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]"
+                                    href="/cart">
+                                    <span
+                                        class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
+                                        1
+                                    </span>
+                                    <span
+                                        class="font-medium text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                                        Cart
+                                    </span>
+                                </a>
+                            </li>
+
+                            <!--Second item-->
+                            <li class="w-[4.5rem] flex-auto">
+                                <a href="/checkout"
+                                    class="flex cursor-pointer items-center leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] after:ml-2 after:h-px after:w-full after:flex-1 after:bg-[#e0e0e0] after:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
+                                    <span
+                                        class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#ebedef] text-sm font-medium text-[#40464f]">
+                                        2
+                                    </span>
+                                    <span
+                                        class="text-neutral-500 after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                                        Checkout
+                                    </span>
+                                </a>
+                            </li>
+
+                            <!--Third item-->
+                            <li class="w-[4.5rem] flex-auto">
+                                <a
+                                    class="flex cursor-pointer items-center pr-2 leading-[1.3rem] no-underline before:mr-2 before:h-px before:w-full before:flex-1 before:bg-[#e0e0e0] before:content-[''] focus:outline-none dark:before:bg-neutral-600 dark:after:bg-neutral-600 dark:hover:bg-[#3b3b3b]">
+                                    <span
+                                        class="my-6 mr-2 flex h-[1.938rem] w-[1.938rem] items-center justify-center rounded-full bg-[#01cae4] text-sm font-medium text-[#40464f]">
+                                        3
+                                    </span>
+                                    <span
+                                        class="text-[#01cae4] after:flex after:text-[0.8rem] after:content-[data-content] dark:text-neutral-300">
+                                        Payment
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section id="pyamentContainer" class="grid grid-cols-12 mx-[8%] ">
+                        <div class="col-span-6 p-8">
+                            <div class="w-[70%] mx-auto">
+                                <a class="flex mb-8" href="/checkout">
+                                    <span class="my-auto me-2"><i
+                                            class="fa-solid fa-arrow-left-long text-gray-400"></i></span>
+                                    <div class="flex">
+                                        <span class="my-auto me-2 border py-3 rounded-full bg-gray-200 px-[6px]"><img
+                                                width="22" src="<%= siteInfo.siteLogo  %>" alt=""></span>
+                                    </div>
+                                </a>
+                                <div class="mb-8">
+                                    <h3 class="text-gray-400 font-medium">
+                                        <%= siteInfo.siteName %> | Fruniture Site
+                                    </h3>
+                                    <h1 class="text-3xl text-gray-700 font-medium indian_Price">
+                                        <%= total %>
+                                    </h1>
+                                </div>
+                                <% for (let i=0; i < products.length; i++) { %>
+                                    <% let product=products[i] %>
+                                        <div class="flex p-1 mb-4">
+                                            <div class="w-12 h-12 relative me-3 ">
+                                                <img class="absolute inset-0 w-full h-full object-cover border rounded-md"
+                                                    src="<%= product.Image[0].path %>" alt="">
+                                            </div>
+                                            <div class="text-gray-600 font-medium">
+                                                <p>
+                                                    <%= product.name %>
+                                                </p>
+                                                <span class="bg-gray-100 border px-2 py-1 rounded text-sm">Qty <%=
+                                                        quantity[i] %></span>
+                                            </div>
+                                            <div class="ms-auto me-0 text-gray-600 font-medium indian_Price">
+                                                <%= product.price %>
+                                            </div>
+
+                                        </div>
+                                        <% } %>
+
+                            </div>
+                        </div>
+                        <div class="col-span-6 shadow p-8">
+                            <form id="payment-form">
+                                <input type="hidden" id="totalprice" name="totalprice" value="<%= total  %>">
+                                <input type="hidden" id="useremail" name="useremail" value="<%= userinfo.email  %>">
+                                <% for (let i=0; i < products.length; i++) { %>
+                                    <input type="hidden" name="userproductsId" value="<%= products[i].productId  %>">
+                                    <input type="hidden" name="userproductsname" value="<%= products[i].name  %>">
+                                    <input type="hidden" name="userproductsPrice" value="<%= products[i].price  %>">
+                                    <input type="hidden" name="userquantity" value="<%= quantity[i]  %>">
+                                    <% } %>
+                                        <input type="hidden" name="userdefaultAdd" value="<%= defaultAdd  %>">
+                                        <input type="hidden" name="userInfo" value="<%= userinfo.id  %>">
+                                        <div id="link-authentication-element">
+                                            <!--Stripe.js injects the Link Authentication Element-->
+                                        </div>
+                                        <div id="payment-element">
+                                            <!--Stripe.js injects the Payment Element-->
+                                        </div>
+                                        <button id="submit">
+                                            <div class="spinner hidden" id="spinner"></div>
+                                            <span id="button-text">Pay now</span>
+                                        </button>
+                                        <div id="payment-message" class="hidden"></div>
+                            </form>
+                        </div>
+                    </section>
+                </main>
+
+                <%- include('./partial/footer.ejs') %> <%- include('./partial/scripts.ejs') %>
+    </body>
+
+</html>

@@ -82,10 +82,6 @@ import {
   useraccount,
   order,
   checkout,
-  payment,
-  paymentResponse,
-  paymentS,
-  paymentF,
   newAddress,
   updatedefaultAddress,
   updateAddress,
@@ -99,6 +95,9 @@ import {
   updateSiteInfo,
   cancelOrder,
   updateOrder,
+  stripePay,
+  stripePay_,
+  paymentSuccessfull,
 } from "../controller/accountController.js";
 
 import limiter from "../middleware/ratemiddleware.js";
@@ -128,12 +127,11 @@ router.post("/updateAddress", isAuthenticated, updateAddress);
 router.post("/deleteAddress", isAuthenticated, deletAddress);
 router.get("/orders", isAuthenticated, order);
 router.get("/checkout", isAuthenticated, checkout);
-router.get("/order/succesful", isAuthenticated, paymentS);
-router.get("/order/failed", isAuthenticated, paymentF);
-router.post("/paynow", payment);
-router.post("callback", paymentResponse);
 router.get("/download-invoice/:id", isAuthenticated, getInvoice);
 router.post("/product_comment", isAuthenticated, productComment);
+router.get("/payment",isAuthenticated, express.json(), stripePay);
+router.post("/payment",isAuthenticated, express.json(), stripePay_);
+router.post("/payment_Sucessfull", express.json(), paymentSuccessfull);
 
 //OTHERS||
 router.get("/cart", cartController);
@@ -225,8 +223,8 @@ router.post(
   upload.single("siteLogo"),
   updateSiteInfo
 );
-router.get("/order/cancel/:id?",isAuthenticated, cancelOrder);
-router.post("/order/orderStaus", isAdmin , updateOrder);
+router.get("/order/cancel/:id?", isAuthenticated, cancelOrder);
+router.post("/order/orderStaus", isAdmin, updateOrder);
 router.get("/pagetest", pagetesterscontroller);
 
 export default router;
