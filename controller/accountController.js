@@ -1,8 +1,7 @@
+import 'dotenv/config'
 import USERREGISTERMODEL from "../model/UserAccount.js";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
-import { secretkey } from "../config/session.js";
 const secretKey = "woodbone201300";
 const tokenExpiration = "30m";
 import { Secret_Key, Publishable_Key } from "../config/payment.js";
@@ -11,7 +10,6 @@ import USERADDRESS from "../model/UserAddress.js";
 import USERDATA from "../model/UserDataSchema.js";
 import PRODUCTS from "../model/productSchema.js";
 import { v4 as uuidv4 } from "uuid";
-import { all } from "axios";
 import ORDERS from "../model/orderSchema.js";
 import easyinvoice from "easyinvoice";
 import INVOICE from "../model/InvoiceSchema.js";
@@ -19,7 +17,6 @@ import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
 import SITEINFO from "../model/siteInfoSchmea.js";
-import "dotenv/config";
 
 const stripe = Stripe(Secret_Key);
 
@@ -51,7 +48,7 @@ const verifyMail = async (username, email, user) => {
       <p>
         We have received a request to reset your password. Click the button below to set a new password:
       </p>
-      <p class="verification-link"><a href="http://localhost:3080/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
+      <p class="verification-link"><a href="http://localhost:${process.env.PORT}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
       <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
       <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
     </div>
@@ -513,7 +510,6 @@ const stripePay_ = async (req, res) => {
 };
 
 const paymentSuccessfull = async (req, res) => {
-  // const YOUR_DOMAIN = "https://localhost:3080";
   const meta = req.body;
   const rawProducts = JSON.parse(meta.userproducts);
   const total = meta.totalprice;

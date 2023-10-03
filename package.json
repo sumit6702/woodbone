@@ -4,8 +4,9 @@
   "description": "Woodbone Furniture Website",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
-    "build-css": "postcss public/css/styles.css -o public/build/styles.css --config ./postcss.config.mjs"
+    "start": "node app.js",
+    "build-css": "postcss public/css/styles.css -o public/build/styles.css --config ./postcss.config.mjs",
+    "dev":"nodemon app.js"
   },
   "author": "Sumit",
   "license": "ISC",
