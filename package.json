@@ -34,7 +34,7 @@
     "nouislider": "latest",
     "quill-delta-to-html": "latest",
     "stripe": "latest",
-    "uuid": "latest"
+    "uuid": "latest",
   },
   "devDependencies": {
     "autoprefixer": "latest",
@@ -47,6 +47,7 @@
   "scripts": {
     "start": "node app.js",
     "build-css": "postcss public/css/styles.css -o public/build/styles.css --config ./postcss.config.mjs",
-    "dev":"nodemon app.js"
-  }
+    "devapp": "nodemon app.js"
+  },
+  "engines": { "node" : "18.18.0" }
 }
