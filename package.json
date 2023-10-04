@@ -49,5 +49,7 @@
     "build-css": "postcss public/css/styles.css -o public/build/styles.css --config ./postcss.config.mjs",
     "devapp": "nodemon app.js"
   },
-  "engines": { "node" : "18.18.0" }
+  "engines": {
+    "node": "18.18.0"
+  }
 }
