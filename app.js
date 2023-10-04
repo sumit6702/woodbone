@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from "express";
 const app = express();
-const port = process.env.PORT || 3080;
+const port = process.env.PORT || 3001;
 import router from "./router/router.js";
 import connectDB from "./db/database.js";
 import bodyParser from "body-parser";
