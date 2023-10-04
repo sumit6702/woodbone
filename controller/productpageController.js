@@ -13,7 +13,7 @@ const singlepage = async (req, res) => {
     req.session.redirectPage = req.originalUrl;
     const isEnoughProructs = await PRODUCTS.countDocuments();
     let relatedproducts;
-    if(isEnoughProructs > 8){
+    if (isEnoughProructs > 8) {
       relatedproducts = await PRODUCTS.find({
         category: product.category,
         _id: { $ne: product._id },
@@ -25,10 +25,9 @@ const singlepage = async (req, res) => {
         }
       }
       shuffleArray(relatedproducts);
-    }else{
+    } else {
       relatedproducts = null;
     }
-    
 
     const formatDate = (dateString) => {
       const options = { year: "numeric", month: "short", day: "2-digit" };
@@ -52,7 +51,7 @@ const singlepage = async (req, res) => {
     const isExist = await PRODCOMMENTS.findOne({
       $and: [{ product_id: product.id }, { user_id: req.session.user_id }],
     });
-    res.status(200).render("productPage", {
+    res.status(200).render("productpage", {
       product,
       userid: req.user,
       cartval: req.cartval,
@@ -61,7 +60,7 @@ const singlepage = async (req, res) => {
       comments,
       formatDate,
       relatedproducts,
-      siteInfo:req.siteInfo
+      siteInfo: req.siteInfo,
     });
   } catch (error) {
     console.log(error);
@@ -109,27 +108,51 @@ const productComment = async (req, res) => {
 const policypage = async (req, res) => {
   res
     .status(200)
-    .render("returnpolicy", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+    .render("returnpolicy", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
 };
 
 const shippingMethod = async (req, res) => {
   res
     .status(200)
-    .render("shippingMethod", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+    .render("shippingMethod", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
 };
 
 const furntirueAssmbling = async (req, res) => {
   res
     .status(200)
-    .render("furntiureAssmb", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+    .render("furntiureAssmb", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
 };
 
 const vistSotre = async (req, res) => {
-  res.status(200).render("stores", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+  res
+    .status(200)
+    .render("stores", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
 };
 
 const aboutus = async (req, res) => {
-  res.status(200).render("aboutus", { userid: req.user, cartval: req.cartval,siteInfo:req.siteInfo });
+  res
+    .status(200)
+    .render("aboutus", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
 };
 
 export {

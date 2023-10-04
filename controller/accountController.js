@@ -48,7 +48,7 @@ const verifyMail = async (username, email, user) => {
       <p>
         We have received a request to reset your password. Click the button below to set a new password:
       </p>
-      <p class="verification-link"><a href="http://localhost:${process.env.PORT}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
+      <p class="verification-link"><a href="${req.protocol}://${req.get("host")}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
       <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
       <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
     </div>
