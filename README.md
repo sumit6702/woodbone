@@ -48,11 +48,12 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Node][Node.js]][https://nodejs.org/]
-* [![Express][Express.js]][https://expressjs.com/]
-* [![MongoDB][MongoDB]][https://www.mongodb.com/]
-* [![JQuery][JQuery.com]][https://jquery.com/]
-* [![Alpine][Alpine.js]][https://alpinejs.dev/]
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [jQuery](https://jquery.com/)
+- [Alpine.js](https://alpinejs.dev/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
