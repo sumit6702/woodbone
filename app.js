@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({
     secret: secretkey,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: {
       secure: false,
@@ -51,5 +51,5 @@ app.use(PagenotFound);
 
 //port listing
 app.listen(port, () => {
-  console.log(`listing to https://localhost:${port}`);
+  console.log(`listing to http://localhost:${port}`);
 });
