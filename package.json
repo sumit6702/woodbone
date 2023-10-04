@@ -15,8 +15,8 @@
     "easyinvoice": "latest",
     "ejs": "latest",
     "esm": "latest",
-    "express": "^latest",
-    "express-flash": "^latest",
+    "express": "latest",
+    "express-flash": "latest",
     "express-rate-limit": "latest",
     "express-recaptcha": "latest",
     "express-session": "latest",
@@ -34,7 +34,7 @@
     "nouislider": "latest",
     "quill-delta-to-html": "latest",
     "stripe": "latest",
-    "uuid": "latest",
+    "uuid": "latest"
   },
   "devDependencies": {
     "autoprefixer": "latest",
