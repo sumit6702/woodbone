@@ -11,18 +11,24 @@ const singlepage = async (req, res) => {
       name: productName,
     });
     req.session.redirectPage = req.originalUrl;
-    const relatedproducts = await PRODUCTS.find({
-      category: product.category,
-      _id: { $ne: product._id },
-    });
-
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+    const isEnoughProructs = await PRODUCTS.countDocuments();
+    let relatedproducts;
+    if(isEnoughProructs > 8){
+      relatedproducts = await PRODUCTS.find({
+        category: product.category,
+        _id: { $ne: product._id },
+      });
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
       }
+      shuffleArray(relatedproducts);
+    }else{
+      relatedproducts = null;
     }
-    shuffleArray(relatedproducts);
+    
 
     const formatDate = (dateString) => {
       const options = { year: "numeric", month: "short", day: "2-digit" };
@@ -46,7 +52,6 @@ const singlepage = async (req, res) => {
     const isExist = await PRODCOMMENTS.findOne({
       $and: [{ product_id: product.id }, { user_id: req.session.user_id }],
     });
-
     res.status(200).render("productPage", {
       product,
       userid: req.user,

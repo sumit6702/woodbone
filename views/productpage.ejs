@@ -419,7 +419,7 @@
             <!-- Product Heading -->
             <div
               class="container px-6 sm:px-0 2xl:px-10 sm:mx-auto my-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              <% if (relatedproducts.length===0) { %>
+              <% if (relatedproducts===null) { %>
                 <%}else{%>
                   <% for (let i=0; i < 4; i++) { %>
                     <% const product=relatedproducts[i];%>
@@ -626,30 +626,31 @@
 
           });
         </script>
+        <script type="module">
+          import Swiper from "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.esm.browser.min.js";
+
+          var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+          });
+          var swiper2 = new Swiper(".mySwiper2", {
+            loop: true,
+            spaceBetween: 10,
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+              swiper: swiper,
+            },
+          });
+        </script>
         <%- include('./partial/footer.ejs') %>
           <%- include('./partial/scripts.ejs') %>
-            <script type="module">
-              import Swiper from "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.esm.browser.min.js";
 
-              var swiper = new Swiper(".mySwiper", {
-                loop: true,
-                spaceBetween: 10,
-                slidesPerView: 4,
-                freeMode: true,
-                watchSlidesProgress: true,
-              });
-              var swiper2 = new Swiper(".mySwiper2", {
-                loop: true,
-                spaceBetween: 10,
-                navigation: {
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                },
-                thumbs: {
-                  swiper: swiper,
-                },
-              });
-            </script>
   </body>
 
 </html>
