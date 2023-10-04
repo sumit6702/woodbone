@@ -32,23 +32,6 @@ const userloginController = async (req, res) => {
         if(data.isVerified){
           //If EveryThing is True
         req.session.user_id = data._id;
-        if (req.session.user_id) {
-          const rememberMeToken = uuid;
-        
-          // Save the token in the database
-          const tokenDocument = new USERTOKEN({
-            userId: data.id,
-            token: rememberMeToken,
-          });
-          await tokenDocument.save();
-          res.cookie("remember_me", rememberMeToken, {
-            expires: new Date(Date.now() + 30 * 24 * 3600 * 1000),
-            httpOnly: true,
-            secure: true,
-          });
-        }
-        
-
         failedLoginAttempts[clientIP] = 0;
         if(req.session.redirectPage){
           const redirectUrl = req.session.redirectPage;
@@ -310,11 +293,6 @@ async function getPublicIP() {
 const logoutController = async(req, res) => {
   try {
     req.session.destroy();
-    if (req.cookies.remember_me) {
-      const rememberMeToken = req.cookies.remember_me;
-      await USERTOKEN.deleteOne({ token: rememberMeToken });
-    }
-    res.clearCookie('remember_me');
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
