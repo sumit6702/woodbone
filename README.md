@@ -27,7 +27,6 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 - A powerful admin panel for easy product and order management.
 - Customizable and extendable with jQuery and Alpine.js.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -38,8 +37,3 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 - ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 - ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
 - ![Alpine.js](https://img.shields.io/badge/Alpine.js-8BC34A?style=for-the-badge&logo=alpine.js&logoColor=white)
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
