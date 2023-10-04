@@ -12,13 +12,7 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 - A powerful admin panel for easy product and order management.
 - Customizable and extendable with jQuery and Alpine.js.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+## Built With
 
 - [Node.js](https://nodejs.org/)
 - [Express.js](https://expressjs.com/)
