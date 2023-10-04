@@ -29,7 +29,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://s6.gifyu.com/images/S6Lk6.gif)
 
 Welcome to our E-commerce Project! This project was built with Node.js, Express.js, MongoDB, Tailwind CSS, jQuery, and Alpine.js to create a fully-featured e-commerce platform. It includes user authentication, a shopping cart, payment processing, order management, invoices, and an admin panel for managing products and orders.
 
@@ -45,9 +45,6 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 
 
 ### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
 - ![Node.js](https://img.shields.io/badge/Node.js-68A063?style=for-the-badge&logo=node.js&logoColor=white)
 - ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 - ![MongoDB](https://img.shields.io/badge/MongoDB-4DB33D?style=for-the-badge&logo=mongodb&logoColor=white)
