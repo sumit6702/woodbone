@@ -1,17 +1,14 @@
 import USERREGISTERMODEL from "../model/UserAccount.js";
 import bcrypt from "bcryptjs";
-import e from "express";
 import nodemailer from "nodemailer";
 import USERDATA from "../model/UserDataSchema.js";
 const singupcontroller = async (req, res) => {
   try {
-    res
-      .status(200)
-      .render("singup", {
-        userid: req.user,
-        cartval: req.cartval,
-        siteInfo: req.siteInfo,
-      });
+    res.status(200).render("singup", {
+      userid: req.user,
+      cartval: req.cartval,
+      siteInfo: req.siteInfo,
+    });
   } catch (error) {
     console.log(error.message + "at SingupController");
     res.status(500).json({ error: "Internal Server Error" });
@@ -123,9 +120,7 @@ const newsingupController = async (req, res) => {
           user._id
         );
       }
-      res.send(
-        "<p>Check Mail to Verify! <a href ='http://localhost:3080/login'>Login</a></p>"
-      );
+      res.redirect("/login");
       req.flash("success", "Registration Successful");
     }
   } catch (error) {
@@ -146,7 +141,9 @@ const verifiedmailcontroller = async (req, res) => {
     await userDataCReation.save();
     if (userdata) {
       res.send(
-        "You are verified click here to <a href ='http://localhost:3080/login'>Login</a>"
+        `You are verified click here to <a href ='${req.protocol}://${req.get(
+          "host"
+        )}/login'>Login</a>`
       );
     }
   } catch (error) {
