@@ -29,7 +29,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://s6.gifyu.com/images/S6Lk6.gif)
+![screenshot](https://s6.gifyu.com/images/S6Lk6.gif)
 
 Welcome to our E-commerce Project! This project was built with Node.js, Express.js, MongoDB, Tailwind CSS, jQuery, and Alpine.js to create a fully-featured e-commerce platform. It includes user authentication, a shopping cart, payment processing, order management, invoices, and an admin panel for managing products and orders.
 
