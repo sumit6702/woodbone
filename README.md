@@ -1,7 +1,35 @@
-<img src="https://s6.gifyu.com/images/S6Lk6.gif" alt="screenshot">
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 Welcome to our E-commerce Project! This project was built with Node.js, Express.js, MongoDB, Tailwind CSS, jQuery, and Alpine.js to create a fully-featured e-commerce platform. It includes user authentication, a shopping cart, payment processing, order management, invoices, and an admin panel for managing products and orders.
 
@@ -12,14 +40,19 @@ Welcome to our E-commerce Project! This project was built with Node.js, Express.
 - A powerful admin panel for easy product and order management.
 - Customizable and extendable with jQuery and Alpine.js.
 
-## Built With
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- [Node.js](https://nodejs.org/)
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [jQuery](https://jquery.com/)
-- [Alpine.js](https://alpinejs.dev/)
+
+
+### Built With
+
+This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
+* [![Node][Node.js]][https://nodejs.org/]
+* [![Express][Express.js]][https://expressjs.com/]
+* [![MongoDB][MongoDB]][https://www.mongodb.com/]
+* [![JQuery][JQuery.com]][https://jquery.com/]
+* [![Alpine][Alpine.js]][https://alpinejs.dev/]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
