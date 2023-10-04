@@ -3,14 +3,6 @@
   border-radius: 8px;
 }
 
-#payment-form {
-  width: 70%;
-  align-self: center;
-  margin: auto;
-  border-radius: 5px;
-  padding: 40px;
-}
-
 #payment-form .hidden {
   display: none;
 }
