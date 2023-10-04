@@ -71,7 +71,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![screenshot](https://s6.gifyu.com/images/S6Lk6.gif)
+<div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); padding: 10px;">
+    ![screenshot](https://s6.gifyu.com/images/S6Lk6.gif)
+</div>
 
 There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
 
