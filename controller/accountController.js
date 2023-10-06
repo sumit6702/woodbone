@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import "dotenv/config";
 import USERREGISTERMODEL from "../model/UserAccount.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -30,7 +30,7 @@ const forgetPass = async (req, res) => {
 };
 
 //Email Reset Link
-const verifyMail = async (username, email, user) => {
+const verifyMail = async (req, res, username, email, user) => {
   try {
     const token = jwt.sign({ user }, secretKey, {
       expiresIn: tokenExpiration,
@@ -48,7 +48,9 @@ const verifyMail = async (username, email, user) => {
       <p>
         We have received a request to reset your password. Click the button below to set a new password:
       </p>
-      <p class="verification-link"><a href="${req.protocol}://${req.get("host")}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
+      <p class="verification-link"><a href="${req.protocol}://${req.get(
+      "host"
+    )}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
       <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
       <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
     </div>
@@ -58,7 +60,7 @@ const verifyMail = async (username, email, user) => {
     </div>`;
     await sendMail(email, subject, htmlStyle, htmlbody);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -70,22 +72,21 @@ const PasswordUpdate = async (req, res) => {
     const usermail = user.email;
     const domain = usermail.match(/@(.+)/)[1];
     if (mail === usermail) {
-      await verifyMail(user.firstName, user.email, user._id);
+      await verifyMail(req, res, user.firstName, user.email, user._id);
       res.render("forgetPass", {
         userid: req.user,
         cartval: req.cartval,
         isUserFound: true,
         mail: mail,
         domain: domain,
+        siteInfo: req.siteInfo,
       });
-      console.log("sccuess");
     } else {
       req.flash("mailAlert", "Email is not found!");
       res.redirect("/account/reset-password");
-      console.log("failed");
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -101,7 +102,7 @@ const PasswordUpdated = async (req, res) => {
       siteInfo: req.siteInfo,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -116,13 +117,11 @@ const resetPassUpdated = async (req, res) => {
     });
     if (updated) {
       res.redirect("/login");
-      console.log("Password Reset");
     } else {
       res.redirect("/account/reset-password");
-      console.log("Password not Reset");
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -446,48 +445,53 @@ const checkout = async (req, res) => {
 const stripePay = async (req, res) => {
   try {
     if (req.query.allowed == req.session.user_id) {
-      
-    const userinfo = await USERREGISTERMODEL.findById(req.session.user_id);
-    const address = await USERADDRESS.findOne({ userid: req.session.user_id });
-    const data = await USERDATA.findOne({ user: req.session.user_id });
-    const Cart = data.cart;
-    
-    if (!Cart || Cart.length === 0 || Cart === null){
-      res.redirect("/cart");
-    }else{
-      let products, totalPricePerItem, quantity, defaultAdd, total;
-      defaultAdd = address.address.find((addr) => addr.default === true);
-    defaultAdd = JSON.stringify(defaultAdd);
+      const userinfo = await USERREGISTERMODEL.findById(req.session.user_id);
+      const address = await USERADDRESS.findOne({
+        userid: req.session.user_id,
+      });
+      const data = await USERDATA.findOne({ user: req.session.user_id });
+      const Cart = data.cart;
 
-    const productID = Cart.map((item) => item.productId);
-    products = await PRODUCTS.find({ productId: { $in: productID } });
-    quantity = Cart.map((quan) => quan.quantity);
+      if (!Cart || Cart.length === 0 || Cart === null) {
+        res.redirect("/cart");
+      } else {
+        let products, totalPricePerItem, quantity, defaultAdd, total;
+        defaultAdd = address.address.find((addr) => addr.default === true);
+        defaultAdd = JSON.stringify(defaultAdd);
 
-    totalPricePerItem = products.map((item, index) => {
-      const numericPrice = item.price;
-      const itemQuantity = Cart[index].quantity;
-      const totalPrice = numericPrice * itemQuantity;
-      return totalPrice;
-    });
+        const productID = Cart.map((item) => item.productId);
+        products = await PRODUCTS.find({ productId: { $in: productID } });
+        quantity = Cart.map((quan) => quan.quantity);
 
-    total = totalPricePerItem.reduce(
-      (acc, product) => acc + parseInt(product, 0)
-    );
+        totalPricePerItem = products.map((item, index) => {
+          const numericPrice = item.price;
+          const itemQuantity = Cart[index].quantity;
+          const totalPrice = numericPrice * itemQuantity;
+          return totalPrice;
+        });
 
-    res.render("paynow", {
-      userid: req.user,
-      userinfo: userinfo,
-      cartval: req.cartval,
-      siteInfo: req.siteInfo,
-      products,
-      totalPricePerItem,
-      quantity,
-      defaultAdd,
-      total,
-    });
-    }
+        total = totalPricePerItem.reduce(
+          (acc, product) => acc + parseInt(product, 0)
+        );
+
+        res.render("paynow", {
+          userid: req.user,
+          userinfo: userinfo,
+          cartval: req.cartval,
+          siteInfo: req.siteInfo,
+          products,
+          totalPricePerItem,
+          quantity,
+          defaultAdd,
+          total,
+        });
+      }
     } else {
-      res.status(404).render("404page", { userid: req.user, cartval:req.cartval,siteInfo:req.siteInfo });
+      res.status(404).render("404page", {
+        userid: req.user,
+        cartval: req.cartval,
+        siteInfo: req.siteInfo,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -496,22 +500,22 @@ const stripePay = async (req, res) => {
 };
 
 const stripePay_ = async (req, res) => {
-try {
-  const { metadata } = req.body;
-  const totalPriceInRupee = metadata.totalprice * 100;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalPriceInRupee,
-    currency: "inr",
-    receipt_email: metadata.useremail,
-    metadata: metadata,
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
-} catch (error) {
-  console.log(error);
-  res.status(400).send("<h1>Internal Server Error</h1>");
-}
+  try {
+    const { metadata } = req.body;
+    const totalPriceInRupee = metadata.totalprice * 100;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalPriceInRupee,
+      currency: "inr",
+      receipt_email: metadata.useremail,
+      metadata: metadata,
+    });
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("<h1>Internal Server Error</h1>");
+  }
 };
 
 const paymentSuccessfull = async (req, res) => {
@@ -521,7 +525,7 @@ const paymentSuccessfull = async (req, res) => {
     const total = meta.totalprice;
     const userDefaultAdd = JSON.parse(meta.userAddress);
     const userid = meta.userid;
-  
+
     /* Generating Order Id */
     const suuid = uuidv4().slice(25, 36);
     const orderID = `WBPVT${suuid}`;
@@ -535,11 +539,11 @@ const paymentSuccessfull = async (req, res) => {
     const user_address = await USERADDRESS.findOne({
       userid: userid,
     });
-  
+
     const fullname = userDefaultAdd.fullname;
     const phoneno = userDefaultAdd.PhoneNo || "";
     const Address = `${userDefaultAdd.Address}, ${userDefaultAdd.City}, ${userDefaultAdd.State}, ${userDefaultAdd.Pincode}, ${userDefaultAdd.Country}`;
-  
+
     const products = [];
     for (let i = 0; i < rawProducts.length; i++) {
       const element = rawProducts[i];
@@ -550,7 +554,7 @@ const paymentSuccessfull = async (req, res) => {
         productPrices: Number(element.productPrice),
       });
     }
-  
+
     /* Generating New Order */
     const NewOrder = new ORDERS({
       order_id: orderID,
@@ -564,7 +568,7 @@ const paymentSuccessfull = async (req, res) => {
       products: products,
       PaymentInformation: "Card",
     });
-  
+
     /* Invoice Generating */
     const BillerDetail = {
       company: fullname,
@@ -573,7 +577,7 @@ const paymentSuccessfull = async (req, res) => {
       city: userDefaultAdd.City,
       country: userDefaultAdd.Country,
     };
-  
+
     const invoiceProducts = [];
     for (let i = 0; i < rawProducts.length; i++) {
       const product = rawProducts[i];
@@ -585,7 +589,7 @@ const paymentSuccessfull = async (req, res) => {
       });
     }
     const siteData = req.siteInfo;
-    
+
     const invoice = {
       customize: {
         template: fs.readFileSync(invoicePath, "base64"),
@@ -643,22 +647,23 @@ const paymentSuccessfull = async (req, res) => {
         vat: "GST", // Defaults to 'vat'
       },
     };
-    
+
     const UpdateOrder = await NewOrder.save();
-  
+
     user_data.cart = [];
     await user_data.save();
-  
+
     const result = await easyinvoice.createInvoice(invoice);
     const orderInvoice = new INVOICE({
       order_id: UpdateOrder.id,
       invoice: result.pdf,
     });
     await orderInvoice.save();
-  
+
     /* Generating Email */
     const InvoiceDate = new Date().toLocaleDateString("en-IN");
-    const productTable = rawProducts.map(
+    const productTable = rawProducts
+      .map(
         (product) =>
           `<tr>
             <td>${product.productName}</td>
@@ -667,13 +672,13 @@ const paymentSuccessfull = async (req, res) => {
          </tr>`
       )
       .join("");
-  
+
     const verifyMail = async (username, email) => {
       const subject = `Hello ${username}, New Order`;
       const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
       const htmlbody = `<div class="container">
           <div class="logo">
-              <img src="${siteData.URL+"/"+siteData.siteLogo}" alt="Logo">
+              <img src="${siteData.URL + "/" + siteData.siteLogo}" alt="Logo">
               <h1>LOGO</h1>
           </div>
           <div class="content">
@@ -901,7 +906,7 @@ const updateSiteInfo = async (req, res) => {
         city: city,
         country: country,
       },
-      siteDescription:siteDescription,
+      siteDescription: siteDescription,
     });
     const updated = await siteInfo.save();
     if (updated) {
