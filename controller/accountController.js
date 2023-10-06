@@ -908,10 +908,26 @@ const updateSiteInfo = async (req, res) => {
       },
       siteDescription: siteDescription,
     });
-    const updated = await siteInfo.save();
+    let updated ;
+    const isSiteInfo = await SITEINFO.find({});
+    if (isSiteInfo && isSiteInfo.length > 0) {
+      const imagePaths = isSiteInfo.map((info) => info.siteLogo);
+      for (const imagePath of imagePaths) {
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      }
+      await SITEINFO.deleteMany({});
+      updated = await siteInfo.save();
+    } else {
+      updated = await siteInfo.save();
+    }
+
     if (updated) {
       res.redirect("/admin/profile");
     }
+    
+    
   } catch (error) {
     console.log(error);
     res.status(400).send("<h1>Internal Server Error</h1>");
