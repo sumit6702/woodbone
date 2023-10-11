@@ -47,8 +47,7 @@ const verifyMail = async (req, res, name, email, id) => {
       <body>
         <div class="container">
           <div class="logo">
-            <!-- <img src="logo.png" alt="Logo"> -->
-            <h1>LOGO</h1>
+            <img src="${req.siteInfo.siteLogo}" alt="Logo">
           </div>
           <div class="content">
             <h2>Hello, ${name}!</h2>

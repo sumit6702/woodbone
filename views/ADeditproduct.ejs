@@ -3,14 +3,14 @@
 <%- include('./partial/header.ejs') %>
 
 <body class="bg-gray-50 jagrataFont">
-  <%- include('./partial/AdminNavbar.ejs')  %>
+  <%- include('./partial/AdminNavbar.ejs') %>
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <style>
     #scrolling-container {
       overflow-y: scroll;
     }
 
-    .image-container{
+    .image-container {
       max-width: 178px;
       max-height: 178px;
       margin: 5px;
@@ -58,12 +58,12 @@
                 <label for="pd_category">Product Category</label>
 
                 <select id="pd_category" name="pd_category" class="block border rounded-md shadow-sm border-gray-300 focus:outline-1 focus:outline-blue-500 placeholder:text-sm placeholder:text-zinc-500 placeholder:font-light  w-full px-1 py-2" required>
-                  <option value="Bed" <%= product.category === 'Bed' ? 'selected' : '' %>>Bed</option>
-                  <option value="Storage" <%= product.category === 'Storage' ? 'selected' : '' %>>Storage</option>
-                  <option value="Seating" <%= product.category === 'Seating' ? 'selected' : '' %>>Seating</option>
-                  <option value="Table" <%= product.category === 'Table' ? 'selected' : '' %>>Table</option>
-                  <option value="Outdoor" <%= product.category === 'Outdoor' ? 'selected' : '' %>>Outdoor</option>
-                  <option value="Other" <%= product.category === 'Other' ? 'selected' : '' %>>Other</option>
+                  <option value="Bed" <%=product.category==='Bed' ? 'selected' : '' %>>Bed</option>
+                  <option value="Storage" <%=product.category==='Storage' ? 'selected' : '' %>>Storage</option>
+                  <option value="Seating" <%=product.category==='Seating' ? 'selected' : '' %>>Seating</option>
+                  <option value="Table" <%=product.category==='Table' ? 'selected' : '' %>>Table</option>
+                  <option value="Outdoor" <%=product.category==='Outdoor' ? 'selected' : '' %>>Outdoor</option>
+                  <option value="Other" <%=product.category==='Other' ? 'selected' : '' %>>Other</option>
                 </select>
               </div>
             </div>
@@ -100,9 +100,9 @@
             <div class="mb-6">
 
               <div class="lg:flex">
-                <% product.Image.forEach((image, index) => { %>
+                <% product.Image.forEach((image, index)=> { %>
                 <div class="max-w-[185px] mx-1 p-1 rounded-md border bg-gray-100 mb-4 lg:mb-0">
-                  <img class="object-cover productImage" height="100%" width="100%" src="/<%= image.path %>" alt="Product Image <%= index + 1 %>">
+                  <img class="object-cover productImage" height="100%" width="100%" src="<%= image.path %>" alt="Product Image <%= index + 1 %>">
                   <div class="flex justify-between mx-2 my-1">
                     <div class="ImageUpdateForm">
                       <label class="cursor-pointer" for="imageInput<%= index %>">Update</label>

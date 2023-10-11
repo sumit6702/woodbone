@@ -32,7 +32,7 @@
                                         <form class="my-auto mx-2 md:mx-4" action="/remove_wishlist/<%= product.productId %>" method="post">
                                             <button  type="submit"><i class="fa-solid fa-xmark"></i></button>
                                         </form>
-                                        <a class="hidden md:block" href=""><img class="h-20" src="http://localhost:3080/<%= product.Image[0].path %>" alt=""></a>
+                                        <a class="hidden md:block" href=""><img class="h-20" src="<%= product.Image[0].path %>" alt=""></a>
                                         <a class="my-auto mx-2 md:mx-4" href=""><%= product.name %></a>
                                     </td>
                                     <td class="text-center py-2">₹ <%= product.price %></td>

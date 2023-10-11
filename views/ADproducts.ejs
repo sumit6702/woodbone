@@ -78,7 +78,7 @@
               <div class="col-span-12 lg:col-span-3 w-60 rounded-md shadow-md border border-gray-300 hover:shadow-lg transition-transform transform hover:-translate-y-1 relative mx-auto my-4">
                 <div class="relative">
                   <a target="_blank" href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
-                    <img class="object-cover rounded-t-md" height="100%" width="100%" src="/<%= product.Image[0].path %>" alt="">
+                    <img class="object-cover rounded-t-md" height="100%" width="100%" src="<%= product.Image[0].path %>" alt="">
                   </a>
                   <div class="flex py-1 rounded bg-opacity-80 absolute -bottom-4 right-0 mx-2 bg-red-500 text-white">
                     <a class="px-2 py-1 group" href="/admin/product/<%= product.productId %>">

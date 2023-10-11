@@ -17,7 +17,7 @@
           <input class="hidden" type="file" name="userProfile" id="userProfile">
         </form>
         <div class="flex items-center rounded-full h-28 w-28 absolute -top-16 left-1/2 -translate-x-1/2 shadow-md border-[10px] border-white">
-          <img class="object-cover h-full w-full rounded-full" height="" width="" src="/<%= admin.profileImg.path  %>" alt="">
+          <img class="object-cover h-full w-full rounded-full" height="" width="" src="<%= admin.profileImg.path  %>" alt="">
           <script>
             $("#profileImg").on("click", () => {
               $("#userProfile").click();
@@ -108,7 +108,12 @@
         <div class="lg:flex mt-12 px-8">
           <form class="w-full" action="/admin/profile/siteInfo" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-              <img class="border p-4 rounded-md" width="128" height="128" src="/<%= siteInfo.siteLogo  %>" alt="">
+              <img class="border p-4 rounded-md" width="94" src="
+              <% if (siteInfo.siteLogo === "") { %>
+                https://cdn-icons-png.flaticon.com/512/763/763775.png
+              <% } else { %>
+                <%= siteInfo.siteLogo %>
+              <% } %>" alt="">
             </div>
             <div class="flex gap-12">
               <div class="w-full">
@@ -118,7 +123,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="siteLogo">Site Logo</label>
-                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo" id="siteLogo" value="" placeholder="Site Logo" required>
+                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo" id="siteLogo" value="" placeholder="Site Logo">
                 </div>
                 <div class="mb-3">
                   <label for="siteURL">Site URL/label>
@@ -144,6 +149,18 @@
                 <div class="mb-3">
                   <label for="description">Site Description</label>
                   <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="description" id="description" value="<%= siteInfo.siteDescription  %>" placeholder="Site Description">
+                </div>
+                <div class="mb-3">
+                  <label for="siteTiming">Working Time</label>
+                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteTiming" id="siteTiming" value="<%= siteInfo.siteTiming  %>" placeholder="from 10AM - 6PM...">
+                </div>
+                <div class="mb-3">
+                  <label for="siteMail">Site Mail</label>
+                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteMail" id="siteMail" value="<%= siteInfo.siteMail  %>" placeholder="company@support.mail">
+                </div>
+                <div class="mb-3">
+                  <label for="contactInfo">Site PhoneNo</label>
+                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="contactInfo" id="contactInfo" value="<%= siteInfo.contactInfo  %>" placeholder="+919191919191">
                 </div>
               </div>
             </div>

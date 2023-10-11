@@ -82,7 +82,7 @@
                   <div class="swiper-wrapper">
                     <% for(const image of product.Image){ %>
                       <div class="swiper-slide">
-                        <img src="/<%= image.path %>" />
+                        <img src="<%= image.path %>" />
                       </div>
                       <% } %>
                   </div>
@@ -91,7 +91,7 @@
                   <div class="swiper-wrapper">
                     <% for(const image of product.Image){ %>
                       <div class="swiper-slide">
-                        <img src="/<%= image.path %>" />
+                        <img src="<%= image.path %>" />
                       </div>
                       <% } %>
                   </div>
@@ -430,7 +430,7 @@
                         x-on:toggle-modal.window="open = !open">
                         <div class="product-Img-Wrapper relative">
                           <div class="divContainer">
-                            <img class="" src="/<%= product.Image[0].path %>" alt="Product Image" />
+                            <img class="" src="<%= product.Image[0].path %>" alt="Product Image" />
                           </div>
                           <div
                             class="product-actions lg:absolute top-0 left-0 w-full h-full lg:bg-gray-100 lg:opacity-0 lg:transition-opacity lg:duration-200 ease-out">
@@ -474,7 +474,7 @@
                             class="w-5/6 h-2/3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-md rounded-sm md:flex overflow-scroll md:overflow-auto">
                             <div class="md:w-1/2">
                               <a href="/productpage">
-                                <img class="h-full w-full object-cover" src="/<%= product.Image[0].path %>" alt="" />
+                                <img class="h-full w-full object-cover" src="<%= product.Image[0].path %>" alt="" />
                               </a>
                             </div>
                             <div class="md:w-1/2">

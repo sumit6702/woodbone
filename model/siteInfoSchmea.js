@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const siteInfoSchema = new mongoose.Schema({
   siteName: { type: String, default: "abcsite" },
   siteLogo: { type: String, default: "" },
-  siteURL: {type: String,default: "localhost:3000"},
+  siteURL: {type: String,default: "localhost:5000"},
   coAddress: {
     address:{type:String, default:""},
     pincode:{type:String, default:""},
@@ -11,12 +11,18 @@ const siteInfoSchema = new mongoose.Schema({
     country:{type:String, default:""},
   },
   siteDescription:{type:String,default:""},
-  contactInfo: [
-    {
-      type: String,
-      default: "",
-    }
-  ],
+  contactInfo: {
+    type: String,
+    default: "",
+  },
+  siteTiming:{
+    type:String,
+    default:"OPEN FROM 9AM TO 5PM – CLOSED ON WEEKENDS"
+  },
+  siteMail:{
+    type:String,
+    default:""
+  },
   timeStampe: { type: Date, default: Date.now() },
 });
 

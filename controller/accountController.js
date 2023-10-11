@@ -17,8 +17,16 @@ import fs from "fs";
 import path from "path";
 import sendMail from "../middleware/email.js";
 import SITEINFO from "../model/siteInfoSchmea.js";
-
+import aws from "aws-sdk";
+import { timeStamp } from "console";
 const stripe = Stripe(Secret_Key);
+aws.config.update({
+  accessKeyId: process.env.S3_ACCESSKEY,
+  secretAccessKey: process.env.S3_SECRECTKEY,
+  region: process.env.AWS_REGION,
+});
+const s3 = new aws.S3();
+const s3URL = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
 
 const forgetPass = async (req, res) => {
   res.render("forgetPass", {
@@ -39,8 +47,7 @@ const verifyMail = async (req, res, username, email, user) => {
     const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}.verification-link{margin-top:40px}.verification-link a{background-color:#000;padding:12px 22px;text-decoration:none;text-transform:uppercase;color:#fff;box-shadow:2px 2px 2px #00000048}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px;} `;
     const htmlbody = `<div class="container">
     <div class="logo">
-      <!-- <img src="logo.png" alt="Logo"> -->
-      <h1>LOGO</h1>
+      <img src="${req.siteInfo.siteLogo}" alt="Logo">
     </div>
     <div class="content">
       <h1>Password Reset</h1>
@@ -294,7 +301,7 @@ const deletAddress = async (req, res) => {
 
 const order = async (req, res) => {
   try {
-    const orders = await ORDERS.find({ user: req.session.user_id });
+    const orders = (await ORDERS.find({ user: req.session.user_id })).reverse();
     const formatDate = (dateString) => {
       const options = { year: "numeric", month: "short", day: "2-digit" };
       const date = new Date(dateString);
@@ -331,7 +338,6 @@ const order = async (req, res) => {
       );
       products.push(orderProducts);
     }
-
     res.render("userorder.ejs", {
       userid: req.user,
       cartval: req.cartval,
@@ -554,6 +560,8 @@ const paymentSuccessfull = async (req, res) => {
         productPrices: Number(element.productPrice),
       });
     }
+    console.log("------PRODUCTS-------");
+    console.log(products);
 
     /* Generating New Order */
     const NewOrder = new ORDERS({
@@ -588,19 +596,20 @@ const paymentSuccessfull = async (req, res) => {
         price: Number(product.productPrice) / (1 + 0.18),
       });
     }
+
     const siteData = req.siteInfo;
+    const siteLogo = siteData.siteLogo !== "" ? siteData.siteLogo : "https://cdn-icons-png.flaticon.com/512/763/763775.png";
+    
+    const invoiceNo = `${uuidv4().slice(0,8)}${new Date().getTime()}`;
 
     const invoice = {
       customize: {
         template: fs.readFileSync(invoicePath, "base64"),
       },
       images: {
-        // The logo on top of your invoice
-        logo: "",
-        // The invoice background
+        logo: siteLogo,
         background: "",
       },
-      // Your own data
       sender: {
         company: siteData.siteName,
         address: siteData.coAddress.address,
@@ -608,11 +617,9 @@ const paymentSuccessfull = async (req, res) => {
         city: siteData.coAddress.city,
         country: siteData.coAddress.country,
       },
-      // Your recipient
       client: BillerDetail,
       information: {
-        // Invoice number
-        number: uuidv4().slice(1, 15),
+        number: invoiceNo,
         date: new Date().toLocaleDateString("en-IN", {
           year: "numeric",
           month: "short",
@@ -635,7 +642,7 @@ const paymentSuccessfull = async (req, res) => {
       },
       translate: {
         // "invoice": "FACTUUR",  // Default to 'INVOICE'
-        //"number": "Invoice No", // Defaults to 'Number'
+        "number": "Invoice No", // Defaults to 'Number'
         // "date": "Datum", // Default to 'Date'
         // "due-date": null, // Defaults to 'Due Date'
         // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
@@ -647,20 +654,19 @@ const paymentSuccessfull = async (req, res) => {
         vat: "GST", // Defaults to 'vat'
       },
     };
-
-    const UpdateOrder = await NewOrder.save();
-
-    user_data.cart = [];
-    await user_data.save();
-
+    
     const result = await easyinvoice.createInvoice(invoice);
+
     const orderInvoice = new INVOICE({
-      order_id: UpdateOrder.id,
+      order_id: NewOrder.id,
       invoice: result.pdf,
     });
-    await orderInvoice.save();
 
-    /* Generating Email */
+    const invoiceGenerated = await orderInvoice.save();
+
+    if(invoiceGenerated){
+      await NewOrder.save();
+    }
     const InvoiceDate = new Date().toLocaleDateString("en-IN");
     const productTable = rawProducts
       .map(
@@ -673,44 +679,46 @@ const paymentSuccessfull = async (req, res) => {
       )
       .join("");
 
-    const verifyMail = async (username, email) => {
-      const subject = `Hello ${username}, New Order`;
-      const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
-      const htmlbody = `<div class="container">
-          <div class="logo">
-              <img src="${siteData.URL + "/" + siteData.siteLogo}" alt="Logo">
-              <h1>LOGO</h1>
-          </div>
-          <div class="content">
-              <h4>Hello, ${username}!</h4>
-              <h3>Thank you for Purchasing</h3>
-              <div>
-                  <p>Invoice No: ${orderInvoice.order_id}</p>
-                  <p>Date: ${InvoiceDate}</p>
-              </div>
-              <div>
-                  Your orders:
-                  <table>
-                      <thead>
-                          <tr>
-                              <th>Product</th>
-                              <th>Quantity</th>
-                              <th>Price</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        ${productTable}
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-          <div class="footer">
-              <p>© 2023 Woodbone. All rights reserved.</p>
-          </div>
-        </div>`;
-      await sendMail(email, subject, htmlStyle, htmlbody);
-    };
-    await verifyMail(user_.fullName, user_.email);
+      user_data.cart = [];
+      await user_data.save();
+
+      const verifyMail = async (username, email, siteData) => {
+        const subject = `Hello ${username}, New Order`;
+        const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
+        const htmlbody = `<div class="container">
+            <div class="logo">
+                <img src="${siteData.siteLogo}" alt="Logo">
+            </div>
+            <div class="content">
+                <h4>Hello, ${username}!</h4>
+                <h3>Thank you for Purchasing</h3>
+                <div>
+                    <p>Date: ${InvoiceDate}</p>
+                </div>
+                <div>
+                    Your orders:
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          ${productTable}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="footer">
+                <p>© 2023 Woodbone. All rights reserved.</p>
+            </div>
+          </div>`;
+        await sendMail(email, subject, htmlStyle, htmlbody);
+      };
+      await verifyMail(user_.fullName, user_.email, siteData);
+    
   } catch (error) {
     console.log(error);
     res.status(400).send("<h1>Internal Server Error</h1>");
@@ -853,30 +861,35 @@ const profileUploader = async (req, res) => {
         req.session.user_id || req.session.admin_id
       );
       if (adminData && adminData.profileImg) {
-        const oldImg = adminData.profileImg.path;
-        if (fs.existsSync(oldImg)) {
-          fs.unlinkSync(oldImg);
-          console.log("File deleted successfully:", oldImg);
+        if(adminData.profileImg.path == ""){
+          await USERREGISTERMODEL.findByIdAndUpdate(
+            req.session.user_id || req.session.admin_id,
+            {
+              profileImg: {
+                filename: image.filename,
+                path: `${s3URL}${image.key}`,
+              },
+            }
+          );
+        }else{
+          const oldImg = adminData.profileImg.path.replace(s3URL, "");
+        await s3
+          .deleteObject({ Bucket: process.env.S3_BUCKET, Key: oldImg })
+          .promise();
         }
-      }
-
-      if (!adminData) {
-        req.flash("alert", "Admin Not Found!");
-        res.redirect("/admin/profile");
-      } else {
         await USERREGISTERMODEL.findByIdAndUpdate(
           req.session.user_id || req.session.admin_id,
           {
             profileImg: {
               filename: image.filename,
-              path: image.path,
+              path: `${s3URL}${image.key}`,
             },
           }
         );
-
-        req.flash("alert", "Profile Updated");
-        res.redirect("/admin/profile#adminprofile");
+        
       }
+      req.flash("alert", "Profile Updated");
+      res.redirect("/admin/profile#adminprofile");
     }
   } catch (error) {
     console.log(error);
@@ -886,6 +899,7 @@ const profileUploader = async (req, res) => {
 
 const updateSiteInfo = async (req, res) => {
   try {
+    const isSiteInfo = await SITEINFO.findOne({}).sort({timeStamp: -1});
     const siteName = req.body.siteName;
     const siteLogo = req.file;
     const siteUrl = req.body.siteURL;
@@ -895,39 +909,84 @@ const updateSiteInfo = async (req, res) => {
     const country = req.body.country;
     const siteDescription = req.body.description;
     const contactInfo = req.body.contactInfo;
+    const siteTiming = req.body.siteTiming;
+    const siteMail = req.body.siteMail;
 
-    const siteInfo = new SITEINFO({
-      siteName: siteName,
-      siteLogo: siteLogo.path,
-      siteURL: siteUrl,
-      coAddress: {
-        address: SiteAddress,
-        pincode: pincode,
-        city: city,
-        country: country,
-      },
-      siteDescription: siteDescription,
-    });
-    let updated ;
-    const isSiteInfo = await SITEINFO.find({});
-    if (isSiteInfo && isSiteInfo.length > 0) {
-      const imagePaths = isSiteInfo.map((info) => info.siteLogo);
-      for (const imagePath of imagePaths) {
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-        }
+    if(isSiteInfo){
+      if(siteLogo){
+        const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, '');
+        await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath }).promise();
+        await isSiteInfo.updateOne({
+          siteName: siteName,
+          siteLogo: `${s3URL}${siteLogo.key}`,
+          siteURL: siteUrl,
+          coAddress: {
+            address: SiteAddress,
+            pincode: pincode,
+            city: city,
+            country: country,
+          },
+          siteDescription: siteDescription,
+          siteTiming:siteTiming,
+          siteMail:siteMail,
+          contactInfo:contactInfo,
+        });
+      }else{
+        const siteLogoPath = isSiteInfo.siteLogo;
+        await isSiteInfo.updateOne({
+          siteName: siteName,
+          siteLogo: siteLogoPath,
+          siteURL: siteUrl,
+          coAddress: {
+            address: SiteAddress,
+            pincode: pincode,
+            city: city,
+            country: country,
+          },
+          siteDescription: siteDescription,
+          siteTiming:siteTiming,
+          siteMail:siteMail,
+          contactInfo:contactInfo,
+        });
       }
-      await SITEINFO.deleteMany({});
-      updated = await siteInfo.save();
-    } else {
-      updated = await siteInfo.save();
+    }else{
+      if(siteLogo){
+        const siteInfo = new SITEINFO({
+          siteName: siteName,
+          siteLogo: `${s3URL}${siteLogo.key}`,
+          siteURL: siteUrl,
+          coAddress: {
+            address: SiteAddress,
+            pincode: pincode,
+            city: city,
+            country: country,
+          },
+          siteDescription: siteDescription,
+          siteTiming:siteTiming,
+          siteMail:siteMail,
+          contactInfo:contactInfo,
+        });
+        await siteInfo.save();
+      }else{
+        const siteInfo = new SITEINFO({
+          siteName: siteName,
+          siteLogo: "",
+          siteURL: siteUrl,
+          coAddress: {
+            address: SiteAddress,
+            pincode: pincode,
+            city: city,
+            country: country,
+          },
+          siteDescription: siteDescription,
+          siteTiming:siteTiming,
+          siteMail:siteMail,
+          contactInfo:contactInfo,
+        });
+        await siteInfo.save();
+      }
     }
-
-    if (updated) {
-      res.redirect("/admin/profile");
-    }
-    
-    
+    res.redirect("/admin/profile#adminperf");
   } catch (error) {
     console.log(error);
     res.status(400).send("<h1>Internal Server Error</h1>");

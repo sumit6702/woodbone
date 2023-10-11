@@ -65,7 +65,7 @@
           <div class="flex py-4">
             <figure class="px-2 h-32">
               <a class="" href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">
-                <img class="w-full h-full object-cover" src="/<%= product.Image[0].path %>" alt=""></a>
+                <img class="w-full h-full object-cover" src="<%= product.Image[0].path %>" alt=""></a>
             </figure>
             <article class="px-2">
               <a href="/product/<%= product.productId %>/<%= encodeURIComponent(product.name) %>">

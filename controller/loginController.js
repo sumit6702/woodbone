@@ -134,7 +134,7 @@ function generateOTP() {
   return otp.toString().substr(0, otpLength);
 }
 
-const verifyMail = async (name, email, otp) => {
+const verifyMail = async (req, res, name, email, otp) => {
   try {
     const transpoter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -165,8 +165,7 @@ const verifyMail = async (name, email, otp) => {
       <body>
         <div class="container">
           <div class="logo">
-            <!-- <img src="logo.png" alt="Logo"> -->
-            <h1>LOGO</h1>
+            <img src="${req.siteInfo.siteLogo}" alt="Logo">
           </div>
             <div class="content">
               <h2>Hello, ${name}!</h2>
@@ -211,7 +210,7 @@ const resetAdminPassController = async(req,res)=>{
       console.log("Submited");
       const otp = generateOTP();
       otpCache.set(admindata.email, otp, 60 * 1);
-      const mailedd = await verifyMail(admindata.fullName, admindata.email, otp);
+      const mailedd = await verifyMail(req, res, admindata.fullName, admindata.email, otp);
       if(mailedd){
         console.log("Email Send!")
       }

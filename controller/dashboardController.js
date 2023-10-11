@@ -1,3 +1,4 @@
+import "dotenv/config";
 import LOGINATTEMPT from "../model/Loginattempt.js";
 import PRODUCTS from "../model/productSchema.js";
 import ORDERS from "../model/orderSchema.js";
@@ -5,7 +6,14 @@ import USERDATA from "../model/UserDataSchema.js";
 import USERREGISTERMODEL from "../model/UserAccount.js";
 import { query } from "express";
 import pagination from "../middleware/pagination.js";
-import { promises as fsPromises } from "fs";
+import aws from 'aws-sdk';
+aws.config.update({
+  accessKeyId: process.env.S3_ACCESSKEY,
+  secretAccessKey: process.env.S3_SECRECTKEY,
+  region: process.env.AWS_REGION,
+});
+const s3 = new aws.S3();
+const s3URL = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
 
 const admincontroller = (req, res) => {
   res.render("adminLogin");
@@ -242,6 +250,12 @@ const updateproduct = async (req, res) => {
 const deleteproduct = async (req, res) => {
   try {
     const id = req.params.id;
+    const deleteitem = await PRODUCTS.findById(id);
+    const imagePaths = deleteitem.Image.map((img) => img.path);
+    for (const imagePath of imagePaths) {
+      const s3Key = imagePath.replace(s3URL, "");
+      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: s3Key }).promise();
+    }
     const deleteProduct = await PRODUCTS.findByIdAndDelete(id);
     if (deleteProduct) {
       req.flash("alert", `${deleteProduct.name} is deleted!`);
@@ -260,19 +274,11 @@ const singleimageremover = async (req, res) => {
   try {
     const { productId, imageId, index } = req.params;
     const product = await PRODUCTS.findById(productId);
-    const prodcutPath = product.Image[index].path;
-    if (
-      product &&
-      product.Image &&
-      index >= 0 &&
-      index < product.Image.length
-    ) {
-      const img = product.Image.splice(index, 1);
-
-      if (img) {
-        await fsPromises.unlink(prodcutPath);
-      }
-
+    
+    if (product && product.Image && index >= 0 && index < product.Image.length) {
+      const prodcutPath = product.Image[index].path.replace(s3URL, '');
+      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: prodcutPath }).promise();
+      product.Image.splice(index, 1);
       await product.save();
       const url = req.session.redirectPage;
       delete req.session.redirectPage;
@@ -298,17 +304,17 @@ const singleimageedit = async (req, res) => {
     }
 
     const imageObject = product.Image[currentImgIndex];
-    const previousImagePath = imageObject.path;
+    const previousImagePath = imageObject.path.replace(s3URL, '');
 
     // Assign the new values to imageObject
     imageObject.filename = uploadedFile.filename;
-    imageObject.path = uploadedFile.path;
+    imageObject.path = `${s3URL}${uploadedFile.key}`;
 
     // Save the updated product
     const imgAdded = await product.save();
 
     if (imgAdded) {
-      await fsPromises.unlink(previousImagePath);
+       await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: previousImagePath }).promise();
       const url = req.session.redirectPage;
       delete req.session.redirectPage;
       return res.redirect(url);
@@ -341,7 +347,7 @@ const updatenewProduct = async (req, res) => {
       const file = pd_photos[i];
       pd_images.push({
         filename: file.filename,
-        path: file.path,
+        path: `${s3URL}${file.key}`,
       });
     }
 
@@ -499,46 +505,46 @@ const statisticsDBcontroller = async (req, res) => {
 };
 
 const uploadPDcontroller = async (req, res) => {
-  const pd_name = req.body.pd_name;
-  const pd_title = req.body.pd_title;
-  const pd_sku = req.body.pd_sku;
-  const pd_category = req.body.pd_category;
-  const pd_price = req.body.pd_price;
-  const pd_stocks = req.body.pd_stocks;
-  const pd_dimension = req.body.pd_dimension;
-  const pd_variants = req.body.pd_variants;
-  const pd_color = req.body.pd_color;
-  const pd_style = req.body.pd_style;
-  const pd_desc_editor = req.body.deltaJSON;
-  const pd_photos = req.files;
-  const pd_images = [];
-  for (let i = 0; i < pd_photos.length; i++) {
-    const file = pd_photos[i];
-    pd_images.push({
-      filename: file.filename,
-      path: file.path,
-    });
-  }
-
-  const lastProduct =
-    (await PRODUCTS.findOne().sort({ timestamp: -1 })) || null;
-
-  let counter;
-  if (lastProduct && lastProduct.productId) {
-    const lastFourDigits = lastProduct.productId.slice(-4);
-    counter = parseInt(lastFourDigits, 10);
-  } else {
-    counter = 0; // Assuming the initial counter starts at 0
-  }
-
-  const generateSequentialUuid = () => {
-    counter++;
-    const uuid = "wdbonepd-";
-    const sequenceUuid = uuid + counter.toString().padStart(4, "0");
-    return sequenceUuid;
-  };
-
   try {
+    const pd_name = req.body.pd_name;
+    const pd_title = req.body.pd_title;
+    const pd_sku = req.body.pd_sku;
+    const pd_category = req.body.pd_category;
+    const pd_price = req.body.pd_price;
+    const pd_stocks = req.body.pd_stocks;
+    const pd_dimension = req.body.pd_dimension;
+    const pd_variants = req.body.pd_variants;
+    const pd_color = req.body.pd_color;
+    const pd_style = req.body.pd_style;
+    const pd_desc_editor = req.body.deltaJSON;
+    const pd_photos = req.files;
+    console.log(pd_photos);
+    const pd_images = [];
+    for (let i = 0; i < pd_photos.length; i++) {
+      const file = pd_photos[i];
+      pd_images.push({
+        filename: file.filename,
+        path: `${s3URL}${file.key}`,
+      });
+    }
+    const lastProduct =
+      (await PRODUCTS.findOne().sort({ timestamp: -1 })) || null;
+  
+    let counter;
+    if (lastProduct && lastProduct.productId) {
+      const lastFourDigits = lastProduct.productId.slice(-4);
+      counter = parseInt(lastFourDigits, 10);
+    } else {
+      counter = 0; // Assuming the initial counter starts at 0
+    }
+  
+    const generateSequentialUuid = () => {
+      counter++;
+      const uuid = "wdbonepd-";
+      const sequenceUuid = uuid + counter.toString().padStart(4, "0");
+      return sequenceUuid;
+    };
+  
     const newProduct = new PRODUCTS({
       productId: generateSequentialUuid(),
       name: pd_name,

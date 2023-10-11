@@ -2,16 +2,24 @@
   <section class="">
     <div class="navabout uppercase text-sm flex justify-between font-medium py-1 bg-slate-300 border-b">
       <div>
-        <a href="#">support@<%= siteInfo.siteName  %>.com </a> / <a href="#">+91 41145727 </a>
+        <a href="mailto:<%= siteInfo.siteMail  %>"><%= siteInfo.siteMail  %></a> / <a href="tel:<%= siteInfo.contactInfo  %>"><%= siteInfo.contactInfo  %> </a>
       </div>
       <div>
-        <p>OPEN FROM 9AM TO 5PM – CLOSED ON WEEKENDS</p>
+        <p><%= siteInfo.siteTiming  %></p>
       </div>
     </div>
     <div id="navMenu" class="flex justify-between text-lg font-medium mx-10">
       <section>
         <ul class="flex">
-          <a class="navbrand py-7" href="/"><img width="64" src="/<%= siteInfo.siteLogo  %>" alt=""></a>
+          <a class="navbrand py-7" href="/">
+            <img width="32" src="
+            <% if (siteInfo.siteLogo === "") { %>
+              https://cdn-icons-png.flaticon.com/512/763/763775.png 
+            <% } else { %>
+              <%= siteInfo.siteLogo %>
+            <% } %>
+            " alt="">
+          </a>
           <li class="nav-links">
             <a class="flex py-7" href="/"><span>Home</span></a>
           </li>
@@ -92,7 +100,7 @@
                   <%= userid.firstName %>
                   <% if(userid.profileImg.path){ %>
                     <span class="ms-1">
-                        <img class="rounded-full" height="26" width="26" src="/<%= userid.profileImg.path %>" alt="">
+                        <img class="rounded-full" height="26" width="26" src="<%= userid.profileImg.path %>" alt="">
                       </span>
                       <% }else{ %>
                         <div class="flex ms-1">

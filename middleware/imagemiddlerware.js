@@ -1,33 +1,32 @@
-import PRODUCTS from "../model/productSchema.js";
+import 'dotenv/config'
+import aws from 'aws-sdk';
+// import { S3Client } from '@aws-sdk/client-s3';
 import multer from "multer";
-import { v4 as uuidv4 } from "uuid";
+import multerS3 from "multer-s3";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const destinationPath = req.originalUrl.includes('/product')
-  ? './uploads/productImages'
-  : req.originalUrl.includes('/my-account')
-  ? './uploads/profileImages'
-  : './uploads';
-    cb(null, destinationPath);
-  },
-  filename: async function (req, file, cb) {
-    try {
-      
-      const cleanedFilename = file.originalname.replace(/\(|\)/g, '').trim();
-
-      // Combine productId and the cleaned filename to create a new filename
-      const ImgName = `${uuidv4()}_${cleanedFilename}`;
-
-      cb(null, ImgName);
-    } catch (error) {
-      cb(error);
-    }
-  },
-  limits: {
-    fileSize: 1024 * 1024 * 12, // 12 MB limit
-  },
+aws.config.update({
+  accessKeyId: process.env.S3_ACCESSKEY,
+  secretAccessKey: process.env.S3_SECRECTKEY,
+  region: process.env.AWS_REGION,
 });
 
-const upload = multer({ storage: storage });
+const s3 = new aws.S3()
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET,
+    acl: "public-read",
+    contentDisposition: 'inline',
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      const cleanedFilename = file.originalname.replace(/\(|\)/g, "").trim();
+      const imgName = `${Date.now()}_${cleanedFilename}`;
+      cb(null, imgName.toString());
+    },
+  }),
+});
 export default upload;
+/* 1696957915436_blossom+1.jpg */
