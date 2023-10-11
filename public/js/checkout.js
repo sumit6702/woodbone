@@ -42,6 +42,8 @@
 
 
   /* --------------------------- Stripe Payment Code -------------------------- */
+  const submitButton = document.querySelector("#submit");
+  submitButton.disabled = true;
   initialize();
   checkStatus();
   document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
@@ -76,6 +78,9 @@
 
     const paymentElement = elements.create("payment", paymentElementOptions);
     paymentElement.mount("#payment-element");
+    paymentElement.on("ready", () => {
+      submitButton.disabled = false;
+    });
 
   }
   const currentLocation = window.location;

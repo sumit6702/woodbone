@@ -560,8 +560,6 @@ const paymentSuccessfull = async (req, res) => {
         productPrices: Number(element.productPrice),
       });
     }
-    console.log("------PRODUCTS-------");
-    console.log(products);
 
     /* Generating New Order */
     const NewOrder = new ORDERS({
