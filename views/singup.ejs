@@ -51,6 +51,13 @@
                 </div>
         </section>
     </main>
+    <script>
+      $("#singupForm").on('submit', (e) => {
+          if ($("#singuppsw").val() !== $("#singupcfpsw").val()) {
+            e.preventDefault();
+          }
+        });
+    </script>
     <%- include('./partial/footer.ejs') %>
     <%- include('./partial/scripts.ejs') %>
 </body>

@@ -18,6 +18,10 @@ const LoginattemptSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    userAgent:{
+        type:String,
+        required:true
+    },
     timestamp:{
         type:Date,
         default: Date.now,

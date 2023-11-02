@@ -27,7 +27,6 @@ import {
   customerDBcontroller,
   loginActivityDBcontroller,
   transcationDBcontroller,
-  statisticsDBcontroller,
   admincontroller,
   uploadPDcontroller,
   deleteloginActcontroller,
@@ -189,7 +188,6 @@ router.get("/admin/orders", isAdmin, customerDBcontroller);
 router.get("/admin/log_activity", isAdmin, loginActivityDBcontroller);
 router.post("/delete_adminlogins", isAdmin, deleteloginActcontroller);
 router.get("/admin/transcation", isAdmin, transcationDBcontroller);
-router.get("/admin/statistics", isAdmin, statisticsDBcontroller);
 router.get("/admin/profile", isAdmin, adminProfileDBcontroller);
 router.get("/admin/products/delete/:id", isAdmin, deleteproduct);
 router.get("/admin/products/search", isAdmin, productquries);

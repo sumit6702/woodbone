@@ -37,40 +37,6 @@ const forgetPass = async (req, res) => {
   });
 };
 
-//Email Reset Link
-const verifyMail = async (req, res, username, email, user) => {
-  try {
-    const token = jwt.sign({ user }, secretKey, {
-      expiresIn: tokenExpiration,
-    });
-    const subject = `Hello ${username}, Password Reset`;
-    const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}.verification-link{margin-top:40px}.verification-link a{background-color:#000;padding:12px 22px;text-decoration:none;text-transform:uppercase;color:#fff;box-shadow:2px 2px 2px #00000048}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px;} `;
-    const htmlbody = `<div class="container">
-    <div class="logo">
-      <img src="${req.siteInfo.siteLogo}" alt="Logo">
-    </div>
-    <div class="content">
-      <h1>Password Reset</h1>
-      <h2>Hello, ${username}!</h2>
-      <p>
-        We have received a request to reset your password. Click the button below to set a new password:
-      </p>
-      <p class="verification-link"><a href="${req.protocol}://${req.get(
-      "host"
-    )}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a></p>
-      <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span></p>
-      <p>If you didn't request this, you can ignore this email. Your password will not be changed unless you click the link above.</p>
-    </div>
-    <div class="footer">
-      <p>© 2023 Woodbone. All rights reserved.</p>
-    </div>
-    </div>`;
-    await sendMail(email, subject, htmlStyle, htmlbody);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 //Reset Mail Page
 const PasswordUpdate = async (req, res) => {
   try {
@@ -79,6 +45,56 @@ const PasswordUpdate = async (req, res) => {
     const usermail = user.email;
     const domain = usermail.match(/@(.+)/)[1];
     if (mail === usermail) {
+      const verifyMail = async (req, res, username, email, user) => {
+        try {
+          const token = jwt.sign({ user }, secretKey, {
+            expiresIn: tokenExpiration,
+          });
+          const subject = `Password Reset - ${req.siteInfo.siteName}`;
+          const htmlStyle = `
+          @import "https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap";.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}#verification-link{display:block;margin-top:40px;margin-bottom:40px}#verification-link a{padding:6px 12px;text-decoration:none;border:1px solid #6c6c6cee;color:#000;border-radius:2px}.footer{font-size:12px;color:#999;padding:20px;text-align:center}body{font-family:'Ubuntu',sans-serif;margin:0;padding:0;background-color:#E1F2F8}.container{background-color:#fff;padding:12px;margin:12px;box-shadow:0 0 8px #eae9e985;border-radius:12px}h1,h2,h3,h4,h5,h6{line-height:0}#otp span{width:fit-content;padding:5px 12px;border:1px solid #9b9b9b;border-radius:4px;background-color:#f0f0f06e}
+          `;
+          const htmlbody = `
+          <div class="container">
+        <div class="logo">
+            <img width="58" src="${req.siteInfo.siteLogo}" alt="Logo">
+        </div>
+        <div class="content">
+            <p>Hello, ${username}!</p>
+            <p style="line-height: 4px;"></p>
+            <p>To reset your password for your ${
+              req.siteInfo.siteName
+            } account, we have generated a One-Time Password (link) for you.
+                This (link) is valid for 30 minutes and should be used exclusively for this password reset process.</p>
+
+            <div id="verification-link">
+            <p><a href="${req.protocol}://${req.get(
+            "host"
+          )}/account/new_password?id=${user}&token=${token}" target='_self'>Reset Password</a>
+            </p>
+            <p style="font-size: 14px; color: #999;">This link is vaild for <span style="font-weight: 700;">30Min</span>
+            </p>
+            </div>
+
+            <p style="font-size: 13px;">If you did not request this password reset, Ignore this message.</p>
+            <p style="font-size: 12px; color: #5f5f5f;">Thank you for using ${
+              req.siteInfo.siteName
+            }. We are dedicated
+                to safeguarding your account and your data.</p>
+        </div>
+        <div class="footer">
+            <p>© ${new Date().getFullYear()} ${
+            req.siteInfo.siteName
+          }. All rights reserved.</p>
+        </div>
+    </div>
+          `;
+          await sendMail(email, subject, htmlStyle, htmlbody);
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        }
+      };
       await verifyMail(req, res, user.firstName, user.email, user._id);
       res.render("forgetPass", {
         userid: req.user,
@@ -596,9 +612,17 @@ const paymentSuccessfull = async (req, res) => {
     }
 
     const siteData = req.siteInfo;
-    const siteLogo = siteData.siteLogo !== "" ? siteData.siteLogo : "https://cdn-icons-png.flaticon.com/512/763/763775.png";
-    
-    const invoiceNo = `${uuidv4().slice(0,8)}${new Date().getTime()}`;
+    const siteLogo =
+      siteData.siteLogo !== ""
+        ? siteData.siteLogo
+        : "https://cdn-icons-png.flaticon.com/512/763/763775.png";
+
+    const invoiceNo = `${uuidv4().slice(0, 8)}${new Date().getTime()}`;
+    const invoiceDate = new Date().toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
     const invoice = {
       customize: {
@@ -617,12 +641,8 @@ const paymentSuccessfull = async (req, res) => {
       },
       client: BillerDetail,
       information: {
-        number: invoiceNo,
-        date: new Date().toLocaleDateString("en-IN", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+        number: NewOrder.id,
+        date: invoiceDate,
       },
       products: invoiceProducts,
       "bottom-notice": `Thank you for your order! - ${siteData.siteName}`,
@@ -640,7 +660,7 @@ const paymentSuccessfull = async (req, res) => {
       },
       translate: {
         // "invoice": "FACTUUR",  // Default to 'INVOICE'
-        "number": "Invoice No", // Defaults to 'Number'
+        number: "Invoice No", // Defaults to 'Number'
         // "date": "Datum", // Default to 'Date'
         // "due-date": null, // Defaults to 'Due Date'
         // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
@@ -652,20 +672,15 @@ const paymentSuccessfull = async (req, res) => {
         vat: "GST", // Defaults to 'vat'
       },
     };
-    
+    const orderGenerated = await NewOrder.save();
     const result = await easyinvoice.createInvoice(invoice);
 
     const orderInvoice = new INVOICE({
-      order_id: NewOrder.id,
+      order_id: orderGenerated.id,
       invoice: result.pdf,
     });
+    await orderInvoice.save();
 
-    const invoiceGenerated = await orderInvoice.save();
-
-    if(invoiceGenerated){
-      await NewOrder.save();
-    }
-    const InvoiceDate = new Date().toLocaleDateString("en-IN");
     const productTable = rawProducts
       .map(
         (product) =>
@@ -677,46 +692,73 @@ const paymentSuccessfull = async (req, res) => {
       )
       .join("");
 
-      user_data.cart = [];
-      await user_data.save();
+    user_data.cart = [];
+    await user_data.save();
 
-      const verifyMail = async (username, email, siteData) => {
-        const subject = `Hello ${username}, New Order`;
-        const htmlStyle = `body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}table,th,td{border:1px solid rgba(191,191,191,.299);border-collapse:collapse;padding:2px 8px}tbody tr td{text-align:center}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px}`;
-        const htmlbody = `<div class="container">
-            <div class="logo">
-                <img src="${siteData.siteLogo}" alt="Logo">
-            </div>
-            <div class="content">
-                <h4>Hello, ${username}!</h4>
-                <h3>Thank you for Purchasing</h3>
+    const verifyMail = async (username, email, siteData) => {
+      const subject = `Order Confirmation - Your Purchase with ${siteData.siteName}`;
+      const htmlStyle = `
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');.logo{padding:12px;padding-bottom:0}.footer{font-size:12px;color:#999}body{font-family:'Ubuntu',sans-serif;margin:0;padding:0;background-color:#e1f2f8}.container{background-color:#fff;padding:12px;margin:12px;box-shadow:0 0 8px #eae9e985;border-radius:12px}th:nth-child(1){width:  60%;}th:nth-child(2){width:  10%;}th:nth-child(3){width:  30%;}h1,h2,h3,h4,h5,h6{line-height:0}table,th{font-weight:400}thead tr{border:1px solid #b3b3b3;padding:2px 4px}tbody tr{border:1px solid #f1f1f1}tbody tr td{text-align:center}
+        `;
+      const htmlbody = `
+        <div class="container">
+        <div class="logo">
+            <img width="52" src="${siteData.siteLogo}" alt="Logo">
+        </div>
+        <div class="content">
+            <p style="line-height: 0px;">Dear ${username}</p>
+            <p>We are delighted to confirm your recent purchase with ${
+              siteData.siteName
+            }. Thank you for choosing us for
+                your Product needs.
+            </p>
+            <div style="border: 1px solid #e4e4e4; padding: 8px; border-radius: 8px;box-shadow: 0px 0px 2px #e6e6e690;">
+                <span style="padding: 8px 0; display: block; font-weight: 500;">
+                    Your order details are as follows:
+                </span>
+                <p>Date: <span style="font-weight: 500;">${invoiceDate}</span></p>
                 <div>
-                    <p>Date: ${InvoiceDate}</p>
+                    <p>Shipping Address: <span style="font-weight: 500;">${Address}</span></p>
                 </div>
                 <div>
-                    Your orders:
-                    <table>
+                    Order Summary:
+                    <table style="border-collapse:collapse;width: 100%;">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
+                                <th >Product</th>
+                                <th>Qty</th>
                                 <th>Price</th>
                             </tr>
                         </thead>
                         <tbody>
-                          ${productTable}
+                            ${productTable}
                         </tbody>
                     </table>
                 </div>
+                <p>Payment Method: <span style="font-weight: 500;">Card</span></p>
             </div>
-            <div class="footer">
-                <p>© 2023 Woodbone. All rights reserved.</p>
+            <div>
+                
+                <p>Your purchase is now being processed and will be shipped to your provided address as soon as
+                    possible. You can track the status of your order by logging into your ${
+                      siteData.siteName
+                    } account.
+                </p>
+                <p style="font-size: 12px;">We value your business and are committed to ensuring your satisfaction with
+                    your purchase. Thank you for choosing [Website Name]. We look forward to serving you again in the
+                    future.</p>
             </div>
-          </div>`;
-        await sendMail(email, subject, htmlStyle, htmlbody);
-      };
-      await verifyMail(user_.fullName, user_.email, siteData);
-    
+        </div>
+        <div class="footer">
+            <p style="text-align: center;">© ${new Date().getFullYear()} ${
+        siteData.siteName
+      }. All rights reserved.</p>
+        </div>
+    </div>
+        `;
+      await sendMail(email, subject, htmlStyle, htmlbody);
+    };
+    await verifyMail(user_.fullName, user_.email, siteData);
   } catch (error) {
     console.log(error);
     res.status(400).send("<h1>Internal Server Error</h1>");
@@ -859,7 +901,7 @@ const profileUploader = async (req, res) => {
         req.session.user_id || req.session.admin_id
       );
       if (adminData && adminData.profileImg) {
-        if(adminData.profileImg.path == ""){
+        if (adminData.profileImg.path == "") {
           await USERREGISTERMODEL.findByIdAndUpdate(
             req.session.user_id || req.session.admin_id,
             {
@@ -869,11 +911,11 @@ const profileUploader = async (req, res) => {
               },
             }
           );
-        }else{
+        } else {
           const oldImg = adminData.profileImg.path.replace(s3URL, "");
-        await s3
-          .deleteObject({ Bucket: process.env.S3_BUCKET, Key: oldImg })
-          .promise();
+          await s3
+            .deleteObject({ Bucket: process.env.S3_BUCKET, Key: oldImg })
+            .promise();
         }
         await USERREGISTERMODEL.findByIdAndUpdate(
           req.session.user_id || req.session.admin_id,
@@ -884,7 +926,6 @@ const profileUploader = async (req, res) => {
             },
           }
         );
-        
       }
       req.flash("alert", "Profile Updated");
       res.redirect("/admin/profile#adminprofile");
@@ -897,7 +938,7 @@ const profileUploader = async (req, res) => {
 
 const updateSiteInfo = async (req, res) => {
   try {
-    const isSiteInfo = await SITEINFO.findOne({}).sort({timeStamp: -1});
+    const isSiteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 });
     const siteName = req.body.siteName;
     const siteLogo = req.file;
     const siteUrl = req.body.siteURL;
@@ -910,10 +951,12 @@ const updateSiteInfo = async (req, res) => {
     const siteTiming = req.body.siteTiming;
     const siteMail = req.body.siteMail;
 
-    if(isSiteInfo){
-      if(siteLogo){
-        const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, '');
-        await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath }).promise();
+    if (isSiteInfo) {
+      if (siteLogo) {
+        const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, "");
+        await s3
+          .deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath })
+          .promise();
         await isSiteInfo.updateOne({
           siteName: siteName,
           siteLogo: `${s3URL}${siteLogo.key}`,
@@ -925,11 +968,11 @@ const updateSiteInfo = async (req, res) => {
             country: country,
           },
           siteDescription: siteDescription,
-          siteTiming:siteTiming,
-          siteMail:siteMail,
-          contactInfo:contactInfo,
+          siteTiming: siteTiming,
+          siteMail: siteMail,
+          contactInfo: contactInfo,
         });
-      }else{
+      } else {
         const siteLogoPath = isSiteInfo.siteLogo;
         await isSiteInfo.updateOne({
           siteName: siteName,
@@ -942,13 +985,13 @@ const updateSiteInfo = async (req, res) => {
             country: country,
           },
           siteDescription: siteDescription,
-          siteTiming:siteTiming,
-          siteMail:siteMail,
-          contactInfo:contactInfo,
+          siteTiming: siteTiming,
+          siteMail: siteMail,
+          contactInfo: contactInfo,
         });
       }
-    }else{
-      if(siteLogo){
+    } else {
+      if (siteLogo) {
         const siteInfo = new SITEINFO({
           siteName: siteName,
           siteLogo: `${s3URL}${siteLogo.key}`,
@@ -960,12 +1003,12 @@ const updateSiteInfo = async (req, res) => {
             country: country,
           },
           siteDescription: siteDescription,
-          siteTiming:siteTiming,
-          siteMail:siteMail,
-          contactInfo:contactInfo,
+          siteTiming: siteTiming,
+          siteMail: siteMail,
+          contactInfo: contactInfo,
         });
         await siteInfo.save();
-      }else{
+      } else {
         const siteInfo = new SITEINFO({
           siteName: siteName,
           siteLogo: "",
@@ -977,9 +1020,9 @@ const updateSiteInfo = async (req, res) => {
             country: country,
           },
           siteDescription: siteDescription,
-          siteTiming:siteTiming,
-          siteMail:siteMail,
-          contactInfo:contactInfo,
+          siteTiming: siteTiming,
+          siteMail: siteMail,
+          contactInfo: contactInfo,
         });
         await siteInfo.save();
       }

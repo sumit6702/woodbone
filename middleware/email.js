@@ -1,14 +1,18 @@
 import nodemailer from "nodemailer";
+import "dotenv/config";
+const coMail = process.env.CO_MAIL;
+const coPass = process.env.CO_MAIL_PASS;
 const sendMail = async (email, subject, htmlStyle,htmlbody) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
+      pool: true,
+      port: 465,
+      secure: true,
       requireTLS: true,
       auth: {
-        user: "raglothbrokking@gmail.com",
-        pass: "xweqwevzihptiahr",
+        user: coMail,
+        pass: coPass,
       },
     });
 
@@ -37,7 +41,7 @@ const sendMail = async (email, subject, htmlStyle,htmlbody) => {
       if (error) {
         console.log(error.message);
       } else {
-        console.log("Email has been sent");
+        console.log('Email Deliverd!');
       }
     });
   } catch (error) {

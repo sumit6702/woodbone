@@ -486,24 +486,6 @@ const transcationDBcontroller = async (req, res) => {
   });
 };
 
-const statisticsDBcontroller = async (req, res) => {
-  const admin = await USERREGISTERMODEL.findOne({
-    _id: req.session.admin_id,
-    role: "admin",
-  });
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-  const orders = await ORDERS.find({
-    $expr: {
-      $and: [
-        { $eq: [{ $year: "$createdAt" }, currentYear] },
-        { $eq: [{ $month: "$createdAt" }, currentMonth] },
-      ],
-    },
-  });
-  res.render("ADstatistics", { admin, orders, siteInfo: req.siteInfo });
-};
-
 const uploadPDcontroller = async (req, res) => {
   try {
     const pd_name = req.body.pd_name;
@@ -594,7 +576,6 @@ export {
   customerDBcontroller,
   loginActivityDBcontroller,
   transcationDBcontroller,
-  statisticsDBcontroller,
   admincontroller,
   uploadPDcontroller,
   deleteloginActcontroller,

@@ -26,10 +26,10 @@
     "googleapis": "latest",
     "ip": "latest",
     "jsonwebtoken": "latest",
-    "mime": "^3.0.0",
+    "mime": "latest",
     "moment": "latest",
     "mongoose": "latest",
-    "multer": "^1.4.2",
+    "multer": "latest",
     "multer-s3": "^2.9.0",
     "node-cache": "latest",
     "nodemailer": "latest",
@@ -37,6 +37,7 @@
     "nouislider": "latest",
     "quill-delta-to-html": "latest",
     "stripe": "latest",
+    "useragent": "latest",
     "uuid": "latest"
   },
   "devDependencies": {
@@ -53,6 +54,6 @@
     "devapp": "nodemon app.js"
   },
   "engines": {
-    "node": "18.18.0"
+    "node": "latest"
   }
 }

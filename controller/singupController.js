@@ -2,6 +2,8 @@ import USERREGISTERMODEL from "../model/UserAccount.js";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import USERDATA from "../model/UserDataSchema.js";
+import sendMail from "../middleware/email.js";
+
 const singupcontroller = async (req, res) => {
   try {
     res.status(200).render("singup", {
@@ -11,75 +13,6 @@ const singupcontroller = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message + "at SingupController");
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-//email Verification!
-const verifyMail = async (req, res, name, email, id) => {
-  try {
-    const transpoter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: "raglothbrokking@gmail.com",
-        pass: "xweqwevzihptiahr",
-      },
-    });
-
-    const mailinfo = {
-      from: '"Woodbone" <woodbone@mail.com>',
-      to: email,
-      subject: `Hello ${name}, Verification Mail.....`,
-      text: "<p>Woodbone Verification</p>",
-      html: `
-      <!DOCTYPE html>
-      <html>
-      
-      <head>
-        <style>
-      body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;margin:0;padding:0}.container{padding:20px}.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}.verification-link{margin-top:40px}.verification-link a{background-color:#000;padding:12px 22px;text-decoration:none;text-transform:uppercase;color:#fff;box-shadow:2px 2px 2px #00000048}.footer{margin-top:20px;font-size:12px;color:#999;padding:20px;}
-        </style>
-      </head>
-      
-      <body>
-        <div class="container">
-          <div class="logo">
-            <img src="${req.siteInfo.siteLogo}" alt="Logo">
-          </div>
-          <div class="content">
-            <h2>Hello, ${name}!</h2>
-            <p>
-              Thank you for registering with <span style="font-weight: 600;">Woodbone</span>. 
-              <br> 
-              before being able to use your account you need to verify that this is your email address by, Clicking below:
-            </p>
-            <p class="verification-link"><a href="${req.protocol}://${req.get(
-        "host"
-      )}/singup/verify?id=${id}" target='_self'>Verify Now</a></p>
-            <p style="margin: 42px 0;">Thanks! – The <span style="font-weight: 600;">Woodbone</span> team</p>
-          </div>
-          <div class="footer">
-            <p>© 2023 Woodbone. All rights reserved.</p>
-          </div>
-        </div>
-      </body>
-      
-      </html>
-      `,
-    };
-
-    transpoter.sendMail(mailinfo, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email has been send" + info.response);
-      }
-    });
-  } catch (error) {
-    console.log(error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -111,6 +44,40 @@ const newsingupController = async (req, res) => {
     } else {
       const user = await newuser.save();
       if (user) {
+        const verifyMail = async (req, res, name, email, id) => {
+          try {
+            const subject = `Verify Your Email Address for ${req.siteInfo.siteName}`;
+            const htmlStyle = `
+            @import "https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap";.logo{padding:20px;padding-bottom:0}.logo h1{font-family:cursive;font-weight:800}.content{padding:20px;padding-top:0}#verification-link{margin-top:40px}#verification-link a{text-decoration:none;color:#000;border:1px solid #000;padding:2px 6px;box-shadow:0 0 8px #e8e8e848;border-radius:3px}.footer{font-size:12px;color:#999}body{font-family:'Ubuntu',sans-serif;margin:0;padding:0;background-color:#E1F2F8}.container{background-color:#fff;padding:12px;margin:12px;box-shadow:0 0 8px #eae9e985;border-radius:12px}h1,h2,h3,h4,h5,h6{line-height:0}
+            `;
+            const htmlbody = `
+            <div class="container">
+            <div class="logo">
+              <img width="58" src="${req.siteInfo.siteLogo}" alt="Logo">
+            </div>
+            <div class="content">
+              <p>Dear ${name}</p>
+              <p>
+                Thank you for signing up for ${req.siteInfo.siteName}. To complete the registration process and access your account, please verify your email address by clicking the link below:
+              </p>
+              <p id="verification-link">
+                <span>Verify Your Email Address:</span>
+                <a href="${req.protocol}://${req.get("host")}/singup/verify?id=${id}" target='_self'>Verify Now</a>
+            </p>
+            <p style="margin-top: 42px;">If you have any questions or encounter any issues, please feel free to contact our support team at Customer Support Email or Phone Number. We're here to help.</p>
+              <p style="font-size: 14px; color: #606060;">Thank you for choosing ${req.siteInfo.siteName}. We look forward to having you as part of our community.</p>
+            </div>
+            <div class="footer">
+              <p style="text-align: center;">© ${new Date().getFullYear()} ${req.siteInfo.siteName}. All rights reserved.</p>
+            </div>
+        </div>
+            `;
+            await sendMail(email, subject, htmlStyle, htmlbody);
+          } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          }
+        };
         const mailedd = await verifyMail(
           req,
           res,

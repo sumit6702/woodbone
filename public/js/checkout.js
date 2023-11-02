@@ -106,7 +106,6 @@
 
   // Fetches the payment intent status
   async function checkStatus() {
-    console.log()
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );

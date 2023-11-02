@@ -52,6 +52,9 @@
               <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
                 Location
               </th>
+              <th class="py-2 w-1/4 text-gray-500 md:font-light text-sm font-medium">
+                userAgent
+              </th>
             </tr>
           </thead>
           <tbody class="w-full text-sm">
@@ -76,8 +79,7 @@
                 </div>
               </td>
               <td class="py-4">
-                <%= (login.timestamp.toLocaleString("en-IN", { 
-                              year: 'numeric' , month: 'numeric' , day: 'numeric'  }))%>
+                <%= (login.timestamp.toLocaleString("en-IN", { year: 'numeric' , month: 'short' , day: 'numeric'  })).replaceAll(' ', '-')%>
               </td>
               <td class="py-4">
                 <%= login.ipAddress %>
@@ -93,6 +95,9 @@
               <% } %>
               <td class="py-4">
                 <%= login.country %>
+              </td>
+              <td class="py-4 pe-3">
+                <%= login.userAgent %>
               </td>
             </tr>
             <% } %>

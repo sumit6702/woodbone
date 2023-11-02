@@ -73,7 +73,7 @@ function productHoverEffect() {
   );
 }
 
-/* ------------------------- Login page Functionalty ------------------------ */
+/* ------------------------- Login & Singup page Functionalty ------------------------ */
 $(function () {
   let loginForm = $("#loginForm input");
   let singupForm = $("#singupForm input");
