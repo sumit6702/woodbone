@@ -105,6 +105,39 @@
           </tbody>
         </table>
       </form>
+      <div class="w-fit px-4 py-1 mx-auto">
+        <% if (currentPage > 1) { %>
+        <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: currentPage - 1 }) %>">Previous</a>
+        <% } %>
+
+        <% const maxVisiblePages = 10;%>
+
+        <% const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2)); %>
+        <% const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1); %>
+
+        <% if (startPage > 1) { %>
+        <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: 1 }) %>">1</a>
+        <% if (startPage > 2) { %>
+        <span>...</span>
+        <% } %>
+        <% } %>
+
+        <% for (let i = startPage; i <= endPage; i++) { %>
+        <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: i }) %>" <%= i === currentPage ? 'class="active"' : '' %>><%= i %></a>
+        <% } %>
+
+        <% if (endPage < totalPages) { %>
+        <% if (endPage < totalPages - 1) { %>
+        <span>...</span>
+        <% } %>
+        <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: totalPages }) %>"><%= totalPages %></a>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+        <a class="mx-1" href="?<%= new URLSearchParams({ ...currentQuery, page: currentPage + 1 }) %>">Next</a>
+        <% } %>
+
+      </div>
     </section>
   </main>
   <script>

@@ -51,7 +51,7 @@
   "scripts": {
     "start": "node app.js",
     "build-css": "postcss public/css/styles.css -o public/build/styles.css --config ./postcss.config.mjs",
-    "devapp": "nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "engines": {
     "node": "latest"

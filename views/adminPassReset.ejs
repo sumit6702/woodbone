@@ -31,7 +31,12 @@
   <% } %>
   <section class="md:p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <div class="my-6">
-      <h1 class="text-4xl text-blue-300 font-bold text-center">LOGO</h1>
+      <img class="py-1 px-2 mx-auto" width="64" src="
+        <% if (siteInfo.siteLogo === "") { %>
+          https://cdn-icons-png.flaticon.com/512/763/763775.png 
+        <% } else { %>
+          <%= siteInfo.siteLogo %>
+        <% } %>" alt="Logo">
     </div>
     <div class="bg-white p-4 md:p-12 rounded-lg shadow-md">
       <form action="/admin/login/reset_Password" id="reset_Password" method="post" novalidate>

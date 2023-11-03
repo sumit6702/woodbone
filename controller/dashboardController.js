@@ -4,9 +4,11 @@ import PRODUCTS from "../model/productSchema.js";
 import ORDERS from "../model/orderSchema.js";
 import USERDATA from "../model/UserDataSchema.js";
 import USERREGISTERMODEL from "../model/UserAccount.js";
+import INVOICE from "../model/InvoiceSchema.js";
 import { query } from "express";
 import pagination from "../middleware/pagination.js";
-import aws from 'aws-sdk';
+import aws from "aws-sdk";
+import USERADDRESS from "../model/UserAddress.js";
 aws.config.update({
   accessKeyId: process.env.S3_ACCESSKEY,
   secretAccessKey: process.env.S3_SECRECTKEY,
@@ -16,7 +18,7 @@ const s3 = new aws.S3();
 const s3URL = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
 
 const admincontroller = (req, res) => {
-  res.render("adminLogin");
+  res.render("adminLogin", {siteInfo: req.siteInfo});
 };
 
 const dashboardcontroller = async (req, res) => {
@@ -254,7 +256,9 @@ const deleteproduct = async (req, res) => {
     const imagePaths = deleteitem.Image.map((img) => img.path);
     for (const imagePath of imagePaths) {
       const s3Key = imagePath.replace(s3URL, "");
-      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: s3Key }).promise();
+      await s3
+        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: s3Key })
+        .promise();
     }
     const deleteProduct = await PRODUCTS.findByIdAndDelete(id);
     if (deleteProduct) {
@@ -274,10 +278,17 @@ const singleimageremover = async (req, res) => {
   try {
     const { productId, imageId, index } = req.params;
     const product = await PRODUCTS.findById(productId);
-    
-    if (product && product.Image && index >= 0 && index < product.Image.length) {
-      const prodcutPath = product.Image[index].path.replace(s3URL, '');
-      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: prodcutPath }).promise();
+
+    if (
+      product &&
+      product.Image &&
+      index >= 0 &&
+      index < product.Image.length
+    ) {
+      const prodcutPath = product.Image[index].path.replace(s3URL, "");
+      await s3
+        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: prodcutPath })
+        .promise();
       product.Image.splice(index, 1);
       await product.save();
       const url = req.session.redirectPage;
@@ -304,7 +315,7 @@ const singleimageedit = async (req, res) => {
     }
 
     const imageObject = product.Image[currentImgIndex];
-    const previousImagePath = imageObject.path.replace(s3URL, '');
+    const previousImagePath = imageObject.path.replace(s3URL, "");
 
     // Assign the new values to imageObject
     imageObject.filename = uploadedFile.filename;
@@ -314,7 +325,9 @@ const singleimageedit = async (req, res) => {
     const imgAdded = await product.save();
 
     if (imgAdded) {
-       await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: previousImagePath }).promise();
+      await s3
+        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: previousImagePath })
+        .promise();
       const url = req.session.redirectPage;
       delete req.session.redirectPage;
       return res.redirect(url);
@@ -439,7 +452,17 @@ const loginActivityDBcontroller = async (req, res) => {
     role: "admin",
   });
   const logins = await LOGINATTEMPT.find({}).sort({ timestamp: -1 });
-  res.render("ADloginactivity", { logins, admin, siteInfo: req.siteInfo });
+  const pagiD = pagination(req, logins);
+  res.render("ADloginactivity", { 
+    logins: pagiD.items,
+    currentPage: pagiD.currentPage,
+    totalPages: pagiD.totalPages,
+    totalProducts: pagiD.totalProducts,
+    itemsPerPage: pagiD.itemsPerPage,
+    currentQuery: req.query,
+    admin, 
+    siteInfo: req.siteInfo 
+  });
 };
 
 const deleteloginActcontroller = async (req, res) => {
@@ -511,7 +534,7 @@ const uploadPDcontroller = async (req, res) => {
     }
     const lastProduct =
       (await PRODUCTS.findOne().sort({ timestamp: -1 })) || null;
-  
+
     let counter;
     if (lastProduct && lastProduct.productId) {
       const lastFourDigits = lastProduct.productId.slice(-4);
@@ -519,14 +542,14 @@ const uploadPDcontroller = async (req, res) => {
     } else {
       counter = 0; // Assuming the initial counter starts at 0
     }
-  
+
     const generateSequentialUuid = () => {
       counter++;
       const uuid = "wdbonepd-";
       const sequenceUuid = uuid + counter.toString().padStart(4, "0");
       return sequenceUuid;
     };
-  
+
     const newProduct = new PRODUCTS({
       productId: generateSequentialUuid(),
       name: pd_name,
@@ -570,6 +593,74 @@ const adminProfileDBcontroller = async (req, res) => {
   res.render("ADprofile", { admin, siteInfo: req.siteInfo });
 };
 
+const customerInfo = async (req, res) => {
+  try {
+    const admin = await USERREGISTERMODEL.findOne({
+      _id: req.session.admin_id,
+      role: "admin",
+    });
+    const customers = await USERREGISTERMODEL.find({ role: "user" }).sort({
+      createdAt: -1,
+    });
+    const customerIds = customers.map((customer) => customer.id);
+    const customerAdd = await USERADDRESS.find({}).sort({ createdAt: -1 });
+    const defaultAdd = [];
+    customerIds.forEach((id) => {
+      const mainAdd = customerAdd.find((mainAdd) => mainAdd.userid === id);
+      if (mainAdd) {
+        const defAdd = mainAdd.address.find((defAdd) => defAdd.default === true);
+        defaultAdd.push(defAdd || {});
+      } else {
+        defaultAdd.push({});
+      }
+    });
+  
+    const pagiD = pagination(req, customers);
+    res.render("ADcustomer", {
+      admin,
+      siteInfo: req.siteInfo,
+      customers : pagiD.items,
+      currentPage: pagiD.currentPage,
+      totalPages: pagiD.totalPages,
+      totalProducts: pagiD.totalProducts,
+      itemsPerPage: pagiD.itemsPerPage,
+      currentQuery: req.query,
+      defaultAdd,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const removeUser = async(req,res)=>{
+  try {
+    const userId = req.params.id;
+
+    const userAddress = await USERADDRESS.findOne({userid:userId});
+    const orders = await ORDERS.find({user:userId});
+    const Invoice = await INVOICE.find({user:userId});
+
+    if(userAddress){
+      await userAddress.deleteOne();
+    }
+    if(orders){
+      await ORDERS.deleteMany({user:userId});
+    }
+    if(Invoice){
+      await INVOICE.deleteMany({user:userId});
+    }
+
+    await USERREGISTERMODEL.deleteOne({_id:userId});
+    await USERDATA.deleteOne({user:userId});
+    
+    res.redirect("/admin/customers");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export {
   dashboardcontroller,
   productDBcontroller,
@@ -586,4 +677,6 @@ export {
   singleimageremover,
   singleimageedit,
   updatenewProduct,
+  customerInfo,
+  removeUser
 };

@@ -2,84 +2,172 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    <script src="/js/jquery.js"></script>
-    <link rel="stylesheet" href="/build/styles.css">
-    <script src="https://kit.fontawesome.com/9966fbdd3d.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <script src="/js/jquery.js"></script>
+  <link rel="stylesheet" href="/build/styles.css">
+  <script src="https://kit.fontawesome.com/9966fbdd3d.js" crossorigin="anonymous"></script>
 
 </head>
 
 <body class="bg-blue-50">
-    <% if (messages.adminalert && messages.adminalert.length> 0) { %>
-        <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 my-3 shadow-md absolute right-0"
-            role="alert">
-            <div class="flex">
-                <div class="py-1">
-                    <svg class="fill-current h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <path
-                            d="M2.06 16.75l8.294-14.697A1 1 0 0111 2h8a1 1 0 01.95 1.312l-8.294 14.697A1 1 0 019 19H3a1 1 0 01-.95-1.312zM10 16a1 1 0 100-2 1 1 0 000 2zm0-4a1 1 0 100-2 1 1 0 000 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="font-bold">
-                        <%= messages.adminalert[0] %>
-                    </p>
-                </div>
-            </div>
+  <% if (messages.adminalert && messages.adminalert.length> 0) { %>
+  <div class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 my-3 shadow-md absolute right-0" role="alert">
+    <div class="flex">
+      <div class="py-1">
+        <svg class="fill-current h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path d="M2.06 16.75l8.294-14.697A1 1 0 0111 2h8a1 1 0 01.95 1.312l-8.294 14.697A1 1 0 019 19H3a1 1 0 01-.95-1.312zM10 16a1 1 0 100-2 1 1 0 000 2zm0-4a1 1 0 100-2 1 1 0 000 2z" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-bold">
+          <%= messages.adminalert[0] %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <section class="md:p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div class="my-6">
+      <img class="py-1 px-2 mx-auto" width="64" src="
+        <% if (siteInfo.siteLogo === "") { %>
+          https://cdn-icons-png.flaticon.com/512/763/763775.png 
+        <% } else { %>
+          <%= siteInfo.siteLogo %>
+        <% } %>" alt="Logo">
+    </div>
+    <div class="bg-white p-4 md:p-12 rounded-lg shadow-md">
+      <form action="" id="admin-Form" method="post" novalidate>
+        <div class="pb-6 block">
+          <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
+          <p class="text-center text-gray-400">Please enter your credentials to log in.</p>
         </div>
-        <% } %>
-            <section class="md:p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div class="my-6">
-                    <h1 class="text-4xl text-blue-300 font-bold text-center">LOGO</h1>
-                </div>
-                <div class="bg-white p-4 md:p-12 rounded-lg shadow-md">
-                    <form action="" id="admin-Form" method="post" novalidate>
-                        <div class="pb-6 block">
-                            <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
-                            <p class="text-center text-gray-400">Please enter your credentials to log in.</p>
-                        </div>
-                        <div class="my-3">
-                            <label for="adminmail"></label>
-                            <div class="relative">
-                                <input
-                                    class="border rounded-md w-72 lg:w-80 border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm"
-                                    placeholder="Enter your email" type="email" name="adminmail" id="adminmail">
-                                <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
-                                    <i class="fa-solid fa-envelope text-blue-400"></i>
-                                </div>
-                            </div>
-                            <span class="text-red-400 font-semibold hidden" id="adminmailerr">Email is empty</span>
-                        </div>
-                        <div class="my-3">
-                            <label for="adminpass"></label>
-                            <div class="relative">
-                                <input
-                                    class="border rounded-md w-72 lg:w-80 border-blue-200 focus:outline-none p-2 ps-8 placeholder:font-medium placeholder:text-sm"
-                                    placeholder="Enter your password" type="password" name="adminpass" id="adminpass">
-                                <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
-                                    <i class="fa-solid fa-lock text-blue-400"></i>
-                                </div>
-                            </div>
-                            <span class="text-red-400 font-semibold hidden" id="adminpasserr">Password is empty</span>
-                        </div>
-                        <div class="mt-3">
-                            <button
-                                class="px-6 w-full rounded-md mx-auto py-1 border-2 bg-blue-400 border-blue-400 text-white text-lg font-semibold"
-                                type="submit">Sign in</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="my-6 text-center">
-                    <p>Forgot password? <a class="text-blue-600" href="/admin/login/reset_Password">Reset Password</a></p>
-                </div>
-            </section>
-            <script>
-                function _0x531f(_0xadc9fa, _0x3f27e0) { const _0x4e2404 = _0x3336(); return _0x531f = function (_0x45efc9, _0x4ead1b) { _0x45efc9 = _0x45efc9 - 0x96; let _0x4e8bca = _0x4e2404[_0x45efc9]; return _0x4e8bca; }, _0x531f(_0xadc9fa, _0x3f27e0); } (function (_0x432053, _0x46beb0) { const _0xb1b9a9 = _0x531f, _0x3be7e8 = _0x432053(); while (!![]) { try { const _0x24470d = parseInt(_0xb1b9a9(0xac)) / 0x1 + parseInt(_0xb1b9a9(0xbd)) / 0x2 + parseInt(_0xb1b9a9(0x99)) / 0x3 + -parseInt(_0xb1b9a9(0xa4)) / 0x4 * (parseInt(_0xb1b9a9(0xbf)) / 0x5) + parseInt(_0xb1b9a9(0xaa)) / 0x6 + -parseInt(_0xb1b9a9(0xa9)) / 0x7 + parseInt(_0xb1b9a9(0xb3)) / 0x8 * (-parseInt(_0xb1b9a9(0xad)) / 0x9); if (_0x24470d === _0x46beb0) break; else _0x3be7e8['push'](_0x3be7e8['shift']()); } catch (_0x9b4ce3) { _0x3be7e8['push'](_0x3be7e8['shift']()); } } }(_0x3336, 0x6c987)); const _0x3950f5 = (function () { let _0x4c36ea = !![]; return function (_0x720ec1, _0x21c36c) { const _0x3a22f6 = _0x4c36ea ? function () { const _0x176e74 = _0x531f; if (_0x21c36c) { const _0x551217 = _0x21c36c[_0x176e74(0xaf)](_0x720ec1, arguments); return _0x21c36c = null, _0x551217; } } : function () { }; return _0x4c36ea = ![], _0x3a22f6; }; }()), _0x592dab = _0x3950f5(this, function () { const _0x26a893 = _0x531f; return _0x592dab[_0x26a893(0xa1)]()[_0x26a893(0x9c)]('(((.+)+)+)+$')[_0x26a893(0xa1)]()['constructor'](_0x592dab)[_0x26a893(0x9c)](_0x26a893(0xb5)); }); _0x592dab(); function _0x3336() { const _0x310b6b = ['1820859liXgZP', 'off', 'length', 'search', '{}.constructor(\x22return\x20this\x22)(\x20)', 'border-green-200', '#adminpasserr', '#admin-Form', 'toString', 'hidden', 'console', '588yffNAc', 'trace', 'warn', 'table', 'return\x20(function()\x20', '1618736aWzedl', '2795718Myknej', 'preventDefault', '326162SFnxpd', '1173753xRTaSJ', 'error', 'apply', 'val', 'removeClass', 'border-red-400', '16vfMbSj', 'exception', '(((.+)+)+)+$', 'submit', 'log', 'addClass', 'constructor', 'bind', '__proto__', 'test', '204896KtdBgy', '#adminmailerr', '19205JZXRjr', 'Email\x20is\x20empty', '#adminmail', 'text', 'border-blue-200']; _0x3336 = function () { return _0x310b6b; }; return _0x3336(); } const _0x4ead1b = (function () { let _0x5e4dbc = !![]; return function (_0x5c14b6, _0x198558) { const _0x5dcd79 = _0x5e4dbc ? function () { if (_0x198558) { const _0x7cb328 = _0x198558['apply'](_0x5c14b6, arguments); return _0x198558 = null, _0x7cb328; } } : function () { }; return _0x5e4dbc = ![], _0x5dcd79; }; }()), _0x45efc9 = _0x4ead1b(this, function () { const _0x13f26a = _0x531f; let _0x1ce6a1; try { const _0x4db160 = Function(_0x13f26a(0xa8) + _0x13f26a(0x9d) + ');'); _0x1ce6a1 = _0x4db160(); } catch (_0x145a79) { _0x1ce6a1 = window; } const _0x5044a8 = _0x1ce6a1[_0x13f26a(0xa3)] = _0x1ce6a1[_0x13f26a(0xa3)] || {}, _0x4f7961 = [_0x13f26a(0xb7), _0x13f26a(0xa6), 'info', _0x13f26a(0xae), _0x13f26a(0xb4), _0x13f26a(0xa7), _0x13f26a(0xa5)]; for (let _0x282b23 = 0x0; _0x282b23 < _0x4f7961[_0x13f26a(0x9b)]; _0x282b23++) { const _0x19ae39 = _0x4ead1b[_0x13f26a(0xb9)]['prototype']['bind'](_0x4ead1b), _0x50b1dc = _0x4f7961[_0x282b23], _0xb6ab = _0x5044a8[_0x50b1dc] || _0x19ae39; _0x19ae39[_0x13f26a(0xbb)] = _0x4ead1b[_0x13f26a(0xba)](_0x4ead1b), _0x19ae39['toString'] = _0xb6ab[_0x13f26a(0xa1)][_0x13f26a(0xba)](_0xb6ab), _0x5044a8[_0x50b1dc] = _0x19ae39; } }); _0x45efc9(), $(function () { const _0x6c5aee = _0x531f; $(_0x6c5aee(0xa0))['on'](_0x6c5aee(0xb6), function (_0x5cf3ed) { const _0xb68b7a = _0x6c5aee; _0x5cf3ed[_0xb68b7a(0xab)](); let _0x4d9c27 = $(_0xb68b7a(0x96)), _0x5dcfa4 = $('#adminpass'); const _0x2ac4da = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/; let _0x4a042f = !![]; if (_0x4d9c27['val']() === '') _0x4d9c27['removeClass']('border-blue-200'), _0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))['removeClass'](_0xb68b7a(0xa2)), _0x4a042f = ![]; else !_0x2ac4da[_0xb68b7a(0xbc)](_0x4d9c27['val']()) ? (_0x4d9c27[_0xb68b7a(0xb1)](_0xb68b7a(0x98)), _0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))[_0xb68b7a(0xb1)]('hidden'), $(_0xb68b7a(0xbe))[_0xb68b7a(0x97)]('Email\x20is\x20not\x20Correct!')) : (_0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0x9e)), _0x4d9c27[_0xb68b7a(0xb1)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))[_0xb68b7a(0x97)](_0xb68b7a(0xc0)), $(_0xb68b7a(0xbe))['addClass'](_0xb68b7a(0xa2))); _0x5dcfa4[_0xb68b7a(0xb0)]() === '' ? (_0x5dcfa4[_0xb68b7a(0xb1)](_0xb68b7a(0x98)), _0x5dcfa4[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0x9f))[_0xb68b7a(0xb1)]('hidden'), _0x4a042f = ![]) : (_0x5dcfa4[_0xb68b7a(0xb8)](_0xb68b7a(0x9e)), _0x5dcfa4[_0xb68b7a(0xb1)](_0xb68b7a(0xb2)), $('#adminpasserr')[_0xb68b7a(0xb8)]('hidden')), _0x4a042f && setTimeout(function () { const _0x3d17e7 = _0xb68b7a; $('#admin-Form')[_0x3d17e7(0x9a)]('submit'), $(_0x3d17e7(0xa0))[_0x3d17e7(0xb6)](); }, 0x320); }); });
-            </script>
+        <div class="my-3">
+          <label for="adminmail"></label>
+          <div class="relative">
+            <input class="border rounded-md w-72 lg:w-80 border-blue-200 focus:outline-none p-2 ps-8  placeholder:font-medium placeholder:text-sm" placeholder="Enter your email" type="email" name="adminmail" id="adminmail">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-envelope text-blue-400"></i>
+            </div>
+          </div>
+          <span class="text-red-400 font-semibold hidden" id="adminmailerr">Email is empty</span>
+        </div>
+        <div class="my-3">
+          <label for="adminpass"></label>
+          <div class="relative">
+            <input class="border rounded-md w-72 lg:w-80 border-blue-200 focus:outline-none p-2 ps-8 placeholder:font-medium placeholder:text-sm" placeholder="Enter your password" type="password" name="adminpass" id="adminpass">
+            <div class="absolute top-1/2 transform -translate-y-1/2 px-2">
+              <i class="fa-solid fa-lock text-blue-400"></i>
+            </div>
+          </div>
+          <span class="text-red-400 font-semibold hidden" id="adminpasserr">Password is empty</span>
+        </div>
+        <div class="mt-3">
+          <button class="px-6 w-full rounded-md mx-auto py-1 border-2 bg-blue-400 border-blue-400 text-white text-lg font-semibold" type="submit">Sign in</button>
+        </div>
+      </form>
+    </div>
+    <div class="my-6 text-center">
+      <p>Forgot password? <a class="text-blue-600" href="/admin/login/reset_Password">Reset Password</a></p>
+    </div>
+  </section>
+  <script>
+    function _0x531f(_0xadc9fa, _0x3f27e0) {
+      const _0x4e2404 = _0x3336();
+      return _0x531f = function(_0x45efc9, _0x4ead1b) {
+        _0x45efc9 = _0x45efc9 - 0x96;
+        let _0x4e8bca = _0x4e2404[_0x45efc9];
+        return _0x4e8bca;
+      }, _0x531f(_0xadc9fa, _0x3f27e0);
+    }(function(_0x432053, _0x46beb0) {
+      const _0xb1b9a9 = _0x531f,
+        _0x3be7e8 = _0x432053();
+      while (!![]) {
+        try {
+          const _0x24470d = parseInt(_0xb1b9a9(0xac)) / 0x1 + parseInt(_0xb1b9a9(0xbd)) / 0x2 + parseInt(_0xb1b9a9(0x99)) / 0x3 + -parseInt(_0xb1b9a9(0xa4)) / 0x4 * (parseInt(_0xb1b9a9(0xbf)) / 0x5) + parseInt(_0xb1b9a9(0xaa)) / 0x6 + -parseInt(_0xb1b9a9(0xa9)) / 0x7 + parseInt(_0xb1b9a9(0xb3)) / 0x8 * (-parseInt(_0xb1b9a9(0xad)) / 0x9);
+          if (_0x24470d === _0x46beb0) break;
+          else _0x3be7e8['push'](_0x3be7e8['shift']());
+        } catch (_0x9b4ce3) {
+          _0x3be7e8['push'](_0x3be7e8['shift']());
+        }
+      }
+    }(_0x3336, 0x6c987));
+    const _0x3950f5 = (function() {
+        let _0x4c36ea = !![];
+        return function(_0x720ec1, _0x21c36c) {
+          const _0x3a22f6 = _0x4c36ea ? function() {
+            const _0x176e74 = _0x531f;
+            if (_0x21c36c) {
+              const _0x551217 = _0x21c36c[_0x176e74(0xaf)](_0x720ec1, arguments);
+              return _0x21c36c = null, _0x551217;
+            }
+          } : function() {};
+          return _0x4c36ea = ![], _0x3a22f6;
+        };
+      }()),
+      _0x592dab = _0x3950f5(this, function() {
+        const _0x26a893 = _0x531f;
+        return _0x592dab[_0x26a893(0xa1)]()[_0x26a893(0x9c)]('(((.+)+)+)+$')[_0x26a893(0xa1)]()['constructor'](_0x592dab)[_0x26a893(0x9c)](_0x26a893(0xb5));
+      });
+    _0x592dab();
+
+    function _0x3336() {
+      const _0x310b6b = ['1820859liXgZP', 'off', 'length', 'search', '{}.constructor(\x22return\x20this\x22)(\x20)', 'border-green-200', '#adminpasserr', '#admin-Form', 'toString', 'hidden', 'console', '588yffNAc', 'trace', 'warn', 'table', 'return\x20(function()\x20', '1618736aWzedl', '2795718Myknej', 'preventDefault', '326162SFnxpd', '1173753xRTaSJ', 'error', 'apply', 'val', 'removeClass', 'border-red-400', '16vfMbSj', 'exception', '(((.+)+)+)+$', 'submit', 'log', 'addClass', 'constructor', 'bind', '__proto__', 'test', '204896KtdBgy', '#adminmailerr', '19205JZXRjr', 'Email\x20is\x20empty', '#adminmail', 'text', 'border-blue-200'];
+      _0x3336 = function() {
+        return _0x310b6b;
+      };
+      return _0x3336();
+    }
+    const _0x4ead1b = (function() {
+        let _0x5e4dbc = !![];
+        return function(_0x5c14b6, _0x198558) {
+          const _0x5dcd79 = _0x5e4dbc ? function() {
+            if (_0x198558) {
+              const _0x7cb328 = _0x198558['apply'](_0x5c14b6, arguments);
+              return _0x198558 = null, _0x7cb328;
+            }
+          } : function() {};
+          return _0x5e4dbc = ![], _0x5dcd79;
+        };
+      }()),
+      _0x45efc9 = _0x4ead1b(this, function() {
+        const _0x13f26a = _0x531f;
+        let _0x1ce6a1;
+        try {
+          const _0x4db160 = Function(_0x13f26a(0xa8) + _0x13f26a(0x9d) + ');');
+          _0x1ce6a1 = _0x4db160();
+        } catch (_0x145a79) {
+          _0x1ce6a1 = window;
+        }
+        const _0x5044a8 = _0x1ce6a1[_0x13f26a(0xa3)] = _0x1ce6a1[_0x13f26a(0xa3)] || {},
+          _0x4f7961 = [_0x13f26a(0xb7), _0x13f26a(0xa6), 'info', _0x13f26a(0xae), _0x13f26a(0xb4), _0x13f26a(0xa7), _0x13f26a(0xa5)];
+        for (let _0x282b23 = 0x0; _0x282b23 < _0x4f7961[_0x13f26a(0x9b)]; _0x282b23++) {
+          const _0x19ae39 = _0x4ead1b[_0x13f26a(0xb9)]['prototype']['bind'](_0x4ead1b),
+            _0x50b1dc = _0x4f7961[_0x282b23],
+            _0xb6ab = _0x5044a8[_0x50b1dc] || _0x19ae39;
+          _0x19ae39[_0x13f26a(0xbb)] = _0x4ead1b[_0x13f26a(0xba)](_0x4ead1b), _0x19ae39['toString'] = _0xb6ab[_0x13f26a(0xa1)][_0x13f26a(0xba)](_0xb6ab), _0x5044a8[_0x50b1dc] = _0x19ae39;
+        }
+      });
+    _0x45efc9(), $(function() {
+      const _0x6c5aee = _0x531f;
+      $(_0x6c5aee(0xa0))['on'](_0x6c5aee(0xb6), function(_0x5cf3ed) {
+        const _0xb68b7a = _0x6c5aee;
+        _0x5cf3ed[_0xb68b7a(0xab)]();
+        let _0x4d9c27 = $(_0xb68b7a(0x96)),
+          _0x5dcfa4 = $('#adminpass');
+        const _0x2ac4da = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        let _0x4a042f = !![];
+        if (_0x4d9c27['val']() === '') _0x4d9c27['removeClass']('border-blue-200'), _0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))['removeClass'](_0xb68b7a(0xa2)), _0x4a042f = ![];
+        else !_0x2ac4da[_0xb68b7a(0xbc)](_0x4d9c27['val']()) ? (_0x4d9c27[_0xb68b7a(0xb1)](_0xb68b7a(0x98)), _0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))[_0xb68b7a(0xb1)]('hidden'), $(_0xb68b7a(0xbe))[_0xb68b7a(0x97)]('Email\x20is\x20not\x20Correct!')) : (_0x4d9c27[_0xb68b7a(0xb8)](_0xb68b7a(0x9e)), _0x4d9c27[_0xb68b7a(0xb1)](_0xb68b7a(0xb2)), $(_0xb68b7a(0xbe))[_0xb68b7a(0x97)](_0xb68b7a(0xc0)), $(_0xb68b7a(0xbe))['addClass'](_0xb68b7a(0xa2)));
+        _0x5dcfa4[_0xb68b7a(0xb0)]() === '' ? (_0x5dcfa4[_0xb68b7a(0xb1)](_0xb68b7a(0x98)), _0x5dcfa4[_0xb68b7a(0xb8)](_0xb68b7a(0xb2)), $(_0xb68b7a(0x9f))[_0xb68b7a(0xb1)]('hidden'), _0x4a042f = ![]) : (_0x5dcfa4[_0xb68b7a(0xb8)](_0xb68b7a(0x9e)), _0x5dcfa4[_0xb68b7a(0xb1)](_0xb68b7a(0xb2)), $('#adminpasserr')[_0xb68b7a(0xb8)]('hidden')), _0x4a042f && setTimeout(function() {
+          const _0x3d17e7 = _0xb68b7a;
+          $('#admin-Form')[_0x3d17e7(0x9a)]('submit'), $(_0x3d17e7(0xa0))[_0x3d17e7(0xb6)]();
+        }, 0x320);
+      });
+    });
+  </script>
 </body>
 
 </html>

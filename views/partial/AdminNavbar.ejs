@@ -45,6 +45,14 @@
             </a>
           </li>
           <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+            <a class="flex" href="/admin/customers">
+              <div class="flex items-center me-1">
+                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://cdn-icons-png.flaticon.com/16/3126/3126649.png" alt="">
+              </div>
+              <span class="ms-1 group-hover:text-white">Customers</span>
+            </a>
+          </li>
+          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
             <a class="flex" href="/admin/log_activity">
               <div class="flex items-center me-1">
                 <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://svgshare.com/i/x5m.svg" alt="">
@@ -66,11 +74,13 @@
                 <div class="my-4 flex">
                   <img class="rounded-full me-2" height="82" width="82" src="<%= admin.profileImg.path  %>" alt="Admin-Profile">
                   <div class="py-1 ms-2">
-                    <span class="block font-medium"><%= admin.fullName  %></span>
+                    <span class="block font-medium">
+                      <%= admin.fullName %>
+                    </span>
                     <span class="block text-sm text-gray-600">Admin</span>
                     <span class="block text-sm text-gray-600">
                       <i class="fa-regular fa-envelope xs me-1"></i>
-                      <%= admin.email  %>
+                      <%= admin.email %>
                     </span>
                   </div>
                 </div>

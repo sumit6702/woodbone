@@ -23,6 +23,16 @@ const siteInfoSchema = new mongoose.Schema({
     type:String,
     default:""
   },
+  siteCarousel:[
+    {
+      filename: {
+        type: String,
+      },
+      path: {
+        type: String,
+      },
+    }
+  ],
   timeStampe: { type: Date, default: Date.now() },
 });
 

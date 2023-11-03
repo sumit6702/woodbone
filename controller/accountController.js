@@ -676,6 +676,7 @@ const paymentSuccessfull = async (req, res) => {
     const result = await easyinvoice.createInvoice(invoice);
 
     const orderInvoice = new INVOICE({
+      user:user_.id,
       order_id: orderGenerated.id,
       invoice: result.pdf,
     });
@@ -940,7 +941,6 @@ const updateSiteInfo = async (req, res) => {
   try {
     const isSiteInfo = await SITEINFO.findOne({}).sort({ timeStamp: -1 });
     const siteName = req.body.siteName;
-    const siteLogo = req.file;
     const siteUrl = req.body.siteURL;
     const SiteAddress = req.body.address;
     const pincode = req.body.pincode;
@@ -951,81 +951,79 @@ const updateSiteInfo = async (req, res) => {
     const siteTiming = req.body.siteTiming;
     const siteMail = req.body.siteMail;
 
+    // Handle the siteLogo
+    let siteLogoPath = "";
+  if (req.files.siteLogo && req.files.siteLogo.length > 0) {
+    const siteLogo = req.files.siteLogo[0];
+    // Delete the existing siteLogo from S3 if it exists
+    if (isSiteInfo && isSiteInfo.siteLogo) {
+      const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, "");
+      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath }).promise();
+    }
+    siteLogoPath = `${s3URL}${siteLogo.key}`;
+  }
+
+  const carouselImages = [];
+  if (req.files.carouselImg && req.files.carouselImg.length > 0) {
+    carouselImages.push(
+      ...req.files.carouselImg.map((file) => ({
+        filename: file.originalname,
+        path: `${s3URL}${file.key}`,
+      }))
+    );
+  }
+
+
+
     if (isSiteInfo) {
-      if (siteLogo) {
-        const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, "");
-        await s3
-          .deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath })
-          .promise();
-        await isSiteInfo.updateOne({
-          siteName: siteName,
-          siteLogo: `${s3URL}${siteLogo.key}`,
-          siteURL: siteUrl,
-          coAddress: {
-            address: SiteAddress,
-            pincode: pincode,
-            city: city,
-            country: country,
-          },
-          siteDescription: siteDescription,
-          siteTiming: siteTiming,
-          siteMail: siteMail,
-          contactInfo: contactInfo,
-        });
-      } else {
-        const siteLogoPath = isSiteInfo.siteLogo;
-        await isSiteInfo.updateOne({
-          siteName: siteName,
-          siteLogo: siteLogoPath,
-          siteURL: siteUrl,
-          coAddress: {
-            address: SiteAddress,
-            pincode: pincode,
-            city: city,
-            country: country,
-          },
-          siteDescription: siteDescription,
-          siteTiming: siteTiming,
-          siteMail: siteMail,
-          contactInfo: contactInfo,
+      isSiteInfo.siteName = siteName;
+      isSiteInfo.siteURL = siteUrl;
+      isSiteInfo.coAddress = {
+        address: SiteAddress,
+        pincode: pincode,
+        city: city,
+        country: country,
+      };
+      isSiteInfo.siteDescription = siteDescription;
+      isSiteInfo.siteTiming = siteTiming;
+      isSiteInfo.siteMail = siteMail;
+      isSiteInfo.contactInfo = contactInfo;
+
+      if (req.files.siteLogo && req.files.siteLogo.length > 0) {
+        isSiteInfo.siteLogo = siteLogoPath;
+      }
+      if (isSiteInfo.siteCarousel.length > 0) {
+        // Delete existing siteCarousel images
+        isSiteInfo.siteCarousel.forEach(async (image) => {
+          const imagePath = image.path.replace(s3URL, "");
+          await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: imagePath }).promise();
         });
       }
+      if (carouselImages.length > 0) {
+        isSiteInfo.siteCarousel = carouselImages;
+      }
+      await isSiteInfo.save();
     } else {
-      if (siteLogo) {
-        const siteInfo = new SITEINFO({
-          siteName: siteName,
-          siteLogo: `${s3URL}${siteLogo.key}`,
-          siteURL: siteUrl,
-          coAddress: {
-            address: SiteAddress,
-            pincode: pincode,
-            city: city,
-            country: country,
-          },
-          siteDescription: siteDescription,
-          siteTiming: siteTiming,
-          siteMail: siteMail,
-          contactInfo: contactInfo,
-        });
-        await siteInfo.save();
-      } else {
-        const siteInfo = new SITEINFO({
-          siteName: siteName,
-          siteLogo: "",
-          siteURL: siteUrl,
-          coAddress: {
-            address: SiteAddress,
-            pincode: pincode,
-            city: city,
-            country: country,
-          },
-          siteDescription: siteDescription,
-          siteTiming: siteTiming,
-          siteMail: siteMail,
-          contactInfo: contactInfo,
-        });
-        await siteInfo.save();
-      }
+      // Create a new site info
+      const siteInfoData = {
+        siteName: siteName,
+        siteLogo: siteLogoPath,
+        siteURL: siteUrl,
+        coAddress: {
+          address: SiteAddress,
+          pincode: pincode,
+          city: city,
+          country: country,
+        },
+        siteDescription: siteDescription,
+        siteTiming: siteTiming,
+        siteMail: siteMail,
+        contactInfo: contactInfo,
+        siteCarousel: carouselImages,
+      };
+  
+      const siteInfo = new SITEINFO(siteInfoData);
+      await siteInfo.save();
     }
     res.redirect("/admin/profile#adminperf");
   } catch (error) {

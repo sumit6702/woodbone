@@ -105,8 +105,21 @@
       <div id="adminperf" class="adminnestedItems">
         <p class="my-3 font-medium text-xl mx-4">Site Preference</p>
         <!-- GENERAL PERFERENCES -->
+        <div class="mx-4 border rounded-md  w-fit">
+          <p class="px-4 py-1 mb-2 text-lg font-medium border-b">Corusel Images</p>
+          <% if(siteInfo.siteCarousel.length > 0){ %>
+            <div class="flex flex-wrap">
+              <% for(let i=0; i<siteInfo.siteCarousel.length; i++){ %>
+                <img width="256" class="mx-4 rounded-md mb-2" src="<%= siteInfo.siteCarousel[i].path %>" alt="">
+              <% } %>
+            </div>
+          <% }else{ %>
+            <p class="text-center py-2 block font-medium text-red-700">No Images</p>
+          <% } %>
+        </div>
         <div class="lg:flex mt-12 px-8">
           <form class="w-full" action="/admin/profile/siteInfo" method="post" enctype="multipart/form-data">
+            <!-- Site Logo -->
             <div class="mb-3">
               <img class="border p-4 rounded-md" width="94" src="
               <% if (siteInfo.siteLogo === "") { %>
@@ -116,6 +129,7 @@
               <% } %>" alt="">
             </div>
             <div class="flex gap-12">
+              <!-- SiteName, SiteURL, SiteLogo -->
               <div class="w-full">
                 <div class="mb-3">
                   <label for="siteName">Site Name</label>
@@ -123,14 +137,22 @@
                 </div>
                 <div class="mb-3">
                   <label for="siteLogo">Site Logo</label>
-                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo" id="siteLogo" value="" placeholder="Site Logo">
+                  <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="siteLogo" id="siteLogo" value="" placeholder="Site Logo" accept="image/png,image/jpeg">
                 </div>
                 <div class="mb-3">
                   <label for="siteURL">Site URL/label>
                     <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteURL" id="siteURL" value="<%= siteInfo.siteURL  %>" placeholder="Site URL Link" required>
                 </div>
+                <div class="border p-3 rounded-md">
+                  <div class="mb-3 siteCarousel">
+                    <label class="carouselLabel" for="carouselImg">Site Carousel</label>
+                    <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="file" name="carouselImg" id="carouselImg" value="" placeholder="Site Carousel" multiple accept="image/png,image/jpeg">
+                  </div>
+                  <div id="img-preview"></div>
+                </div>
               </div>
               <div class="w-full">
+                <!-- Company Address -->
                 <div class="mb-3">
                   <p>Company Address</p>
                   <div class="mb-2">
@@ -146,10 +168,12 @@
                     <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="country" id="country" value="<%= siteInfo.coAddress.country  %>" placeholder="Co City">
                   </div>
                 </div>
+                <!-- Company Description -->
                 <div class="mb-3">
                   <label for="description">Site Description</label>
                   <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="description" id="description" value="<%= siteInfo.siteDescription  %>" placeholder="Site Description">
                 </div>
+                <!-- Company Description -->
                 <div class="mb-3">
                   <label for="siteTiming">Working Time</label>
                   <input class="block px-3 py-2 mt-1 border rounded-md w-full" type="text" name="siteTiming" id="siteTiming" value="<%= siteInfo.siteTiming  %>" placeholder="from 10AM - 6PM...">
@@ -168,15 +192,16 @@
             </button>
           </form>
         </div>
+        
       </div>
     </section>
   </main>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const toggleCheckbox = document.getElementById('toggle');
       const toggleLabel = document.querySelector('.toggle-label');
 
-      toggleCheckbox.addEventListener('change', function() {
+      toggleCheckbox.addEventListener('change', function () {
         if (toggleCheckbox.checked) {
           toggleLabel.classList.remove('bg-gray-300');
           toggleLabel.classList.add('bg-blue-500');
@@ -190,6 +215,73 @@
     });
 
     $("#adminprofile").show()
+
+    
+    const input = document.querySelector("#carouselImg");
+    const preview = document.querySelector("#img-preview");
+    input.addEventListener("change", updateImageDisplay);
+    function updateImageDisplay() {
+      while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+      }
+
+      const curFiles = input.files;
+      if (curFiles.length === 0) {
+        const para = document.createElement("p");
+        para.textContent = "No files currently selected for upload";
+        preview.appendChild(para);
+      } else {
+        const list = document.createElement("ol");
+        preview.appendChild(list);
+
+        for (const file of curFiles) {
+          const listItem = document.createElement("li");
+          const para = document.createElement("p");
+          if (validFileType(file)) {
+            para.textContent = `${file.name}`;
+            const image = document.createElement("img");
+            image.src = URL.createObjectURL(file);
+
+            listItem.appendChild(image);
+            listItem.appendChild(para);
+          } else {
+            para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+            listItem.appendChild(para);
+          }
+
+          list.appendChild(listItem);
+        }
+      }
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types
+    const fileTypes = [
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/pjpeg",
+      "image/png",
+      "image/svg+xml",
+      "image/tiff",
+      "image/webp",
+      "image/x-icon",
+    ];
+
+    function validFileType(file) {
+      return fileTypes.includes(file.type);
+    }
+
+    function returnFileSize(number) {
+      if (number < 1024) {
+        return `${number} bytes`;
+      } else if (number >= 1024 && number < 1048576) {
+        return `${(number / 1024).toFixed(1)} KB`;
+      } else if (number >= 1048576) {
+        return `${(number / 1048576).toFixed(1)} MB`;
+      }
+    }
+    showInputFilePreview()
   </script>
   <%- include('./partial/scripts.ejs') %>
 </body>

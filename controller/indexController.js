@@ -3,6 +3,7 @@ import PRODUCTS from "../model/productSchema.js";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import sendMail from "../middleware/email.js";
 import USERREGISTERMODEL from "../model/UserAccount.js";
+import USERADDRESS from "../model/UserAddress.js";
 
 const indexcontroller = async (req, res) => {
   try {
@@ -27,6 +28,7 @@ const indexcontroller = async (req, res) => {
       products = null;
     }
     res.render("index", { userid: req.user, cartval:req.cartval, products, siteInfo:req.siteInfo });
+
   } catch (error) {
     console.log(error + " at indexController");
     res.status(500).json({ error: "Internal Server Error" });

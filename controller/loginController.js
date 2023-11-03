@@ -78,6 +78,7 @@ const userloginController = async (req, res) => {
   }
 };
 
+//adminLogin
 const adminLoginController = async (req, res) => {
   try {
     var agent = useragent.parse(req.headers["user-agent"]);
@@ -157,7 +158,9 @@ const adminLoginController = async (req, res) => {
     )}/admin/login/reset_Password`;
     const verifyMail = async (username, email) => {
       const subject = `New Login Attempt`;
-      const htmlStyle = `@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');body{font-family: 'Ubuntu', sans-serif;margin:0;padding:0;background-color: #E1F2F8;}.container{background-color: #fff;padding: 12px;margin: 12px;box-shadow: 0px 0px 8px #eae9e985;border-radius: 12px;}h1,h2,h3,h4,h5,h6{line-height: 0;}#logindetails{border: 1px solid #dfdfdf51;padding: 8px;border-radius: 4px;background-color: #f0f0f02b;}#logindetails p {line-height: 8px;}.loginHead{font-weight: 500;}`;
+      const htmlStyle = `
+      @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');body{font-family: 'Ubuntu', sans-serif;margin:0;padding:0;background-color: #E1F2F8;}.container{background-color: #fff;padding: 12px;margin: 12px;box-shadow: 0px 0px 8px #eae9e985;border-radius: 12px;}h1,h2,h3,h4,h5,h6{line-height: 0;}#logindetails{border: 1px solid #dfdfdf51;padding: 8px;border-radius: 4px;background-color: #f0f0f02b;}#logindetails p {line-height: 8px;}.loginHead{font-weight: 500;}
+      `;
       const htmlbody = `
       <div class="container">
       <div class="logo">
@@ -186,10 +189,12 @@ const adminLoginController = async (req, res) => {
   }
 };
 
+//adminPasswordReset
 const resetAdminController = async (req, res) => {
-  res.status(200).render("adminPassReset");
+  res.status(200).render("adminPassReset",{siteInfo: req.siteInfo,});
 };
 
+//adminPasswordReset
 const resetAdminPassController = async (req, res) => {
   try {
     const mail = req.body.resetmail;
@@ -259,6 +264,7 @@ const resetAdminPassController = async (req, res) => {
   }
 };
 
+//adminVerifyOtp
 const verifyotp = async (req, res) => {
   try {
     const userotp = req.body.resetotp;
@@ -276,6 +282,7 @@ const verifyotp = async (req, res) => {
   }
 };
 
+//adminNewPassword
 const newAdminPassword = async (req, res) => {
   try {
     const mail = req.body.resetedmailed;
