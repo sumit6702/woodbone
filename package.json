@@ -7,7 +7,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "aws-sdk": "^2.895.0",
+    "aws-sdk": "latest",
     "axios": "latest",
     "bcryptjs": "latest",
     "body-parser": "latest",
@@ -30,7 +30,7 @@
     "moment": "latest",
     "mongoose": "latest",
     "multer": "latest",
-    "multer-s3": "^2.9.0",
+    "multer-s3": "latest",
     "node-cache": "latest",
     "nodemailer": "latest",
     "nodemon": "latest",
