@@ -10,7 +10,7 @@
   <a href="#how-to-use">How To Use</a> •
 </p>
 
-![screenshot](https://github.com/sumit6702/ecommerce/screenshots/Screenshot%202024-03-18%20012159.png)
+![screenshot](https://github.com/sumit6702/ecommerce/blob/main/screenshots/Screenshot%202024-03-18%20012159.png)
 
 ## Key Features
 
