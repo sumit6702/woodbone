@@ -11,6 +11,7 @@
 </p>
 
 ![screenshot](https://github.com/sumit6702/ecommerce/blob/main/screenshots/Screenshot%202024-03-18%20012159.png)
+![screenshot](https://github.com/sumit6702/ecommerce/blob/main/screenshots/Screenshot%202023-12-30%20072907.png)
 
 ## Key Features
 
