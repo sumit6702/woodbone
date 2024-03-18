@@ -4,116 +4,130 @@
     <div class="w-fit h-full flex items-center">
       <a class="block" href="/admin/dashboard">
         <img class="py-1 px-2" width="62" src="
-        <% if (siteInfo.siteLogo === "") { %>
-          https://cdn-icons-png.flaticon.com/512/763/763775.png 
-        <% } else { %>
+        <% if (siteInfo && siteInfo.siteLogo && siteInfo.siteLogo !== "") { %>
           <%= siteInfo.siteLogo %>
-        <% } %>" alt="">
+        <% } else { %>
+          https://cdn-icons-png.flaticon.com/512/763/763775.png 
+        <% } %>
       </a>
     </div>
-    <div id="navbarMenu" class="w-full flex justify-between" x-data="{ smMenu: false }" x-init="smMenu = window.innerWidth > 1024">
-      <!-- LeftSideComponents -->
-      <div class="">
-        <ul class="lg:flex h-full items-center absolute left-0 z-50 bg-white shadow-md p-4 lg:static lg:bg-transparent lg:shadow-none lg:p-0" x-show="smMenu" x-on:click.away="smMenu = false" x-transition:enter="transition ease-out duration-300">
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 lg:hidden">
-            <a class="block" href="/admin/dashboard">
-              <img class="max-h-16 py-1 px-2" src="/images/random_logo.png" alt="">
-            </a>
-          </li>
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
-            <a class="flex" href="/admin/dashboard">
-              <div class="flex items-center me-1">
-                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://svgshare.com/i/x6A.svg" alt="">
-              </div>
-              <span class="ms-1 group-hover:text-white">Dashboard</span>
-            </a>
-          </li>
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
-            <a class="flex" href="/admin/orders">
-              <div class="flex items-center me-1">
-                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://svgshare.com/i/x6M.svg" alt="">
-              </div>
-              <span class="ms-1 group-hover:text-white">Orders</span>
-            </a>
-          </li>
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
-            <a class="flex" href="/admin/products">
-              <div class="flex items-center me-1">
-                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://svgshare.com/i/x6t.svg" alt="">
-              </div>
-              <span class="ms-1 group-hover:text-white">Products</span>
-            </a>
-          </li>
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
-            <a class="flex" href="/admin/customers">
-              <div class="flex items-center me-1">
-                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://cdn-icons-png.flaticon.com/16/3126/3126649.png" alt="">
-              </div>
-              <span class="ms-1 group-hover:text-white">Customers</span>
-            </a>
-          </li>
-          <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
-            <a class="flex" href="/admin/log_activity">
-              <div class="flex items-center me-1">
-                <img height="16" width="16" class="group-hover:filter group-hover:invert" src="https://svgshare.com/i/x5m.svg" alt="">
-              </div>
-              <span class="ms-1 group-hover:text-white">Login Activity</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <!-- RightSideComponents -->
-      <div class="">
-        <ul class="h-full flex items-center">
-          <li class="px-2 py-1 mx-1 rounded-full relative" x-data="{ profile :  false }">
-            <img class="rounded-full cursor-pointer" height="32" width="32" src="<%= admin.profileImg.path  %>" alt="Admin-Profile" x-on:click="profile = !profile" x-transition:enter="transition ease-in-out duration-300">
+    <div id=" navbarMenu" class="w-full flex justify-between" x-data="{ smMenu: false }"
+          x-init="smMenu = window.innerWidth > 1024">
+        <!-- LeftSideComponents -->
+        <div class="">
+          <ul
+            class="lg:flex h-full items-center absolute left-0 z-50 bg-white shadow-md p-4 lg:static lg:bg-transparent lg:shadow-none lg:p-0"
+            x-show="smMenu" x-on:click.away="smMenu = false" x-transition:enter="transition ease-out duration-300">
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 lg:hidden">
+              <a class="block" href="/admin/dashboard">
+                <img class="max-h-16 py-1 px-2" src="/images/random_logo.png" alt="">
+              </a>
+            </li>
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+              <a class="flex" href="/admin/dashboard">
+                <div class="flex items-center me-1">
+                  <img height="16" width="16" class="group-hover:filter group-hover:invert"
+                    src="https://svgshare.com/i/x6A.svg" alt="">
+                </div>
+                <span class="ms-1 group-hover:text-white">Dashboard</span>
+              </a>
+            </li>
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+              <a class="flex" href="/admin/orders">
+                <div class="flex items-center me-1">
+                  <img height="16" width="16" class="group-hover:filter group-hover:invert"
+                    src="https://svgshare.com/i/x6M.svg" alt="">
+                </div>
+                <span class="ms-1 group-hover:text-white">Orders</span>
+              </a>
+            </li>
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+              <a class="flex" href="/admin/products">
+                <div class="flex items-center me-1">
+                  <img height="16" width="16" class="group-hover:filter group-hover:invert"
+                    src="https://svgshare.com/i/x6t.svg" alt="">
+                </div>
+                <span class="ms-1 group-hover:text-white">Products</span>
+              </a>
+            </li>
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+              <a class="flex" href="/admin/customers">
+                <div class="flex items-center me-1">
+                  <img height="16" width="16" class="group-hover:filter group-hover:invert"
+                    src="https://cdn-icons-png.flaticon.com/16/3126/3126649.png" alt="">
+                </div>
+                <span class="ms-1 group-hover:text-white">Customers</span>
+              </a>
+            </li>
+            <li class="px-3 py-2 mb-3 lg:mb-0 lg:ms-3 group hover:bg-blue-400 rounded-md">
+              <a class="flex" href="/admin/log_activity">
+                <div class="flex items-center me-1">
+                  <img height="16" width="16" class="group-hover:filter group-hover:invert"
+                    src="https://svgshare.com/i/x5m.svg" alt="">
+                </div>
+                <span class="ms-1 group-hover:text-white">Login Activity</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- RightSideComponents -->
+        <div class="">
+          <ul class="h-full flex items-center">
+            <li class="px-2 py-1 mx-1 rounded-full relative" x-data="{ profile :  false }">
+              <img class="rounded-full cursor-pointer" height="32" width="32" src="<%= admin.profileImg.path  %>"
+                alt="Admin-Profile" x-on:click="profile = !profile"
+                x-transition:enter="transition ease-in-out duration-300">
 
-            <div class="bg-white shadow-md p-6 absolute w-max right-0 rounded-md border z-50" x-show="profile" x-on:click.away="profile = false" x-transition:enter="transition ease-out duration-300">
-              <div class="border-b mb-4">
-                <h2 class="font-medium text-gray-800 text-xl">User Profile</h2>
-                <div class="my-4 flex">
-                  <img class="rounded-full me-2" height="82" width="82" src="<%= admin.profileImg.path  %>" alt="Admin-Profile">
-                  <div class="py-1 ms-2">
-                    <span class="block font-medium">
-                      <%= admin.fullName %>
-                    </span>
-                    <span class="block text-sm text-gray-600">Admin</span>
-                    <span class="block text-sm text-gray-600">
-                      <i class="fa-regular fa-envelope xs me-1"></i>
-                      <%= admin.email %>
-                    </span>
+              <div class="bg-white shadow-md p-6 absolute w-max right-0 rounded-md border z-50" x-show="profile"
+                x-on:click.away="profile = false" x-transition:enter="transition ease-out duration-300">
+                <div class="border-b mb-4">
+                  <h2 class="font-medium text-gray-800 text-xl">User Profile</h2>
+                  <div class="my-4 flex">
+                    <img class="rounded-full me-2" height="82" width="82" src="<%= admin.profileImg.path  %>"
+                      alt="Admin-Profile">
+                    <div class="py-1 ms-2">
+                      <span class="block font-medium">
+                        <%= admin.fullName %>
+                      </span>
+                      <span class="block text-sm text-gray-600">Admin</span>
+                      <span class="block text-sm text-gray-600">
+                        <i class="fa-regular fa-envelope xs me-1"></i>
+                        <%= admin.email %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="mb-4 group">
+                    <a class="flex" href="/admin/profile">
+                      <div class="flex items-center px-3 bg-blue-50 rounded-md me-2">
+                        <img height="22" width="22" src="https://cdn-icons-png.flaticon.com/32/10797/10797016.png "
+                          alt="">
+                      </div>
+                      <div>
+                        <span class="block group-hover:text-blue-600">My Profile</span>
+                        <span class="text-gray-500">Account Setting</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="">
+                    <a class="flex border rounded-md justify-center py-1 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:transition-colors"
+                      href="/logout">
+                      Logout
+                    </a>
                   </div>
                 </div>
               </div>
-              <div>
-                <div class="mb-4 group">
-                  <a class="flex" href="/admin/profile">
-                    <div class="flex items-center px-3 bg-blue-50 rounded-md me-2">
-                      <img height="22" width="22" src="https://cdn-icons-png.flaticon.com/32/10797/10797016.png " alt="">
-                    </div>
-                    <div>
-                      <span class="block group-hover:text-blue-600">My Profile</span>
-                      <span class="text-gray-500">Account Setting</span>
-                    </div>
-                  </a>
-                </div>
-                <div class="">
-                  <a class="flex border rounded-md justify-center py-1 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:transition-colors" href="/logout">
-                    Logout
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="px-2 py-1 mx-1 cursor-pointer rounded-full lg:hidden" x-on:click="smMenu = !smMenu">
-            <i class="fa-solid fa-bars fa-lg"></i>
-          </li>
-        </ul>
-      </div>
+            </li>
+            <li class="px-2 py-1 mx-1 cursor-pointer rounded-full lg:hidden" x-on:click="smMenu = !smMenu">
+              <i class="fa-solid fa-bars fa-lg"></i>
+            </li>
+          </ul>
+        </div>
     </div>
   </div>
   <script>
-    $(function() {
+    $(function () {
       if (window.innerWidth > 1024) {
         $("#navbarMenu ul[x-show='smMenu']").removeAttr('x-show x-on:click.away x-transition:enter');
         $("#navbarMenu").removeAttr('x-data x-init');

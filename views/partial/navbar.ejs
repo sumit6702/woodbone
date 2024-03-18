@@ -2,10 +2,30 @@
   <section class="">
     <div class="navabout uppercase text-sm flex justify-between font-medium py-1 bg-slate-300 border-b">
       <div>
-        <a href="mailto:<%= siteInfo.siteMail  %>"><%= siteInfo.siteMail  %></a> / <a href="tel:<%= siteInfo.contactInfo  %>"><%= siteInfo.contactInfo  %> </a>
+        <% if (siteInfo && siteInfo.siteMail) { %>
+          <a href="mailto:<%= siteInfo.siteMail %>">
+            <%= siteInfo.siteMail %>
+          </a>
+          <% } else { %>
+            <a href="mailto:abc@mail.com">
+              abc@mail.com
+              <% } %> /
+                <% if (siteInfo && siteInfo.contactInfo) { %>
+                  <a href="tel:<%= siteInfo.contactInfo %>">
+                    <%= siteInfo.contactInfo %>
+                      <% } else { %>
+                        abc@mail.com
+                        <% } %>
+                  </a>
       </div>
       <div>
-        <p><%= siteInfo.siteTiming  %></p>
+        <p>
+          <% if (siteInfo && siteInfo.siteTiming) { %>
+            <%= siteInfo.siteTiming %>
+              <% } else { %>
+                No timing
+                <% } %>
+        </p>
       </div>
     </div>
     <div id="navMenu" class="flex justify-between text-lg font-medium mx-10">
@@ -13,10 +33,10 @@
         <ul class="flex">
           <a class="navbrand py-7" href="/">
             <img width="32" src="
-            <% if (siteInfo.siteLogo === "") { %>
-              https://cdn-icons-png.flaticon.com/512/763/763775.png 
-            <% } else { %>
+            <% if (siteInfo && siteInfo.siteLogo && siteInfo.siteLogo !== "") { %>
               <%= siteInfo.siteLogo %>
+            <% } else { %>
+              https://cdn-icons-png.flaticon.com/512/763/763775.png 
             <% } %>
             " alt="">
           </a>
@@ -87,7 +107,7 @@
                   </svg>
                 </span>
                 <span id="carCount" class="absolute right-2">
-                  <%= cartval  %>
+                  <%= cartval %>
                 </span>
               </div>
             </a>
@@ -98,14 +118,14 @@
               <a class="flex" href="/my-account">
                 <div class="flex my-auto">
                   <%= userid.firstName %>
-                  <% if(userid.profileImg.path){ %>
-                    <span class="ms-1">
+                    <% if(userid.profileImg.path){ %>
+                      <span class="ms-1">
                         <img class="rounded-full" height="26" width="26" src="<%= userid.profileImg.path %>" alt="">
                       </span>
                       <% }else{ %>
                         <div class="flex ms-1">
-                          <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 211.68 252.51">
+                          <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211.68 252.51">
                             <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
                             <path class="login-svg"
                               d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
@@ -133,15 +153,13 @@
               </div>
             </li>
             <% }else{ %>
-              <li class="loginNavbtn relative cursor-pointer hover:text-gray-700" x-data="{ logins :  false }" 
-              x-on:click="logins = !logins"
-              x-on:mouseenter="logins = true" 
-              x-on:mouseleave="logins = false"
-              x-transition:enter="transition ease-out duration-200">
+              <li class="loginNavbtn relative cursor-pointer hover:text-gray-700" x-data="{ logins :  false }"
+                x-on:click="logins = !logins" x-on:mouseenter="logins = true" x-on:mouseleave="logins = false"
+                x-transition:enter="transition ease-out duration-200">
                 <section class="my-auto pt-2 pb-4">
                   <div class="flex ms-1">
-                    <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 211.68 252.51">
+                    <svg class="mx-auto" id="Layer_1" data-name="Layer 1" height="22" width="22"
+                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211.68 252.51">
                       <circle class="login-svg" cx="104.95" cy="72.63" r="66.63" />
                       <path class="login-svg"
                         d="m204,246.51c1.94-11.75,3.57-31.83-3.32-54.89-12.16-40.74-42.36-62.33-52.05-68.68-4.41,3.4-24.52,18.12-52.12,14.81-17.98-2.15-30.36-10.9-35.75-15.25-9.35,7.04-20.63,17.33-30.57,31.85C4.71,191.54,5.31,231.17,6.38,246.51h197.62Z" />
@@ -149,10 +167,10 @@
                   </div>
                   <span>login/Singup</span>
                 </section>
-                <div class="absolute -bottom-12 z-50"  x-show="logins">
+                <div class="absolute -bottom-12 z-50" x-show="logins">
                   <div class="py-1 px-3 bg-white z-50 shadow-md">
-                      <a class="block pb-1" href="/singup">Singup</a>
-                      <a class="block pb-1" href="/login">Login</a>
+                    <a class="block pb-1" href="/singup">Singup</a>
+                    <a class="block pb-1" href="/login">Login</a>
                   </div>
                 </div>
               </li>

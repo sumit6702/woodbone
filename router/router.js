@@ -221,8 +221,8 @@ router.post(
 router.post(
   "/admin/profile/siteInfo",
   upload.fields([
-    { name: 'siteLogo', maxCount: 1 },
-    { name: 'carouselImg', maxCount: 8 },
+    { name: "siteLogo", maxCount: 1 },
+    { name: "carouselImg", maxCount: 8 },
   ]),
   updateSiteInfo
 );
@@ -230,6 +230,6 @@ router.get("/order/cancel/:id?", isAuthenticated, cancelOrder);
 router.post("/order/orderStaus", isAdmin, updateOrder);
 router.get("/pagetest", pagetesterscontroller);
 router.get("/admin/customers", isAdmin, customerInfo);
-router.get("/admin/customer/remove/:id?",isAdmin, removeUser);
+router.get("/admin/customer/remove/:id?", isAdmin, removeUser);
 
 export default router;

@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import "dotenv/config";
 import express from "express";
 const app = express();
 const port = process.env.PORT || 3001;
@@ -12,7 +12,7 @@ import cookieParser from "cookie-parser";
 import { PagenotFound } from "./controller/indexController.js";
 
 //Database Config
-const DATABASE_URL = process.env.MONGO_URL ;
+const DATABASE_URL = process.env.MONGO_URL;
 connectDB(DATABASE_URL);
 
 //cookie parser

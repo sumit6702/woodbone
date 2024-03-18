@@ -67,14 +67,16 @@
       <!-- Additional required wrapper -->
       <div class="swiper-wrapper">
         <!-- Slides -->
-        <% if(siteInfo.siteCarousel.length > 0){ %>
-        <% for(let i=0; i<siteInfo.siteCarousel.length; i++){ %>
+        <% if (siteInfo && siteInfo.siteCarousel && Array.isArray(siteInfo.siteCarousel) && siteInfo.siteCarousel.length > 0) { %>
+        <% for (let i = 0; i < siteInfo.siteCarousel.length; i++) { %>
+        <% if (siteInfo.siteCarousel[i] && siteInfo.siteCarousel[i].path) { %>
         <div class="swiper-slide" data-swiper-autoplay="6000">
           <img src="<%= siteInfo.siteCarousel[i].path %>" alt="">
         </div>
         <% } %>
-        <% }else{ %>
-        <div class="swiper-slide " data-swiper-autoplay="6000"><img src="/images/h5-slider-img-2-1.jpg" alt=""></div>
+        <% } %>
+        <% } else { %>
+        <div class="swiper-slide" data-swiper-autoplay="6000"><img src="/images/h5-slider-img-2-1.jpg" alt=""></div>
         <div class="swiper-slide" data-swiper-autoplay="6000"><img src="/images/h5-slider-img-3.jpg" alt=""></div>
         <% } %>
       </div>

@@ -34,13 +34,13 @@
       <section class="md:p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div class="my-6">
           <img class="py-1 px-2 mx-auto" width="64" src="
-        <% if (siteInfo.siteLogo === "") { %>
-          https://cdn-icons-png.flaticon.com/512/763/763775.png 
-        <% } else { %>
-          <%= siteInfo.siteLogo %>
-        <% } %>" alt="Logo">
+          <% if (siteInfo && siteInfo.siteLogo && siteInfo.siteLogo !== "") { %>
+            <%= siteInfo.siteLogo %>
+          <% } else { %>
+            https://cdn-icons-png.flaticon.com/512/763/763775.png 
+          <% } %>
         </div>
-        <div class="bg-white p-4 md:p-12 rounded-lg shadow-md">
+        <div class=" bg-white p-4 md:p-12 rounded-lg shadow-md">
           <form action="" id="admin-Form" method="post">
             <div class="pb-6 block">
               <h2 class="text-lg font-bold text-center text-slate-600">Welcome, Admin!</h2>
