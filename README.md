@@ -10,8 +10,9 @@
   <a href="#how-to-use">How To Use</a> •
 </p>
 
-![screenshot](https://github.com/sumit6702/ecommerce/blob/main/screenshots/Screenshot%202024-03-18%20012159.png)
-![screenshot](https://github.com/sumit6702/ecommerce/blob/main/screenshots/Screenshot%202023-12-30%20072907.png)
+<div width="100%">
+  <img src="https://i.giphy.com/GppRiXfQxjJlDUTYed.webp" width='100%' height='100%' alt="Screenshot" />
+</div>
 
 ## Key Features
 
