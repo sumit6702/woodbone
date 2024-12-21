@@ -7,18 +7,15 @@ import USERREGISTERMODEL from "../model/UserAccount.js";
 import INVOICE from "../model/InvoiceSchema.js";
 import { query } from "express";
 import pagination from "../middleware/pagination.js";
-import aws from "aws-sdk";
 import USERADDRESS from "../model/UserAddress.js";
-aws.config.update({
-  accessKeyId: process.env.S3_ACCESSKEY,
-  secretAccessKey: process.env.S3_SECRECTKEY,
-  region: process.env.AWS_REGION,
-});
-const s3 = new aws.S3();
-const s3URL = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
+
+import path from "path";
+import fs from "fs-extra";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const siteUploadDir = path.join(__dirname, "uploads");
 
 const admincontroller = (req, res) => {
-  res.render("adminLogin", {siteInfo: req.siteInfo});
+  res.render("adminLogin", { siteInfo: req.siteInfo });
 };
 
 const dashboardcontroller = async (req, res) => {
@@ -255,10 +252,7 @@ const deleteproduct = async (req, res) => {
     const deleteitem = await PRODUCTS.findById(id);
     const imagePaths = deleteitem.Image.map((img) => img.path);
     for (const imagePath of imagePaths) {
-      const s3Key = imagePath.replace(s3URL, "");
-      await s3
-        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: s3Key })
-        .promise();
+      fs.unlinkSync(imagePath);
     }
     const deleteProduct = await PRODUCTS.findByIdAndDelete(id);
     if (deleteProduct) {
@@ -285,10 +279,8 @@ const singleimageremover = async (req, res) => {
       index >= 0 &&
       index < product.Image.length
     ) {
-      const prodcutPath = product.Image[index].path.replace(s3URL, "");
-      await s3
-        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: prodcutPath })
-        .promise();
+      const prodcutPath = path.join(siteUploadDir, product.Image[index].path);
+      fs.unlinkSync(prodcutPath);
       product.Image.splice(index, 1);
       await product.save();
       const url = req.session.redirectPage;
@@ -315,19 +307,17 @@ const singleimageedit = async (req, res) => {
     }
 
     const imageObject = product.Image[currentImgIndex];
-    const previousImagePath = imageObject.path.replace(s3URL, "");
+    const previousImagePath = imageObject.path;
 
     // Assign the new values to imageObject
     imageObject.filename = uploadedFile.filename;
-    imageObject.path = `${s3URL}${uploadedFile.key}`;
+    imageObject.path = `/uploads/${uploadedFile.filename}`;
 
     // Save the updated product
     const imgAdded = await product.save();
 
     if (imgAdded) {
-      await s3
-        .deleteObject({ Bucket: process.env.S3_BUCKET, Key: previousImagePath })
-        .promise();
+      fs.unlinkSync(previousImagePath);
       const url = req.session.redirectPage;
       delete req.session.redirectPage;
       return res.redirect(url);
@@ -358,9 +348,10 @@ const updatenewProduct = async (req, res) => {
     const pd_images = [];
     for (let i = 0; i < pd_photos.length; i++) {
       const file = pd_photos[i];
+      const filePath = path.join(siteUploadDir, file.filename);
       pd_images.push({
         filename: file.filename,
-        path: `${s3URL}${file.key}`,
+        path: filePath,
       });
     }
 
@@ -453,15 +444,15 @@ const loginActivityDBcontroller = async (req, res) => {
   });
   const logins = await LOGINATTEMPT.find({}).sort({ timestamp: -1 });
   const pagiD = pagination(req, logins);
-  res.render("ADloginactivity", { 
+  res.render("ADloginactivity", {
     logins: pagiD.items,
     currentPage: pagiD.currentPage,
     totalPages: pagiD.totalPages,
     totalProducts: pagiD.totalProducts,
     itemsPerPage: pagiD.itemsPerPage,
     currentQuery: req.query,
-    admin, 
-    siteInfo: req.siteInfo 
+    admin,
+    siteInfo: req.siteInfo,
   });
 };
 
@@ -527,10 +518,8 @@ const uploadPDcontroller = async (req, res) => {
     const pd_images = [];
     for (let i = 0; i < pd_photos.length; i++) {
       const file = pd_photos[i];
-      pd_images.push({
-        filename: file.filename,
-        path: `${s3URL}${file.key}`,
-      });
+      const filepath = path.join(__dirname, "..", "uploads", file.filename);
+      pd_images.push({ filename: file.filename, path: filepath });
     }
     const lastProduct =
       (await PRODUCTS.findOne().sort({ timestamp: -1 })) || null;
@@ -608,18 +597,20 @@ const customerInfo = async (req, res) => {
     customerIds.forEach((id) => {
       const mainAdd = customerAdd.find((mainAdd) => mainAdd.userid === id);
       if (mainAdd) {
-        const defAdd = mainAdd.address.find((defAdd) => defAdd.default === true);
+        const defAdd = mainAdd.address.find(
+          (defAdd) => defAdd.default === true
+        );
         defaultAdd.push(defAdd || {});
       } else {
         defaultAdd.push({});
       }
     });
-  
+
     const pagiD = pagination(req, customers);
     res.render("ADcustomer", {
       admin,
       siteInfo: req.siteInfo,
-      customers : pagiD.items,
+      customers: pagiD.items,
       currentPage: pagiD.currentPage,
       totalPages: pagiD.totalPages,
       totalProducts: pagiD.totalProducts,
@@ -633,33 +624,33 @@ const customerInfo = async (req, res) => {
   }
 };
 
-const removeUser = async(req,res)=>{
+const removeUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const userAddress = await USERADDRESS.findOne({userid:userId});
-    const orders = await ORDERS.find({user:userId});
-    const Invoice = await INVOICE.find({user:userId});
+    const userAddress = await USERADDRESS.findOne({ userid: userId });
+    const orders = await ORDERS.find({ user: userId });
+    const Invoice = await INVOICE.find({ user: userId });
 
-    if(userAddress){
+    if (userAddress) {
       await userAddress.deleteOne();
     }
-    if(orders){
-      await ORDERS.deleteMany({user:userId});
+    if (orders) {
+      await ORDERS.deleteMany({ user: userId });
     }
-    if(Invoice){
-      await INVOICE.deleteMany({user:userId});
+    if (Invoice) {
+      await INVOICE.deleteMany({ user: userId });
     }
 
-    await USERREGISTERMODEL.deleteOne({_id:userId});
-    await USERDATA.deleteOne({user:userId});
-    
+    await USERREGISTERMODEL.deleteOne({ _id: userId });
+    await USERDATA.deleteOne({ user: userId });
+
     res.redirect("/admin/customers");
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 export {
   dashboardcontroller,
@@ -678,5 +669,5 @@ export {
   singleimageedit,
   updatenewProduct,
   customerInfo,
-  removeUser
+  removeUser,
 };

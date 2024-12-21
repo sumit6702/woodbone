@@ -13,20 +13,15 @@ import { v4 as uuidv4 } from "uuid";
 import ORDERS from "../model/orderSchema.js";
 import easyinvoice from "easyinvoice";
 import INVOICE from "../model/InvoiceSchema.js";
-import fs from "fs";
-import path from "path";
 import sendMail from "../middleware/email.js";
 import SITEINFO from "../model/siteInfoSchmea.js";
-import aws from "aws-sdk";
 import { timeStamp } from "console";
 const stripe = Stripe(Secret_Key);
-aws.config.update({
-  accessKeyId: process.env.S3_ACCESSKEY,
-  secretAccessKey: process.env.S3_SECRECTKEY,
-  region: process.env.AWS_REGION,
-});
-const s3 = new aws.S3();
-const s3URL = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/`;
+
+import path from "path";
+import fs from "fs-extra";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const siteUploadDir = path.join(__dirname, "uploads");
 
 const forgetPass = async (req, res) => {
   res.render("forgetPass", {
@@ -676,7 +671,7 @@ const paymentSuccessfull = async (req, res) => {
     const result = await easyinvoice.createInvoice(invoice);
 
     const orderInvoice = new INVOICE({
-      user:user_.id,
+      user: user_.id,
       order_id: orderGenerated.id,
       invoice: result.pdf,
     });
@@ -908,22 +903,22 @@ const profileUploader = async (req, res) => {
             {
               profileImg: {
                 filename: image.filename,
-                path: `${s3URL}${image.key}`,
+                path: `/uploads/${image.filename}`,
               },
             }
           );
         } else {
-          const oldImg = adminData.profileImg.path.replace(s3URL, "");
-          await s3
-            .deleteObject({ Bucket: process.env.S3_BUCKET, Key: oldImg })
-            .promise();
+          const oldImg = path.join(__dirname, "..", adminData.profileImg.path);
+          if (fs.existsSync(oldImg)) {
+            fs.unlinkSync(oldImg);
+          }
         }
         await USERREGISTERMODEL.findByIdAndUpdate(
           req.session.user_id || req.session.admin_id,
           {
             profileImg: {
               filename: image.filename,
-              path: `${s3URL}${image.key}`,
+              path: `/uploads/${image.filename}`,
             },
           }
         );
@@ -953,27 +948,26 @@ const updateSiteInfo = async (req, res) => {
 
     // Handle the siteLogo
     let siteLogoPath = "";
-  if (req.files.siteLogo && req.files.siteLogo.length > 0) {
-    const siteLogo = req.files.siteLogo[0];
-    // Delete the existing siteLogo from S3 if it exists
-    if (isSiteInfo && isSiteInfo.siteLogo) {
-      const sitelogoPath = isSiteInfo.siteLogo.replace(s3URL, "");
-      await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: sitelogoPath }).promise();
+    if (req.files.siteLogo && req.files.siteLogo.length > 0) {
+      const siteLogo = req.files.siteLogo[0];
+      // Delete the existing siteLogo from S3 if it exists
+      if (isSiteInfo && isSiteInfo.siteLogo) {
+        const siteLogoPath = path.join(siteUploadDir, isSiteInfo.siteLogo);
+        fs.access(siteLogoPath);
+        fs.unlink(siteLogoPath);
+      }
+      siteLogoPath = `/uploads/${siteLogo.filename}`;
     }
-    siteLogoPath = `${s3URL}${siteLogo.key}`;
-  }
 
-  const carouselImages = [];
-  if (req.files.carouselImg && req.files.carouselImg.length > 0) {
-    carouselImages.push(
-      ...req.files.carouselImg.map((file) => ({
-        filename: file.originalname,
-        path: `${s3URL}${file.key}`,
-      }))
-    );
-  }
-
-
+    const carouselImages = [];
+    if (req.files.carouselImg && req.files.carouselImg.length > 0) {
+      carouselImages.push(
+        ...req.files.carouselImg.map((file) => ({
+          filename: file.originalname,
+          path: `/uploads/${file.originalname}`,
+        }))
+      );
+    }
 
     if (isSiteInfo) {
       isSiteInfo.siteName = siteName;
@@ -995,8 +989,9 @@ const updateSiteInfo = async (req, res) => {
       if (isSiteInfo.siteCarousel.length > 0) {
         // Delete existing siteCarousel images
         isSiteInfo.siteCarousel.forEach(async (image) => {
-          const imagePath = image.path.replace(s3URL, "");
-          await s3.deleteObject({ Bucket: process.env.S3_BUCKET, Key: imagePath }).promise();
+          const imagePath = path.join(siteLogoDir, image.path);
+          fs.access(imagePath);
+          fs.unlink(imagePath);
         });
       }
       if (carouselImages.length > 0) {
@@ -1021,7 +1016,7 @@ const updateSiteInfo = async (req, res) => {
         contactInfo: contactInfo,
         siteCarousel: carouselImages,
       };
-  
+
       const siteInfo = new SITEINFO(siteInfoData);
       await siteInfo.save();
     }

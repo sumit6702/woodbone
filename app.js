@@ -43,6 +43,7 @@ app.use("/", router);
 //File Config
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
+// app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static("uploads"));
 app.set("view engine", "ejs");
 app.set("views", "./views");

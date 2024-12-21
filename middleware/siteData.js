@@ -27,7 +27,7 @@ const siteData = async (req, res, next) => {
     next();
   } catch (error) {
     console.error("Error fetching user information:", error);
-    next(error);
+    next(error.message);
   }
 };
 

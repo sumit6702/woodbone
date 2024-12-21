@@ -83,7 +83,8 @@ const adminLoginController = async (req, res) => {
   try {
     var agent = useragent.parse(req.headers["user-agent"]);
     const userAgent = `${agent.os.family}/${agent.toAgent().split(" ")[0]}`;
-    const website = req.siteInfo.siteName;
+    // const website = req.siteInfo.siteName;
+    const website = "Your Website Name";
     const adminmail = req.body.adminmail;
     const adminpassword = req.body.adminpass;
     const adminData = await USERREGISTERMODEL.findOne({
@@ -191,7 +192,7 @@ const adminLoginController = async (req, res) => {
 
 //adminPasswordReset
 const resetAdminController = async (req, res) => {
-  res.status(200).render("adminPassReset",{siteInfo: req.siteInfo,});
+  res.status(200).render("adminPassReset", { siteInfo: req.siteInfo });
 };
 
 //adminPasswordReset

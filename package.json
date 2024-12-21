@@ -22,6 +22,7 @@
     "express-recaptcha": "latest",
     "express-session": "latest",
     "flowbite-datepicker": "latest",
+    "fs-extra": "^11.2.0",
     "google-auth-library": "latest",
     "googleapis": "latest",
     "ip": "latest",
